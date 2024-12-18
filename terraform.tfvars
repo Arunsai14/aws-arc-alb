@@ -46,12 +46,12 @@ security_group_data = {
 # Access logs configuration
 access_logs = {
   enabled = true
-  bucket  = "my-log-bucket"
+  bucket  = "arc-terraform-alb-logs"
   prefix  = "load-balancer-logs"
 }
 
 connection_logs = {
-    bucket  = "my-logs-bucket"
+    bucket  = "arc-terraform-alb-logs"
     prefix  = "lb-logs"
     enabled = true
   }
