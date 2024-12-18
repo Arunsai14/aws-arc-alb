@@ -46,7 +46,6 @@ resource "aws_lb" "this" {
   load_balancer_type       = var.load_balancer_type
   internal                 = var.internal
   security_groups          = var.security_groups != null ? var.security_groups : [module.arc_security_group.id]
-  subnets                  = var.subnets
   ip_address_type          = var.ip_address_type
   enable_deletion_protection = var.enable_deletion_protection
   enable_cross_zone_load_balancing = var.enable_cross_zone_load_balancing

@@ -50,6 +50,12 @@ access_logs = {
   prefix  = "load-balancer-logs"
 }
 
+connection_logs = {
+    bucket  = "my-logs-bucket"
+    prefix  = "lb-logs/"
+    enabled = true
+  }
+
 # Subnet mapping (optional, use if needed)
 subnet_mapping = [
   {
