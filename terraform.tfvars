@@ -53,7 +53,7 @@ access_logs = {
 connection_logs = {
     bucket  = "arc-terraform-alb-logs"
     prefix  = "lb-logs"
-    enabled = true
+    enabled = false
   }
 
 # Subnet mapping (optional, use if needed)
