@@ -47,7 +47,7 @@ variable "internal" {
 variable "security_groups" {
   description = "List of security group IDs to assign to the Load Balancer."
   type        = list(string)
-  default     = null
+  default     = []
 }
 
 variable "vpc_id" {

@@ -12,37 +12,36 @@ subnets = ["subnet-6781cb49", "subnet-f55c1392"]
 vpc_id = "vpc-68f96212"
 
 # Security group rules
- security_group_data = {
-    create      = true
-    description = "Security Group for alb"
+security_group_data = {
+  create      = true
+  description = "Security Group for alb"
+  ingress_rules = [
+    {
+      description = "Allow VPC traffic"
+      cidr_block  = "0.0.0.0/0" # Changed to string
+      from_port   = 0
+      ip_protocol = "tcp"
+      to_port     = 88
+    },
+    {
+      description = "Allow traffic from self"
+      self        = true
+      from_port   = 0
+      ip_protocol = "tcp"
+      to_port     = 443
+    },
+  ]
+  egress_rules = [
+    {
+      description = "Allow all outbound traffic"
+      cidr_block  = "0.0.0.0/0" # Changed to string
+      from_port   = -1
+      ip_protocol = "-1"
+      to_port     = -1
+    }
+  ]
+}
 
-    ingress_rules = [
-      {
-        description = "Allow VPC traffic"
-        cidr_block  = ["0.0.0.0/0"]
-        from_port   = 0
-        ip_protocol = "tcp"
-        to_port     = 88
-      },
-      {
-        description = "Allow traffic from self"
-        self        = true
-        from_port   = 0
-        ip_protocol = "tcp"
-        to_port     = 443
-      },
-    ]
-
-    egress_rules = [
-      {
-        description = "Allow all outbound traffic"
-        cidr_block  = "0.0.0.0/0"
-        from_port   = -1
-        ip_protocol = "-1"
-        to_port     = -1
-      }
-    ]
-  }
 
 # Access logs configuration
 access_logs = {
