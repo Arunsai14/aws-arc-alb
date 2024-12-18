@@ -52,7 +52,7 @@ access_logs = {
 
 connection_logs = {
     bucket  = "my-logs-bucket"
-    prefix  = "lb-logs/"
+    prefix  = "lb-logs"
     enabled = true
   }
 
