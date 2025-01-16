@@ -21,12 +21,12 @@ security_group_data = {
       cidr_block  = "0.0.0.0/0" # Changed to string
       from_port   = 0
       ip_protocol = "tcp"
-      to_port     = 88
+      to_port     = 443
     },
     {
       description = "Allow traffic from self"
       self        = true
-      from_port   = 0
+      from_port   = 443
       ip_protocol = "tcp"
       to_port     = 443
     },
