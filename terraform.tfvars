@@ -87,7 +87,7 @@ subnet_mapping = [
       type    = "lb_cookie"
     }
   }]
-
+ cidr_blocks = null
   listener_rules = []
 
     alb = {
