@@ -45,7 +45,7 @@ security_group_data = {
 
 # Access logs configuration
 access_logs = {
-  enabled = true
+  enabled = false
   bucket  = "arc-terraform-alb-logs"
   prefix  = "load-balancer-logs"
 }
@@ -72,3 +72,20 @@ subnet_mapping = [
   }
 ]
 
+  alb_target_group = [{
+    name        = "arc-poc-alb-tg"
+    port        = 80
+    protocol    = "HTTP"
+    vpc_id      = "vpc-12345"
+    target_type = "ip"
+    health_check = {
+      enabled = true
+      path    = "/"
+    }
+    stickiness = {
+      enabled = true
+      type    = "lb_cookie"
+    }
+  }]
+
+  listener_rules = []

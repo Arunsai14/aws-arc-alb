@@ -238,3 +238,73 @@ variable "security_group_data" {
     create = false
   }
 }
+
+variable "alb_target_group" {
+  description = "List of target groups to create"
+  type = list(object({
+    name                              = optional(string, "target-group")
+    port                              = number
+    protocol                          = optional(string, null)
+    protocol_version                  = optional(string, "HTTP1")
+    vpc_id                            = optional(string, "")
+    target_type                       = optional(string, "ip")
+    ip_address_type                   = optional(string, "ipv4")
+    load_balancing_algorithm_type     = optional(string, "round_robin")
+    load_balancing_cross_zone_enabled = optional(string, "use_load_balancer_configuration")
+    deregistration_delay              = optional(number, 300)
+    slow_start                        = optional(number, 0)
+    tags                              = optional(map(string), {})
+
+    health_check = optional(object({
+      enabled             = optional(bool, true)
+      protocol            = optional(string, "HTTP") # Allowed values: "HTTP", "HTTPS", "TCP", etc.
+      path                = optional(string, "/")
+      port                = optional(string, "traffic-port")
+      timeout             = optional(number, 6)
+      healthy_threshold   = optional(number, 3)
+      unhealthy_threshold = optional(number, 3)
+      interval            = optional(number, 30)
+      matcher             = optional(string, "200") # Default HTTP matcher. Range 200 to 499
+    }))
+
+    stickiness = optional(object({
+      enabled         = optional(bool, true)
+      type            = string
+      cookie_duration = optional(number, 86400)
+      })
+    )
+
+  }))
+}
+
+variable "listener_rules" {
+  description = "List of listener rules to create"
+  type = list(object({
+    priority = number
+
+    conditions = list(object({
+      field  = string
+      values = list(string)
+    }))
+
+    actions = list(object({
+      type             = string
+      target_group_arn = optional(string)
+      order            = optional(number)
+      redirect = optional(object({
+        protocol    = string
+        port        = string
+        host        = optional(string)
+        path        = optional(string)
+        query       = optional(string)
+        status_code = string
+      }), null)
+
+      fixed_response = optional(object({
+        content_type = string
+        message_body = optional(string)
+        status_code  = optional(string)
+      }), null)
+    }))
+  }))
+}
