@@ -14,5 +14,5 @@ output "load_balancer_zone_id" {
 }
 
 output "security_group_id" {
-  value = [for sg in aws_security_group.this : sg.id]
+  value = [for sg in module.arc_security_group : sg.id]
 }

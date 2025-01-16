@@ -277,6 +277,12 @@ variable "alb_target_group" {
   }))
 }
 
+
+variable "create_listener_rule" {
+  type    = bool
+  default = false
+}
+
 variable "listener_rules" {
   description = "List of listener rules to create"
   type = list(object({
