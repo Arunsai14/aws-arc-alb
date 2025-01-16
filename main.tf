@@ -45,7 +45,7 @@ resource "aws_lb" "this" {
   name_prefix              = var.name_prefix
   load_balancer_type       = var.load_balancer_type
   internal                 = var.internal
-  security_groups          = [module.arc_security_group.id]
+  security_groups          = module.arc_security_group.id
   ip_address_type          = var.ip_address_type
   enable_deletion_protection = var.enable_deletion_protection
   enable_cross_zone_load_balancing = var.enable_cross_zone_load_balancing
