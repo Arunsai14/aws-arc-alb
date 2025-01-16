@@ -89,3 +89,10 @@ subnet_mapping = [
   }]
 
   listener_rules = []
+
+    alb = {
+    name       = "arc-poc-alb"
+    internal   = false
+    port       = 80
+    create_alb = false
+  }
