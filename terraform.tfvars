@@ -26,9 +26,9 @@ security_group_data = {
     {
       description = "Allow traffic from self"
       self        = true
-      from_port   = 443
+      from_port   = 80
       ip_protocol = "tcp"
-      to_port     = 443
+      to_port     = 80
     },
   ]
   egress_rules = [
