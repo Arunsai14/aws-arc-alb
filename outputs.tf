@@ -12,3 +12,7 @@ output "load_balancer_zone_id" {
   description = "The zone ID of the created load balancer"
   value       = aws_lb.this.zone_id
 }
+
+output "security_group_id" {
+  value = [for sg in aws_security_group.this : sg.id]
+}
