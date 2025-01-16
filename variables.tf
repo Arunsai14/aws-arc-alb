@@ -308,3 +308,25 @@ variable "listener_rules" {
     }))
   }))
 }
+
+variable "alb" {
+  type = object({
+    name                       = optional(string, null)
+    port                       = optional(number)
+    protocol                   = optional(string, "HTTP")
+    internal                   = optional(bool, false)
+    load_balancer_type         = optional(string, "application")
+    idle_timeout               = optional(number, 60)
+    enable_deletion_protection = optional(bool, false)
+    enable_http2               = optional(bool, true)
+    certificate_arn            = optional(string, null)
+
+    access_logs = optional(object({
+      bucket  = string
+      enabled = optional(bool, true)
+      prefix  = optional(string, "")
+    }))
+
+    tags = optional(map(string), {})
+  })
+}
