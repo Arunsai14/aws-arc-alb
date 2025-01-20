@@ -386,6 +386,7 @@ variable "default_actions" {
       status_code = string
     }))
   }))
+   default = []
 }
 
 # Example variables for other options
