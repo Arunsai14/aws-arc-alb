@@ -222,7 +222,7 @@ resource "aws_lb_listener" "this" {
         message_body = default_action.value.fixed_response.message_body
       }
 
-      Forward action - Dynamic Block
+      # Forward action - Dynamic Block
       dynamic "forward" {
         for_each = lookup(default_actions.value, "forward", [])
         content {
