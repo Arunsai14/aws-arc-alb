@@ -145,29 +145,117 @@ resource "aws_lb_target_group" "this" {
 ## Listener
 ###################################################################
 
-resource "aws_lb_listener" "http" {
-  load_balancer_arn = aws_lb.this.arn
-  port              = var.alb.port
-  protocol          = var.alb.protocol
+# resource "aws_lb_listener" "http" {
+#   load_balancer_arn = aws_lb.this.arn
+#   port              = var.alb.port
+#   protocol          = var.alb.protocol
 
-  certificate_arn = var.alb.certificate_arn
+#   certificate_arn = var.alb.certificate_arn
 
-  # Static "default_action" for forward
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.this[var.alb_target_group[0].name].arn
-  }
+#   # Static "default_action" for forward
+#   default_action {
+#     type             = "forward"
+#     target_group_arn = aws_lb_target_group.this[var.alb_target_group[0].name].arn
+#   }
 
-  # Dynamic "default_action" for variable-driven actions
+#   # Dynamic "default_action" for variable-driven actions
+#   dynamic "default_action" {
+#     for_each = var.listener_rules
+
+#     content {
+#       type             = length(each.value.actions) > 0 ? each.value.actions[0].type : null
+#       target_group_arn = length(each.value.actions) > 0 ? lookup(each.value.actions[0], "target_group_arn", null) : null
+#     }
+#   }
+#   depends_on = [aws_lb_target_group.this]
+# }
+
+
+resource "aws_lb_listener" "front_end" {
+  load_balancer_arn = aws_lb.front_end.arn
+  port              = var.port            # Optional: Specify port as a variable
+  protocol          = var.protocol        # Optional: Specify protocol as a variable
+  
+  alpn_policy       = var.alpn_policy     # Optional: ALPN Policy for TLS
+
+  # Optional: Default action with dynamic actions
   dynamic "default_action" {
-    for_each = var.listener_rules
-
+    for_each = var.default_actions      # You can pass this as a map or list of maps
     content {
-      type             = length(each.value.actions) > 0 ? each.value.actions[0].type : null
-      target_group_arn = length(each.value.actions) > 0 ? lookup(each.value.actions[0], "target_group_arn", null) : null
+      type = default_action.value.type
+      
+      # OIDC Authentication action
+      authenticate_oidc {
+        authorization_endpoint = default_action.value.authenticate_oidc.authorization_endpoint
+        client_id              = default_action.value.authenticate_oidc.client_id
+        client_secret          = default_action.value.authenticate_oidc.client_secret
+        issuer                 = default_action.value.authenticate_oidc.issuer
+        token_endpoint         = default_action.value.authenticate_oidc.token_endpoint
+        user_info_endpoint     = default_action.value.authenticate_oidc.user_info_endpoint
+      }
+
+      # Cognito Authentication action
+      authenticate_cognito {
+        user_pool_arn          = default_action.value.authenticate_cognito.user_pool_arn
+        user_pool_client_id    = default_action.value.authenticate_cognito.user_pool_client_id
+        user_pool_domain       = default_action.value.authenticate_cognito.user_pool_domain
+        authentication_request_extra_params = default_action.value.authenticate_cognito.authentication_request_extra_params
+        on_unauthenticated_request = default_action.value.authenticate_cognito.on_unauthenticated_request
+        scope = default_action.value.authenticate_cognito.scope
+        session_cookie_name = default_action.value.authenticate_cognito.session_cookie_name
+        session_timeout = default_action.value.authenticate_cognito.session_timeout
+      }
+
+      # Mutual Authentication (TLS)
+      mutual_authentication {
+        mode            = default_action.value.mutual_authentication.mode
+        trust_store_arn = default_action.value.mutual_authentication.trust_store_arn
+      }
+
+      # Fixed Response action
+      fixed_response {
+        status_code = default_action.value.fixed_response.status_code
+        content_type = default_action.value.fixed_response.content_type
+        message_body = default_action.value.fixed_response.message_body
+      }
+
+      # Forward action
+      forward {
+        target_group_arn = default_action.value.forward.target_group_arn
+        stickiness {
+          duration = default_action.value.forward.stickiness.duration
+          enabled  = default_action.value.forward.stickiness.enabled
+        }
+      }
+
+      # Redirect action
+      redirect {
+        host               = default_action.value.redirect.host
+        path               = default_action.value.redirect.path
+        query              = default_action.value.redirect.query
+        protocol           = default_action.value.redirect.protocol
+        port               = default_action.value.redirect.port
+        status_code        = default_action.value.redirect.status_code
+      }
     }
   }
-  depends_on = [aws_lb_target_group.this]
+
+  # Optional: SSL certificate ARN
+  certificate_arn = var.certificate_arn   # Only if using HTTPS
+
+  # Optional: SSL policy for TLS listeners
+  ssl_policy = var.ssl_policy             # Only if using HTTPS
+
+  # Optional: TCP idle timeout for TCP protocols
+  tcp_idle_timeout_seconds = var.tcp_idle_timeout_seconds # Only for TCP
+
+  # Optional: Routing HTTP headers
+  routing_http_response_server_enabled = var.routing_http_response_server_enabled # Optional for HTTP/HTTPS ALB
+  routing_http_response_strict_transport_security_header_value = var.routing_http_response_strict_transport_security_header_value
+  routing_http_response_access_control_allow_origin_header_value = var.routing_http_response_access_control_allow_origin_header_value
+
+  # Optional: Tags for the listener
+  tags = module.tags.tags # Pass tags as a map
 }
 
 
