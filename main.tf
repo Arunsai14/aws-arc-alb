@@ -229,18 +229,20 @@ resource "aws_lb_listener" "this" {
       #     target_group {
       #       arn = aws_lb_target_group.this[var.alb_target_group[0].name].arn
       #     }
-  # Static "default_action" for forward
+
+      #     stickiness {
+      #       duration = forward.value.stickiness.duration
+      #       enabled  = forward.value.stickiness.enabled
+      #     }
+      #   }
+      # }
+
+      #   # Static "default_action" for forward
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.this[var.alb_target_group[0].name].arn
   }
 
-          stickiness {
-            duration = forward.value.stickiness.duration
-            enabled  = forward.value.stickiness.enabled
-          }
-        }
-      }
 
       # Redirect action
       redirect {
