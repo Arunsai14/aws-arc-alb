@@ -207,13 +207,13 @@ resource "aws_lb_listener" "this" {
       }
 
       # Mutual Authentication (TLS) - Dynamic Block
-      dynamic "mutual_authentication" {
-        for_each = lookup(default_action.value, "mutual_authentication", [])
-        content {
-          mode            = mutual_authentication.value.mode
-          trust_store_arn = mutual_authentication.value.trust_store_arn
-        }
-      }
+      # dynamic "mutual_authentication" {
+      #   for_each = lookup(default_action.value, "mutual_authentication", [])
+      #   content {
+      #     mode            = mutual_authentication.value.mode
+      #     trust_store_arn = mutual_authentication.value.trust_store_arn
+      #   }
+      # }
 
       # Fixed Response action
       fixed_response {
@@ -227,7 +227,7 @@ resource "aws_lb_listener" "this" {
         for_each = lookup(default_action.value, "forward", [])
         content {
           target_group {
-            arn = forward.value.target_group_arn
+            arn = aws_lb_target_group.this[var.alb_target_group[0].name].arn
           }
 
           stickiness {
