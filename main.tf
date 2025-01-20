@@ -171,8 +171,8 @@ resource "aws_lb_target_group" "this" {
 # }
 
 
-resource "aws_lb_listener" "front_end" {
-  load_balancer_arn = aws_lb.front_end.arn
+resource "aws_lb_listener" "this" {
+  load_balancer_arn = aws_lb.this.arn
   port              = var.port            # Optional: Specify port as a variable
   protocol          = var.protocol        # Optional: Specify protocol as a variable
   
@@ -265,7 +265,7 @@ resource "aws_lb_listener" "front_end" {
 resource "aws_lb_listener_rule" "this" {
   for_each = var.create_listener_rule ? { for rule in var.listener_rules : rule.priority => rule } : {}
 
-  listener_arn = aws_lb_listener.http.arn
+  listener_arn = aws_lb_listener.this.arn
   priority     = each.value.priority
 
   dynamic "condition" {
@@ -309,5 +309,5 @@ resource "aws_lb_listener_rule" "this" {
     }
   }
 
-  depends_on = [aws_lb_listener.http]
+  depends_on = [aws_lb_listener.this]
 }
