@@ -340,7 +340,6 @@ variable "alb" {
 #########################################
 
 variable "default_actions" {
-  description = "List of actions to apply to the listener"
   type = list(object({
     type = string
     authenticate_oidc = optional(object({
@@ -352,17 +351,17 @@ variable "default_actions" {
       user_info_endpoint     = string
     }))
     authenticate_cognito = optional(object({
-      user_pool_arn           = string
-      user_pool_client_id     = string
-      user_pool_domain        = string
+      user_pool_arn                     = string
+      user_pool_client_id               = string
+      user_pool_domain                  = string
       authentication_request_extra_params = map(string)
-      on_unauthenticated_request = string
-      scope                    = list(string)
-      session_cookie_name      = string
-      session_timeout          = number
+      on_unauthenticated_request        = string
+      scope                             = string
+      session_cookie_name               = string
+      session_timeout                   = number
     }))
     mutual_authentication = optional(object({
-      mode = string
+      mode            = string
       trust_store_arn = string
     }))
     fixed_response = optional(object({
@@ -388,6 +387,7 @@ variable "default_actions" {
   }))
    default = []
 }
+
 
 # Example variables for other options
 variable "port" {

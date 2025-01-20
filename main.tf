@@ -175,7 +175,7 @@ resource "aws_lb_listener" "this" {
   load_balancer_arn = aws_lb.this.arn
   port              = var.port            # Optional: Specify port as a variable
   protocol          = var.protocol        # Optional: Specify protocol as a variable
-  
+
   alpn_policy       = var.alpn_policy     # Optional: ALPN Policy for TLS
 
   # Optional: Default action with dynamic actions
@@ -183,7 +183,7 @@ resource "aws_lb_listener" "this" {
     for_each = var.default_actions      # You can pass this as a map or list of maps
     content {
       type = default_action.value.type
-      
+
       # OIDC Authentication action
       authenticate_oidc {
         authorization_endpoint = default_action.value.authenticate_oidc.authorization_endpoint
@@ -206,10 +206,13 @@ resource "aws_lb_listener" "this" {
         session_timeout = default_action.value.authenticate_cognito.session_timeout
       }
 
-      # Mutual Authentication (TLS)
-      mutual_authentication {
-        mode            = default_action.value.mutual_authentication.mode
-        trust_store_arn = default_action.value.mutual_authentication.trust_store_arn
+      # Mutual Authentication (TLS) - Dynamic Block
+      dynamic "mutual_authentication" {
+        for_each = lookup(default_action.value, "mutual_authentication", [])
+        content {
+          mode            = mutual_authentication.value.mode
+          trust_store_arn = mutual_authentication.value.trust_store_arn
+        }
       }
 
       # Fixed Response action
@@ -219,12 +222,18 @@ resource "aws_lb_listener" "this" {
         message_body = default_action.value.fixed_response.message_body
       }
 
-      # Forward action
-      forward {
-        target_group_arn = default_action.value.forward.target_group_arn
-        stickiness {
-          duration = default_action.value.forward.stickiness.duration
-          enabled  = default_action.value.forward.stickiness.enabled
+      # Forward action - Dynamic Block
+      dynamic "forward" {
+        for_each = lookup(default_action.value, "forward", [])
+        content {
+          target_group {
+            arn = forward.value.target_group_arn
+          }
+
+          stickiness {
+            duration = forward.value.stickiness.duration
+            enabled  = forward.value.stickiness.enabled
+          }
         }
       }
 
@@ -249,14 +258,10 @@ resource "aws_lb_listener" "this" {
   # Optional: TCP idle timeout for TCP protocols
   tcp_idle_timeout_seconds = var.tcp_idle_timeout_seconds # Only for TCP
 
-  # Optional: Routing HTTP headers
-  routing_http_response_server_enabled = var.routing_http_response_server_enabled # Optional for HTTP/HTTPS ALB
-  routing_http_response_strict_transport_security_header_value = var.routing_http_response_strict_transport_security_header_value
-  routing_http_response_access_control_allow_origin_header_value = var.routing_http_response_access_control_allow_origin_header_value
-
   # Optional: Tags for the listener
   tags = module.tags.tags # Pass tags as a map
 }
+
 
 
 ###################################################################
