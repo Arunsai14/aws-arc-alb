@@ -96,3 +96,16 @@ subnet_mapping = [
     port       = 80
     create_alb = false
   }
+
+
+  efault_actions = [
+  {
+    type = "forward"
+    forward = {
+      stickiness = {
+        enabled  = true
+        duration = 60
+      }
+    }
+  }
+]

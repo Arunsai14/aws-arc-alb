@@ -370,7 +370,7 @@ variable "default_actions" {
       message_body = string
     }))
     forward = optional(object({
-      target_group_arn = string
+      # target_group_arn = string
       stickiness = optional(object({
         duration = number
         enabled  = bool
