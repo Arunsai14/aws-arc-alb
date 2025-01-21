@@ -342,33 +342,29 @@ variable "alb" {
 variable "default_actions" {
   type = list(object({
     type = string
-    authenticate_oidc = optional(object({
-      authorization_endpoint = string
-      client_id              = string
-      client_secret          = string
-      issuer                 = string
-      token_endpoint         = string
-      user_info_endpoint     = string
-    }))
-    authenticate_cognito = optional(object({
-      user_pool_arn                     = string
-      user_pool_client_id               = string
-      user_pool_domain                  = string
-      authentication_request_extra_params = map(string)
-      on_unauthenticated_request        = string
-      scope                             = string
-      session_cookie_name               = string
-      session_timeout                   = number
-    }))
-    mutual_authentication = optional(object({
-      mode            = string
-      trust_store_arn = string
-    }))
-    fixed_response = optional(object({
-      status_code  = string
-      content_type = string
-      message_body = string
-    }))
+    # authenticate_oidc = optional(object({
+    #   authorization_endpoint = string
+    #   client_id              = string
+    #   client_secret          = string
+    #   issuer                 = string
+    #   token_endpoint         = string
+    #   user_info_endpoint     = string
+    # }))
+    # authenticate_cognito = optional(object({
+    #   user_pool_arn                     = string
+    #   user_pool_client_id               = string
+    #   user_pool_domain                  = string
+    #   authentication_request_extra_params = map(string)
+    #   on_unauthenticated_request        = string
+    #   scope                             = string
+    #   session_cookie_name               = string
+    #   session_timeout                   = number
+    # }))
+    # fixed_response = optional(object({
+    #   status_code  = string
+    #   content_type = string
+    #   message_body = string
+    # }))
     forward = optional(object({
       # target_group_arn = string
       stickiness = optional(object({

@@ -159,26 +159,26 @@ resource "aws_lb_listener" "this" {
       type = default_action.value.type
 
       # OIDC Authentication action
-      authenticate_oidc {
-        authorization_endpoint = default_action.value.authenticate_oidc.authorization_endpoint
-        client_id              = default_action.value.authenticate_oidc.client_id
-        client_secret          = default_action.value.authenticate_oidc.client_secret
-        issuer                 = default_action.value.authenticate_oidc.issuer
-        token_endpoint         = default_action.value.authenticate_oidc.token_endpoint
-        user_info_endpoint     = default_action.value.authenticate_oidc.user_info_endpoint
-      }
+      # authenticate_oidc {
+      #   authorization_endpoint = default_action.value.authenticate_oidc.authorization_endpoint
+      #   client_id              = default_action.value.authenticate_oidc.client_id
+      #   client_secret          = default_action.value.authenticate_oidc.client_secret
+      #   issuer                 = default_action.value.authenticate_oidc.issuer
+      #   token_endpoint         = default_action.value.authenticate_oidc.token_endpoint
+      #   user_info_endpoint     = default_action.value.authenticate_oidc.user_info_endpoint
+      # }
 
-      # Cognito Authentication action
-      authenticate_cognito {
-        user_pool_arn          = default_action.value.authenticate_cognito.user_pool_arn
-        user_pool_client_id    = default_action.value.authenticate_cognito.user_pool_client_id
-        user_pool_domain       = default_action.value.authenticate_cognito.user_pool_domain
-        authentication_request_extra_params = default_action.value.authenticate_cognito.authentication_request_extra_params
-        on_unauthenticated_request = default_action.value.authenticate_cognito.on_unauthenticated_request
-        scope = default_action.value.authenticate_cognito.scope
-        session_cookie_name = default_action.value.authenticate_cognito.session_cookie_name
-        session_timeout = default_action.value.authenticate_cognito.session_timeout
-      }
+      # # Cognito Authentication action
+      # authenticate_cognito {
+      #   user_pool_arn          = default_action.value.authenticate_cognito.user_pool_arn
+      #   user_pool_client_id    = default_action.value.authenticate_cognito.user_pool_client_id
+      #   user_pool_domain       = default_action.value.authenticate_cognito.user_pool_domain
+      #   authentication_request_extra_params = default_action.value.authenticate_cognito.authentication_request_extra_params
+      #   on_unauthenticated_request = default_action.value.authenticate_cognito.on_unauthenticated_request
+      #   scope = default_action.value.authenticate_cognito.scope
+      #   session_cookie_name = default_action.value.authenticate_cognito.session_cookie_name
+      #   session_timeout = default_action.value.authenticate_cognito.session_timeout
+      # }
 
       # Mutual Authentication (TLS) - Dynamic Block
       # dynamic "mutual_authentication" {
@@ -190,11 +190,11 @@ resource "aws_lb_listener" "this" {
       # }
 
       # Fixed Response action
-      fixed_response {
-        status_code = default_action.value.fixed_response.status_code
-        content_type = default_action.value.fixed_response.content_type
-        message_body = default_action.value.fixed_response.message_body
-      }
+      # fixed_response {
+      #   status_code = default_action.value.fixed_response.status_code
+      #   content_type = default_action.value.fixed_response.content_type
+      #   message_body = default_action.value.fixed_response.message_body
+      # }
 
       # Forward action - Dynamic Block
       dynamic "forward" {
