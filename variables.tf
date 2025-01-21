@@ -430,14 +430,14 @@ variable "listener_rules" {
         on_unauthenticated_request = string
       }))
     }))
-    # conditions = list(object({
-    #   host_header = optional(object({
-    #     values = list(string)
-    #   }))
-    #   path_pattern = optional(object({
-    #     values = list(string)
-    #   }))
-    # }))
+    conditions = list(object({
+      host_header = optional(object({
+        values = list(string)
+      }))
+      path_pattern = optional(object({
+        values = list(string)
+      }))
+    }))
   }))
 }
 

@@ -315,17 +315,18 @@ resource "aws_lb_listener_rule" "this" {
     }
   }
 
-#   dynamic "condition" {
-#     for_each = each.value.conditions
-#   content {
-#       # Use predefined condition types such as host_header, path_pattern, etc.
-#       host_header {
-#         values = condition.value.values
-#       }
+  condition {
+    host_header {
+      values = flatten([for cond in each.value.conditions : cond.host_header != null ? cond.host_header.values : []])
+    }
 
-#       path_pattern {
-#         values = condition.value.values
-#       }
-#   }
-# }
+    path_pattern {
+      values = flatten([for cond in each.value.conditions : cond.path_pattern != null ? cond.path_pattern.values : []])
+    }
+  }
+
+  certificate {
+    for_each = length(var.listener_certificates) > 0 ? var.listener_certificates : []
+    certificate_arn = each.value.certificate_arn
+  }
 }
