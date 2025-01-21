@@ -325,8 +325,8 @@ resource "aws_lb_listener_rule" "this" {
     }
   }
 
-  certificate {
-    for_each = length(var.listener_certificates) > 0 ? var.listener_certificates : []
-    certificate_arn = each.value.certificate_arn
-  }
+  # certificate {
+  #   for_each = length(var.listener_certificates) > 0 ? var.listener_certificates : []
+  #   certificate_arn = each.value.certificate_arn
+  # }
 }
