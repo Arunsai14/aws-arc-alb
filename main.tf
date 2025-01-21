@@ -154,81 +154,77 @@ resource "aws_lb_listener" "this" {
 
   # Optional: Default action with dynamic actions
   dynamic "default_action" {
-    for_each = var.default_action    
-    content {
-      type = default_action.value.type
+  for_each = var.default_action
+  content {
+    type = default_action.value.type
 
-      # OIDC Authentication action
-      authenticate_oidc {
-        authorization_endpoint = default_action.value.authenticate_oidc.authorization_endpoint
-        client_id              = default_action.value.authenticate_oidc.client_id
-        client_secret          = default_action.value.authenticate_oidc.client_secret
-        issuer                 = default_action.value.authenticate_oidc.issuer
-        token_endpoint         = default_action.value.authenticate_oidc.token_endpoint
-        user_info_endpoint     = default_action.value.authenticate_oidc.user_info_endpoint
+    # OIDC Authentication action - Only if authenticate_oidc is provided
+    dynamic "authenticate_oidc" {
+      for_each = lookup(default_action.value, "authenticate_oidc", null) != null ? [default_action.value.authenticate_oidc] : []
+      content {
+        authorization_endpoint = authenticate_oidc.value.authorization_endpoint
+        client_id              = authenticate_oidc.value.client_id
+        client_secret          = authenticate_oidc.value.client_secret
+        issuer                 = authenticate_oidc.value.issuer
+        token_endpoint         = authenticate_oidc.value.token_endpoint
+        user_info_endpoint     = authenticate_oidc.value.user_info_endpoint
       }
+    }
 
-      # Cognito Authentication action
-      authenticate_cognito {
-        user_pool_arn          = default_action.value.authenticate_cognito.user_pool_arn
-        user_pool_client_id    = default_action.value.authenticate_cognito.user_pool_client_id
-        user_pool_domain       = default_action.value.authenticate_cognito.user_pool_domain
-        authentication_request_extra_params = default_action.value.authenticate_cognito.authentication_request_extra_params
-        on_unauthenticated_request = default_action.value.authenticate_cognito.on_unauthenticated_request
-        scope = default_action.value.authenticate_cognito.scope
-        session_cookie_name = default_action.value.authenticate_cognito.session_cookie_name
-        session_timeout = default_action.value.authenticate_cognito.session_timeout
+    # Cognito Authentication action - Only if authenticate_cognito is provided
+    dynamic "authenticate_cognito" {
+      for_each = lookup(default_action.value, "authenticate_cognito", null) != null ? [default_action.value.authenticate_cognito] : []
+      content {
+        user_pool_arn                    = authenticate_cognito.value.user_pool_arn
+        user_pool_client_id              = authenticate_cognito.value.user_pool_client_id
+        user_pool_domain                 = authenticate_cognito.value.user_pool_domain
+        authentication_request_extra_params = authenticate_cognito.value.authentication_request_extra_params
+        on_unauthenticated_request       = authenticate_cognito.value.on_unauthenticated_request
+        scope                            = authenticate_cognito.value.scope
+        session_cookie_name              = authenticate_cognito.value.session_cookie_name
+        session_timeout                  = authenticate_cognito.value.session_timeout
       }
+    }
 
-      # Mutual Authentication (TLS) - Dynamic Block
-      # dynamic "mutual_authentication" {
-      #   for_each = lookup(default_action.value, "mutual_authentication", [])
-      #   content {
-      #     mode            = mutual_authentication.value.mode
-      #     trust_store_arn = mutual_authentication.value.trust_store_arn
-      #   }
-      # }
-
-      # Fixed Response action
-      fixed_response {
-        status_code = default_action.value.fixed_response.status_code
-        content_type = default_action.value.fixed_response.content_type
-        message_body = default_action.value.fixed_response.message_body
+    # Fixed Response action - Only if fixed_response is provided
+    dynamic "fixed_response" {
+      for_each = lookup(default_action.value, "fixed_response", null) != null ? [default_action.value.fixed_response] : []
+      content {
+        status_code  = fixed_response.value.status_code
+        content_type = fixed_response.value.content_type
+        message_body = fixed_response.value.message_body
       }
+    }
 
-      # Forward action - Dynamic Block
-      dynamic "forward" {
-        for_each = lookup(default_action.value, "forward", [])
-        content {
-          target_group {
-            arn = aws_lb_target_group.this[var.alb_target_group[0].name].arn
-          }
+    # Forward action - Only if forward is provided
+    dynamic "forward" {
+      for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
+      content {
+        target_group {
+          arn = aws_lb_target_group.this[var.alb_target_group[0].name].arn
+        }
 
-          stickiness {
-            duration = forward.value.stickiness.duration
-            enabled  = forward.value.stickiness.enabled
-          }
+        stickiness {
+          duration = forward.value.stickiness.duration
+          enabled  = forward.value.stickiness.enabled
         }
       }
+    }
 
-      #   # Static "default_action" for forward
-  # default_action {
-  #   type             = "forward"
-  #   target_group_arn = aws_lb_target_group.this[var.alb_target_group[0].name].arn
-  # }
-
-
-      # Redirect action
-      redirect {
-        host               = default_action.value.redirect.host
-        path               = default_action.value.redirect.path
-        query              = default_action.value.redirect.query
-        protocol           = default_action.value.redirect.protocol
-        port               = default_action.value.redirect.port
-        status_code        = default_action.value.redirect.status_code
+    # Redirect action - Only if redirect is provided
+    dynamic "redirect" {
+      for_each = lookup(default_action.value, "redirect", null) != null ? [default_action.value.redirect] : []
+      content {
+        host        = redirect.value.host
+        path        = redirect.value.path
+        query       = redirect.value.query
+        protocol    = redirect.value.protocol
+        port        = redirect.value.port
+        status_code = redirect.value.status_code
       }
     }
   }
+}
 
   # Optional: SSL certificate ARN
   certificate_arn = var.certificate_arn   # Only if using HTTPS
