@@ -369,7 +369,7 @@ variable "listener_certificates" {
   type = map(object({
     certificate_arn = string
   }))
-  default = []
+  default = {}
 }
 
 # Example variables for other options
