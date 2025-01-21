@@ -201,7 +201,7 @@ listener_rules = {
     priority = 2
     actions = [
       {
-        type  = "fixed_response"
+        type  = "fixed-response"
         order = 1
         fixed_response = {
           status_code  = "200"
@@ -219,6 +219,13 @@ listener_rules = {
     ]
   }
 }
+
+# listener_certificates = [
+#   {
+#     certificate_arn = "arn:aws:acm:region:account-id:certificate/certificate-id"
+#   }
+]
+
 
 
 # SSL and Listener settings

@@ -270,20 +270,19 @@ resource "aws_lb_listener_certificate" "this" {
 #                 Listener Rules
 ###################################################################
 resource "aws_lb_listener_rule" "this" {
-  for_each = { for idx, rule in var.listener_rules : idx => rule }
+  for_each = var.listener_rules
 
-  listener_arn = aws_lb_listener.this.arn
+  listener_arn = var.listener_arn
   priority     = each.value.priority
 
   dynamic "action" {
     for_each = each.value.actions
     content {
-      type             = action.value.type
-      target_group_arn = aws_lb_target_group.this[var.alb_target_group[0].name].arn
-      order            = action.value.order
+      type  = action.value.type
+      order = action.value.order
 
       dynamic "redirect" {
-        for_each = lookup(action.value, "redirect", null) != null ? [action.value.redirect] : []
+        for_each = action.value.redirect != null ? [action.value.redirect] : []
         content {
           host        = redirect.value.host
           path        = redirect.value.path
@@ -295,7 +294,7 @@ resource "aws_lb_listener_rule" "this" {
       }
 
       dynamic "fixed_response" {
-        for_each = lookup(action.value, "fixed_response", null) != null ? [action.value.fixed_response] : []
+        for_each = action.value.fixed_response != null ? [action.value.fixed_response] : []
         content {
           status_code  = fixed_response.value.status_code
           content_type = fixed_response.value.content_type
@@ -304,24 +303,33 @@ resource "aws_lb_listener_rule" "this" {
       }
 
       dynamic "authenticate_cognito" {
-        for_each = lookup(action.value, "authenticate_cognito", null) != null ? [action.value.authenticate_cognito] : []
+        for_each = action.value.authenticate_cognito != null ? [action.value.authenticate_cognito] : []
         content {
-          user_pool_arn        = authenticate_cognito.value.user_pool_arn
-          user_pool_client_id  = authenticate_cognito.value.user_pool_client_id
-          user_pool_domain     = authenticate_cognito.value.user_pool_domain
-          on_unauthenticated_request = authenticate_cognito.value.on_unauthenticated_request
+          user_pool_arn                   = authenticate_cognito.value.user_pool_arn
+          user_pool_client_id             = authenticate_cognito.value.user_pool_client_id
+          user_pool_domain                = authenticate_cognito.value.user_pool_domain
+          on_unauthenticated_request      = authenticate_cognito.value.on_unauthenticated_request
         }
       }
     }
   }
 
-  condition {
-    host_header {
-      values = flatten([for cond in each.value.conditions : cond.host_header != null ? cond.host_header.values : []])
-    }
+  dynamic "condition" {
+    for_each = each.value.conditions
+    content {
+      dynamic "host_header" {
+        for_each = condition.value.host_header != null ? [condition.value.host_header] : []
+        content {
+          values = host_header.value.values
+        }
+      }
 
-    path_pattern {
-      values = flatten([for cond in each.value.conditions : cond.path_pattern != null ? cond.path_pattern.values : []])
+      dynamic "path_pattern" {
+        for_each = condition.value.path_pattern != null ? [condition.value.path_pattern] : []
+        content {
+          values = path_pattern.value.values
+        }
+      }
     }
   }
 
