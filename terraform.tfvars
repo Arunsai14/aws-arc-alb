@@ -98,14 +98,70 @@ subnet_mapping = [
   }
 
 
-  default_actions = [
+#   default_actions = [
+#   {
+#     type = "forward"
+#     forward = {
+#       stickiness = {
+#         enabled  = true
+#         duration = 60
+#       }
+#     }
+#   }
+# ]
+
+
+default_actions = [
   {
-    type = "forward"
+    type             = "forward"
     forward = {
       stickiness = {
+        duration = 300
         enabled  = true
-        duration = 60
       }
+    }
+  },
+  {
+    type             = "fixed-response"
+    fixed_response = {
+      status_code  = "200"
+      content_type = "text/plain"
+      message_body = "Hello, World!"
+    }
+  },
+  {
+    type             = "redirect"
+    redirect = {
+      host        = "example.com"
+      path        = "/new-path"
+      query       = "?id=123"
+      protocol    = "HTTPS"
+      port        = "443"
+      status_code = "301"
+    }
+  },
+  {
+    type             = "authenticate_oidc"
+    authenticate_oidc = {
+      authorization_endpoint = "https://example.com/authorize"
+      client_id              = "your-client-id"
+      client_secret          = "your-client-secret"
+      issuer                 = "https://example.com"
+      token_endpoint         = "https://example.com/token"
+      user_info_endpoint     = "https://example.com/userinfo"
+    }
+  },
+  {
+    type             = "authenticate_cognito"
+    authenticate_cognito = {
+      user_pool_arn                     = "arn:aws:cognito-idp:region:account-id:userpool/user-pool-id"
+      user_pool_client_id               = "client-id"
+      user_pool_domain                  = "your-cognito-domain"
+      authentication_request_extra_params = { "param1" = "value1" }
+      on_unauthenticated_request        = "deny"
+      scope                             = "openid profile"
+      session_cookie_name               = "my-session-cookie"
+      session_timeout                   = 3600
     }
   }
 ]
