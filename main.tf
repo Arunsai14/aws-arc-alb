@@ -270,75 +270,20 @@ resource "aws_lb_listener_certificate" "this" {
 #                 Listener Rules
 ###################################################################
 resource "aws_lb_listener_rule" "this" {
-  for_each = var.listener_rules
+  for_each = { for idx, rule in var.listener_rules : idx => rule }
 
   listener_arn = aws_lb_listener.this.arn
+  priority     = each.value.priority
 
-  dynamic "listener_action" {
-    for_each = lookup(each.value, "listener_action", null) != null ? [each.value.listener_action] : []
+  dynamic "action" {
+    for_each = each.value.actions
     content {
-      type = listener_action.value.type
+      type             = action.value.type
+      target_group_arn = action.value.target_group_arn
+      order            = action.value.order
 
-      # OIDC Authentication action
-      dynamic "authenticate_oidc" {
-        for_each = lookup(listener_action.value, "authenticate_oidc", null) != null ? [listener_action.value.authenticate_oidc] : []
-        content {
-          authorization_endpoint = authenticate_oidc.value.authorization_endpoint
-          client_id              = authenticate_oidc.value.client_id
-          client_secret          = authenticate_oidc.value.client_secret
-          issuer                 = authenticate_oidc.value.issuer
-          token_endpoint         = authenticate_oidc.value.token_endpoint
-          user_info_endpoint     = authenticate_oidc.value.user_info_endpoint
-          on_unauthenticated_request = authenticate_oidc.value.on_unauthenticated_request
-          scope                            = authenticate_oidc.value.scope
-          session_cookie_name              = authenticate_oidc.value.session_cookie_name
-          session_timeout                  = authenticate_oidc.value.session_timeout
-        }
-      }
-
-      # Cognito Authentication action
-      dynamic "authenticate_cognito" {
-        for_each = lookup(listener_action.value, "authenticate_cognito", null) != null ? [listener_action.value.authenticate_cognito] : []
-        content {
-          user_pool_arn                    = authenticate_cognito.value.user_pool_arn
-          user_pool_client_id              = authenticate_cognito.value.user_pool_client_id
-          user_pool_domain                 = authenticate_cognito.value.user_pool_domain
-          authentication_request_extra_params = authenticate_cognito.value.authentication_request_extra_params
-          on_unauthenticated_request       = authenticate_cognito.value.on_unauthenticated_request
-          scope                            = authenticate_cognito.value.scope
-          session_cookie_name              = authenticate_cognito.value.session_cookie_name
-          session_timeout                  = authenticate_cognito.value.session_timeout
-        }
-      }
-
-      # Fixed Response action
-      dynamic "fixed_response" {
-        for_each = lookup(listener_action.value, "fixed_response", null) != null ? [listener_action.value.fixed_response] : []
-        content {
-          status_code  = fixed_response.value.status_code
-          content_type = fixed_response.value.content_type
-          message_body = fixed_response.value.message_body
-        }
-      }
-
-      # Forward action
-      dynamic "forward" {
-        for_each = lookup(listener_action.value, "forward", null) != null ? [listener_action.value.forward] : []
-        content {
-          target_group {
-            arn = aws_lb_target_group.this[forward.value.target_group_key].arn
-          }
-
-          stickiness {
-            duration = forward.value.stickiness.duration
-            enabled  = forward.value.stickiness.enabled
-          }
-        }
-      }
-
-      # Redirect action
       dynamic "redirect" {
-        for_each = lookup(listener_action.value, "redirect", null) != null ? [listener_action.value.redirect] : []
+        for_each = lookup(action.value, "redirect", null) != null ? [action.value.redirect] : []
         content {
           host        = redirect.value.host
           path        = redirect.value.path
@@ -348,18 +293,34 @@ resource "aws_lb_listener_rule" "this" {
           status_code = redirect.value.status_code
         }
       }
+
+      dynamic "fixed_response" {
+        for_each = lookup(action.value, "fixed_response", null) != null ? [action.value.fixed_response] : []
+        content {
+          status_code  = fixed_response.value.status_code
+          content_type = fixed_response.value.content_type
+          message_body = fixed_response.value.message_body
+        }
+      }
+
+      dynamic "authenticate_cognito" {
+        for_each = lookup(action.value, "authenticate_cognito", null) != null ? [action.value.authenticate_cognito] : []
+        content {
+          user_pool_arn        = authenticate_cognito.value.user_pool_arn
+          user_pool_client_id  = authenticate_cognito.value.user_pool_client_id
+          user_pool_domain     = authenticate_cognito.value.user_pool_domain
+          on_unauthenticated_request = authenticate_cognito.value.on_unauthenticated_request
+        }
+      }
     }
   }
 
   dynamic "condition" {
-    for_each = lookup(each.value, "condition", null) != null ? [each.value.condition] : []
+    for_each = each.value.conditions
     content {
       field  = condition.value.field
       values = condition.value.values
     }
   }
-
-  priority = each.value.priority
-  listener_action = each.value.listener_action
 }
 

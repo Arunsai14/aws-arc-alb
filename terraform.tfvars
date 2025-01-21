@@ -172,36 +172,33 @@ protocol = "HTTP"
 
 
 # Listener configuration
-listener_rules = [
-  {
-    listener_action = {
-      type = "forward"
-      forward = {
-        target_group_key = "my-target-group"
-        stickiness = {
-          duration = 60
-          enabled  = true
+listener_rules = {
+  rule1 = {
+    priority = 1
+    actions = [
+      {
+        type             = "forward"
+        target_group_arn = aws_lb_target_group.example.arn
+        order            = 1
+        redirect = {
+          host        = "example.com"
+          path        = "/redirect"
+          query       = "action=redirect"
+          protocol    = "HTTP"
+          port        = 80
+          status_code = "HTTP_301"
         }
       }
-    }
-    condition = {
-      field  = "path-pattern"
-      values = ["/api/*"]
-    }
-    priority = 10
-  },
-  {
-    listener_action = {
-      type = "fixed-response"
-      fixed_response = {
-        status_code  = 200
-        content_type = "text/plain"
-        message_body = "OK"
+    ]
+    conditions = [
+      {
+        field  = "host-header"
+        values = ["example.com"]
       }
-    }
-    priority = 20
+    ]
   }
-]
+}
+
 
 # SSL and Listener settings
 # certificate_arn = "arn:aws:acm:region:account-id:certificate/certificate-id"

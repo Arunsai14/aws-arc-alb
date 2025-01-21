@@ -404,61 +404,40 @@ variable "tcp_idle_timeout_seconds" {
 }
 
 variable "listener_rules" {
-  description = "List of listener rules"
-  type = list(object({
-    listener_action = object({
-      type = string
-      authenticate_oidc = optional(object({
-        authorization_endpoint         = string
-        client_id                     = string
-        client_secret                 = string
-        issuer                        = string
-        token_endpoint                = string
-        user_info_endpoint            = string
-        on_unauthenticated_request    = string
-        scope                         = string
-        session_cookie_name           = string
-        session_timeout               = number
-      }))
-      authenticate_cognito = optional(object({
-        user_pool_arn                = string
-        user_pool_client_id          = string
-        user_pool_domain             = string
-        authentication_request_extra_params = map(string)
-        on_unauthenticated_request   = string
-        scope                        = string
-        session_cookie_name          = string
-        session_timeout              = number
-      }))
-      fixed_response = optional(object({
-        status_code  = number
-        content_type = string
-        message_body = string
-      }))
-      forward = optional(object({
-        target_group_key = string
-        stickiness = optional(object({
-          duration = number
-          enabled  = bool
-        }))
-      }))
-      redirect = optional(object({
+  description = "A map of listener rules"
+  type = map(object({
+    priority   = number
+    actions    = list(object({
+      type             = string
+      target_group_arn = string
+      order            = number
+      redirect         = optional(object({
         host        = string
         path        = string
         query       = string
         protocol    = string
-        port        = string
-        status_code = number
+        port        = number
+        status_code = string
       }))
-    })
-    condition = optional(object({
+      fixed_response = optional(object({
+        status_code  = string
+        content_type = string
+        message_body = string
+      }))
+      authenticate_cognito = optional(object({
+        user_pool_arn       = string
+        user_pool_client_id = string
+        user_pool_domain    = string
+        on_unauthenticated_request = string
+      }))
+    }))
+    conditions = list(object({
       field  = string
       values = list(string)
     }))
-    priority         = number
   }))
-  default = []
 }
+
 
 
 
