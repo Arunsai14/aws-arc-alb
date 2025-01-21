@@ -145,42 +145,16 @@ resource "aws_lb_target_group" "this" {
 ## Listener
 ###################################################################
 
-# resource "aws_lb_listener" "http" {
-#   load_balancer_arn = aws_lb.this.arn
-#   port              = var.alb.port
-#   protocol          = var.alb.protocol
-
-#   certificate_arn = var.alb.certificate_arn
-
-#   # Static "default_action" for forward
-#   default_action {
-#     type             = "forward"
-#     target_group_arn = aws_lb_target_group.this[var.alb_target_group[0].name].arn
-#   }
-
-#   # Dynamic "default_action" for variable-driven actions
-#   dynamic "default_action" {
-#     for_each = var.listener_rules
-
-#     content {
-#       type             = length(each.value.actions) > 0 ? each.value.actions[0].type : null
-#       target_group_arn = length(each.value.actions) > 0 ? lookup(each.value.actions[0], "target_group_arn", null) : null
-#     }
-#   }
-#   depends_on = [aws_lb_target_group.this]
-# }
-
-
 resource "aws_lb_listener" "this" {
   load_balancer_arn = aws_lb.this.arn
-  port              = var.port            # Optional: Specify port as a variable
-  protocol          = var.protocol        # Optional: Specify protocol as a variable
+  port              = var.port           
+  protocol          = var.protocol       
 
-  alpn_policy       = var.alpn_policy     # Optional: ALPN Policy for TLS
+  alpn_policy       = var.alpn_policy     
 
   # Optional: Default action with dynamic actions
   dynamic "default_action" {
-    for_each = var.default_actions      # You can pass this as a map or list of maps
+    for_each = var.default_actions    
     content {
       type = default_action.value.type
 
