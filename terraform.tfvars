@@ -224,7 +224,7 @@ listener_rules = {
 #   {
 #     certificate_arn = "arn:aws:acm:region:account-id:certificate/certificate-id"
 #   }
-]
+# ]
 
 
 
