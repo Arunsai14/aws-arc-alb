@@ -149,7 +149,7 @@ resource "aws_lb_listener" "this" {
   load_balancer_arn = aws_lb.this.arn
   port              = var.port           
   protocol          = var.protocol       
-  # alpn_policy       = var.alpn_policy     
+  alpn_policy       = var.alpn_policy     
 
   # Optional: Default action with dynamic actions
   dynamic "default_action" {
@@ -162,11 +162,16 @@ resource "aws_lb_listener" "this" {
       for_each = lookup(default_action.value, "authenticate_oidc", null) != null ? [default_action.value.authenticate_oidc] : []
       content {
         authorization_endpoint = authenticate_oidc.value.authorization_endpoint
+        authentication_request_extra_params = authenticate_cognito.value.authentication_request_extra_params
         client_id              = authenticate_oidc.value.client_id
         client_secret          = authenticate_oidc.value.client_secret
         issuer                 = authenticate_oidc.value.issuer
         token_endpoint         = authenticate_oidc.value.token_endpoint
         user_info_endpoint     = authenticate_oidc.value.user_info_endpoint
+        on_unauthenticated_request       = authenticate_cognito.value.on_unauthenticated_request
+        scope                            = authenticate_cognito.value.scope
+        session_cookie_name              = authenticate_cognito.value.session_cookie_name
+        session_timeout                  = authenticate_cognito.value.session_timeout
       }
     }
 
@@ -222,20 +227,31 @@ resource "aws_lb_listener" "this" {
         status_code = redirect.value.status_code
       }
     }
+
+   # Dynamic mutual_authentication block
+  dynamic "mutual_authentication" {
+    for_each = lookup(default_action.value, "mutual_authentication", null) != null ? [default_action.value.mutual_authentication] : []
+    content {
+      advertise_trust_store_ca_names = mutual_authentication.value.advertise_trust_store_ca_names
+      ignore_client_certificate_expiry = mutual_authentication.value.ignore_client_certificate_expiry
+      mode                           = mutual_authentication.value.mode
+      trust_store_arn                = mutual_authentication.value.trust_store_arn
+    }
+  }
   }
 }
 
   # Optional: SSL certificate ARN
-  # certificate_arn = var.certificate_arn   # Only if using HTTPS
+  certificate_arn = var.certificate_arn   # Only if using HTTPS
 
   # Optional: SSL policy for TLS listeners
-  # ssl_policy = var.ssl_policy             # Only if using HTTPS
+  ssl_policy = var.ssl_policy             # Only if using HTTPS
 
-  # # Optional: TCP idle timeout for TCP protocols
-  # tcp_idle_timeout_seconds = var.tcp_idle_timeout_seconds # Only for TCP
+  # Optional: TCP idle timeout for TCP protocols
+  tcp_idle_timeout_seconds = var.tcp_idle_timeout_seconds # Only for TCP
 
   # Optional: Tags for the listener
-  tags = module.tags.tags # Pass tags as a map
+  tags = module.tags.tags 
 }
 
 

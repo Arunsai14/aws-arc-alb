@@ -349,6 +349,11 @@ variable "default_action" {
       issuer                 = string
       token_endpoint         = string
       user_info_endpoint     = string
+      authentication_request_extra_params = map(string)
+      on_unauthenticated_request        = string
+      scope                             = string
+      session_cookie_name               = string
+      session_timeout                   = number
     }))
     authenticate_cognito = optional(object({
       user_pool_arn                     = string
@@ -379,6 +384,12 @@ variable "default_action" {
       protocol    = string
       port        = string
       status_code = string
+    }))
+      mutual_authentication = optional(object({
+      advertise_trust_store_ca_names      = string
+      ignore_client_certificate_expiry   = bool
+      mode                               = string
+      trust_store_arn                    = string
     }))
   }))
    default = []
