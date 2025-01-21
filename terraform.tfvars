@@ -111,7 +111,7 @@ subnet_mapping = [
 # ]
 
 
-default_actions = [
+default_action = [
   {
     type             = "forward"
     forward = {

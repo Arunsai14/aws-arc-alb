@@ -339,7 +339,7 @@ variable "alb" {
 
 #########################################
 
-variable "default_actions" {
+variable "default_action" {
   type = list(object({
     type = string
     authenticate_oidc = optional(object({
