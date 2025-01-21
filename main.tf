@@ -154,7 +154,7 @@ resource "aws_lb_listener" "this" {
 
   # Optional: Default action with dynamic actions
   dynamic "default_action" {
-    for_each = var.default_actions    
+    for_each = var.default_action    
     content {
       type = default_action.value.type
 
@@ -198,7 +198,7 @@ resource "aws_lb_listener" "this" {
 
       # Forward action - Dynamic Block
       dynamic "forward" {
-        for_each = lookup(default_actions.value, "forward", [])
+        for_each = lookup(default_action.value, "forward", [])
         content {
           target_group {
             arn = aws_lb_target_group.this[var.alb_target_group[0].name].arn
