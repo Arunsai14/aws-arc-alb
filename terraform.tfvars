@@ -135,8 +135,8 @@ default_action = [
       host        = "example.com"
       path        = "/new-path"
       query       = "?id=123"
-      protocol    = "HTTPS"
-      port        = "443"
+      protocol    = "HTTP"
+      port        = "80"
       status_code = "HTTP_301"
     }
   },
@@ -167,5 +167,5 @@ default_action = [
 ]
 
 
-port = 443
-protocol = "HTTPS"
+port = 80
+protocol = "HTTP"
