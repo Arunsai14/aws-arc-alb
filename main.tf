@@ -272,7 +272,7 @@ resource "aws_lb_listener_certificate" "this" {
 resource "aws_lb_listener_rule" "this" {
   for_each = var.listener_rules
 
-  listener_arn = var.listener_arn
+  listener_arn = aws_lb_listener.this.arn
   priority     = each.value.priority
 
   dynamic "action" {
