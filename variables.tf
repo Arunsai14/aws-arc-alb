@@ -283,37 +283,37 @@ variable "create_listener_rule" {
   default = false
 }
 
-variable "listener_rules" {
-  description = "List of listener rules to create"
-  type = list(object({
-    priority = number
+# variable "listener_rules" {
+#   description = "List of listener rules to create"
+#   type = list(object({
+#     priority = number
 
-    conditions = list(object({
-      field  = string
-      values = list(string)
-    }))
+#     conditions = list(object({
+#       field  = string
+#       values = list(string)
+#     }))
 
-    actions = list(object({
-      type             = string
-      target_group_arn = optional(string)
-      order            = optional(number)
-      redirect = optional(object({
-        protocol    = string
-        port        = string
-        host        = optional(string)
-        path        = optional(string)
-        query       = optional(string)
-        status_code = string
-      }), null)
+#     actions = list(object({
+#       type             = string
+#       target_group_arn = optional(string)
+#       order            = optional(number)
+#       redirect = optional(object({
+#         protocol    = string
+#         port        = string
+#         host        = optional(string)
+#         path        = optional(string)
+#         query       = optional(string)
+#         status_code = string
+#       }), null)
 
-      fixed_response = optional(object({
-        content_type = string
-        message_body = optional(string)
-        status_code  = optional(string)
-      }), null)
-    }))
-  }))
-}
+#       fixed_response = optional(object({
+#         content_type = string
+#         message_body = optional(string)
+#         status_code  = optional(string)
+#       }), null)
+#     }))
+#   }))
+# }
 
 variable "alb" {
   type = object({
