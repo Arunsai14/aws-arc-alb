@@ -283,37 +283,6 @@ variable "create_listener_rule" {
   default = false
 }
 
-# variable "listener_rules" {
-#   description = "List of listener rules to create"
-#   type = list(object({
-#     priority = number
-
-#     conditions = list(object({
-#       field  = string
-#       values = list(string)
-#     }))
-
-#     actions = list(object({
-#       type             = string
-#       target_group_arn = optional(string)
-#       order            = optional(number)
-#       redirect = optional(object({
-#         protocol    = string
-#         port        = string
-#         host        = optional(string)
-#         path        = optional(string)
-#         query       = optional(string)
-#         status_code = string
-#       }), null)
-
-#       fixed_response = optional(object({
-#         content_type = string
-#         message_body = optional(string)
-#         status_code  = optional(string)
-#       }), null)
-#     }))
-#   }))
-# }
 
 variable "alb" {
   type = object({
@@ -402,6 +371,36 @@ variable "listener_certificates" {
   }))
 }
 
+# Example variables for other options
+variable "port" {
+  description = "Port number"
+  default = "80"
+}
+
+variable "protocol" {
+  description = "Protocol for listener"
+  default = "HTTP"
+}
+
+variable "alpn_policy" {
+  description = "ALPN policy for TLS"
+  default = "None"
+}
+
+variable "certificate_arn" {
+  description = "SSL certificate ARN for HTTPS"
+  default = ""
+}
+
+variable "ssl_policy" {
+  description = "SSL policy"
+  default = "ELBSecurityPolicy-2016-08"
+}
+
+variable "tcp_idle_timeout_seconds" {
+  description = "TCP idle timeout seconds"
+  default = 350
+}
 
 variable "listener_rules" {
   description = "List of listener rules"
@@ -460,34 +459,6 @@ variable "listener_rules" {
   default = []
 }
 
-variable "certificate_arn" {
-  description = "The ARN of the certificate to be associated with the listener"
-  type        = string
-}
 
-variable "ssl_policy" {
-  description = "The SSL policy to be used with the listener (if using HTTPS)"
-  type        = string
-}
-
-variable "port" {
-  description = "The port for the listener"
-  type        = number
-}
-
-variable "protocol" {
-  description = "The protocol for the listener"
-  type        = string
-}
-
-variable "alpn_policy" {
-  description = "The ALPN policy to be used for the listener"
-  type        = string
-}
-
-variable "tcp_idle_timeout_seconds" {
-  description = "The TCP idle timeout for TCP protocols (optional)"
-  type        = number
-}
 
 
