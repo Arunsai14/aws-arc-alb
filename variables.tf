@@ -431,8 +431,12 @@ variable "listener_rules" {
       }))
     }))
     conditions = list(object({
-      field  = string
-      values = list(string)
+      host_header = optional(object({
+        values = list(string)
+      }))
+      path_pattern = optional(object({
+        values = list(string)
+      }))
     }))
   }))
 }

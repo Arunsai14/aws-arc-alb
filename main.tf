@@ -317,10 +317,15 @@ resource "aws_lb_listener_rule" "this" {
 
   dynamic "condition" {
     for_each = each.value.conditions
-    content {
-      field  = condition.value.field
-      values = condition.value.values
-    }
+  content {
+      # Use predefined condition types such as host_header, path_pattern, etc.
+      host_header {
+        values = condition.value.values
+      }
+
+      path_pattern {
+        values = condition.value.values
+      }
   }
 }
 

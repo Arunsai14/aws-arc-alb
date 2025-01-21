@@ -171,14 +171,13 @@ port = 80
 protocol = "HTTP"
 
 
-# Listener configuration
 listener_rules = {
   rule1 = {
     priority = 1
     actions = [
       {
-        type             = "forward"
-        order            = 1
+        type  = "redirect"
+        order = 1
         redirect = {
           host        = "example.com"
           path        = "/redirect"
@@ -191,8 +190,31 @@ listener_rules = {
     ]
     conditions = [
       {
-        field  = "host-header"
-        values = ["example.com"]
+        host_header = {
+          values = ["example.com"]
+        }
+      }
+    ]
+  }
+
+  rule2 = {
+    priority = 2
+    actions = [
+      {
+        type  = "fixed_response"
+        order = 1
+        fixed_response = {
+          status_code  = "200"
+          content_type = "text/plain"
+          message_body = "OK"
+        }
+      }
+    ]
+    conditions = [
+      {
+        path_pattern = {
+          values = ["/status"]
+        }
       }
     ]
   }
