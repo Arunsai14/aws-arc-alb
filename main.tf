@@ -149,7 +149,6 @@ resource "aws_lb_listener" "this" {
   load_balancer_arn = aws_lb.this.arn
   port              = var.port           
   protocol          = var.protocol       
-  ssl_policy        = var.ssl_policy
   alpn_policy       = var.alpn_policy     
 
   # Optional: Default action with dynamic actions
@@ -227,13 +226,13 @@ resource "aws_lb_listener" "this" {
 }
 
   # Optional: SSL certificate ARN
-  certificate_arn = var.certificate_arn   # Only if using HTTPS
+  # certificate_arn = var.certificate_arn   # Only if using HTTPS
 
-  # Optional: SSL policy for TLS listeners
-  ssl_policy = var.ssl_policy             # Only if using HTTPS
+  # # Optional: SSL policy for TLS listeners
+  # ssl_policy = var.ssl_policy             # Only if using HTTPS
 
-  # Optional: TCP idle timeout for TCP protocols
-  tcp_idle_timeout_seconds = var.tcp_idle_timeout_seconds # Only for TCP
+  # # Optional: TCP idle timeout for TCP protocols
+  # tcp_idle_timeout_seconds = var.tcp_idle_timeout_seconds # Only for TCP
 
   # Optional: Tags for the listener
   tags = module.tags.tags # Pass tags as a map
