@@ -395,34 +395,99 @@ variable "default_action" {
    default = []
 }
 
-
-# Example variables for other options
-variable "port" {
-  description = "Port number"
-  default = "80"
+variable "listener_certificates" {
+  description = "A map of listener certificates with their ARN"
+  type = map(object({
+    certificate_arn = string
+  }))
 }
 
-variable "protocol" {
-  description = "Protocol for listener"
-  default = "HTTP"
-}
 
-variable "alpn_policy" {
-  description = "ALPN policy for TLS"
-  default = "None"
+variable "listener_rules" {
+  description = "List of listener rules"
+  type = list(object({
+    listener_action = object({
+      type = string
+      authenticate_oidc = optional(object({
+        authorization_endpoint         = string
+        client_id                     = string
+        client_secret                 = string
+        issuer                        = string
+        token_endpoint                = string
+        user_info_endpoint            = string
+        on_unauthenticated_request    = string
+        scope                         = string
+        session_cookie_name           = string
+        session_timeout               = number
+      }))
+      authenticate_cognito = optional(object({
+        user_pool_arn                = string
+        user_pool_client_id          = string
+        user_pool_domain             = string
+        authentication_request_extra_params = map(string)
+        on_unauthenticated_request   = string
+        scope                        = string
+        session_cookie_name          = string
+        session_timeout              = number
+      }))
+      fixed_response = optional(object({
+        status_code  = number
+        content_type = string
+        message_body = string
+      }))
+      forward = optional(object({
+        target_group_key = string
+        stickiness = optional(object({
+          duration = number
+          enabled  = bool
+        }))
+      }))
+      redirect = optional(object({
+        host        = string
+        path        = string
+        query       = string
+        protocol    = string
+        port        = string
+        status_code = number
+      }))
+    })
+    condition = optional(object({
+      field  = string
+      values = list(string)
+    }))
+    priority         = number
+  }))
+  default = []
 }
 
 variable "certificate_arn" {
-  description = "SSL certificate ARN for HTTPS"
-  default = ""
+  description = "The ARN of the certificate to be associated with the listener"
+  type        = string
 }
 
 variable "ssl_policy" {
-  description = "SSL policy"
-  default = "ELBSecurityPolicy-2016-08"
+  description = "The SSL policy to be used with the listener (if using HTTPS)"
+  type        = string
+}
+
+variable "port" {
+  description = "The port for the listener"
+  type        = number
+}
+
+variable "protocol" {
+  description = "The protocol for the listener"
+  type        = string
+}
+
+variable "alpn_policy" {
+  description = "The ALPN policy to be used for the listener"
+  type        = string
 }
 
 variable "tcp_idle_timeout_seconds" {
-  description = "TCP idle timeout seconds"
-  default = 350
+  description = "The TCP idle timeout for TCP protocols (optional)"
+  type        = number
 }
+
+

@@ -169,3 +169,47 @@ default_action = [
 
 port = 80
 protocol = "HTTP"
+
+
+# Listener configuration
+listener_rules = [
+  {
+    listener_action = {
+      type = "forward"
+      forward = {
+        target_group_key = "my-target-group"
+        stickiness = {
+          duration = 60
+          enabled  = true
+        }
+      }
+    }
+    condition = {
+      field  = "path-pattern"
+      values = ["/api/*"]
+    }
+    priority = 10
+  },
+  {
+    listener_action = {
+      type = "fixed-response"
+      fixed_response = {
+        status_code  = 200
+        content_type = "text/plain"
+        message_body = "OK"
+      }
+    }
+    priority = 20
+  }
+]
+
+# SSL and Listener settings
+# certificate_arn = "arn:aws:acm:region:account-id:certificate/certificate-id"
+# ssl_policy      = "ELBSecurityPolicy-2016-08"
+# port            = 443
+# protocol        = "HTTPS"
+# alpn_policy     = "HTTP2"
+
+# Optional settings
+tcp_idle_timeout_seconds = 60
+
