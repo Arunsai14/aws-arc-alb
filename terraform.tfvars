@@ -88,7 +88,7 @@ subnet_mapping = [
     }
   }]
  cidr_blocks = null
-  listener_rules = []
+  # listener_rules = []
 
     alb = {
     name       = "arc-poc-alb"
