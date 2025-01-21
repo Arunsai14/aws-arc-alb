@@ -409,7 +409,6 @@ variable "listener_rules" {
     priority   = number
     actions    = list(object({
       type             = string
-      target_group_arn = string
       order            = number
       redirect         = optional(object({
         host        = string

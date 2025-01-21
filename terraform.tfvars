@@ -178,7 +178,6 @@ listener_rules = {
     actions = [
       {
         type             = "forward"
-        target_group_arn = aws_lb_target_group.example.arn
         order            = 1
         redirect = {
           host        = "example.com"

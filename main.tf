@@ -279,7 +279,7 @@ resource "aws_lb_listener_rule" "this" {
     for_each = each.value.actions
     content {
       type             = action.value.type
-      target_group_arn = action.value.target_group_arn
+      target_group_arn = aws_lb_target_group.this[var.alb_target_group[0].name].arn
       order            = action.value.order
 
       dynamic "redirect" {
