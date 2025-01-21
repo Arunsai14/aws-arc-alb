@@ -149,7 +149,7 @@ resource "aws_lb_listener" "this" {
   load_balancer_arn = aws_lb.this.arn
   port              = var.port           
   protocol          = var.protocol       
-
+  ssl_policy        = var.ssl_policy
   alpn_policy       = var.alpn_policy     
 
   # Optional: Default action with dynamic actions
