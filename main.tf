@@ -204,10 +204,10 @@ resource "aws_lb_listener" "this" {
             arn = aws_lb_target_group.this[var.alb_target_group[0].name].arn
           }
 
-          # stickiness {
-          #   duration = forward.value.stickiness.duration
-          #   enabled  = forward.value.stickiness.enabled
-          # }
+          stickiness {
+            duration = forward.value.stickiness.duration
+            enabled  = forward.value.stickiness.enabled
+          }
         }
       }
 

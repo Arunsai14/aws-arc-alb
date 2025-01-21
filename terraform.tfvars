@@ -98,7 +98,7 @@ subnet_mapping = [
   }
 
 
-  efault_actions = [
+  default_actions = [
   {
     type = "forward"
     forward = {
