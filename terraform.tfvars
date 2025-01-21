@@ -188,13 +188,13 @@ listener_rules = {
         }
       }
     ]
-    conditions = [
-      {
-        host_header = {
-          values = ["example.com"]
-        }
-      }
-    ]
+    # conditions = [
+    #   {
+    #     host_header = {
+    #       values = ["example.com"]
+    #     }
+    #   }
+    # ]
   }
 
   rule2 = {
@@ -210,13 +210,13 @@ listener_rules = {
         }
       }
     ]
-    conditions = [
-      {
-        path_pattern = {
-          values = ["/status"]
-        }
-      }
-    ]
+    # conditions = [
+    #   {
+    #     path_pattern = {
+    #       values = ["/status"]
+    #     }
+    #   }
+    # ]
   }
 }
 
