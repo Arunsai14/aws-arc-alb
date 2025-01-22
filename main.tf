@@ -364,7 +364,6 @@ resource "aws_lb_listener_rule" "this" {
           authentication_request_extra_params = authenticate_cognito.value.authentication_request_extra_params
           session_cookie_name              = authenticate_cognito.value.session_cookie_name
           session_timeout                  = authenticate_cognito.value.session_timeout
-          on_unauthenticated_request       = authenticate_cognito.value.on_unauthenticated_request
         }
       }
 
