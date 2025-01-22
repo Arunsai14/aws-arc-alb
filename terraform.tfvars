@@ -79,15 +79,22 @@ target_group_config = {
   vpc_id      = "vpc-68f96212"
   target_type = "ip"
   health_check = {
-    enabled = true
-    path    = "/"
+    enabled             = true
+    interval            = 30         # Time in seconds between health checks
+    path                = "/"
+    port                = 80         # The port on which to perform the health check
+    protocol            = "HTTP"
+    timeout             = 5          # Time in seconds to wait for a response
+    unhealthy_threshold = 3          # Number of consecutive failed health checks
+    healthy_threshold   = 2          # Number of consecutive successful health checks
+    matcher             = "200"      # Expected response code from the health check
   }
   stickiness = {
     enabled         = true
     type            = "lb_cookie"
-    cookie_duration = 3600  
+    cookie_duration = 3600  # Cookie duration in seconds
   }
-}
+
 
  cidr_blocks = null
   # listener_rules = []
