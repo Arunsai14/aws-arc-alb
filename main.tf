@@ -40,32 +40,87 @@ module "arc_security_group" {
   tags = var.tags
 }
 
+# resource "aws_lb" "this" {
+#   name                     = var.name
+#   name_prefix              = var.name_prefix
+#   load_balancer_type       = var.load_balancer_type
+#   internal                 = var.internal
+#   security_groups          = [for sg in module.arc_security_group : sg.id]
+#   ip_address_type          = var.ip_address_type
+#   enable_deletion_protection = var.enable_deletion_protection
+#   enable_cross_zone_load_balancing = var.enable_cross_zone_load_balancing
+#   enable_http2             = var.enable_http2
+#   enable_waf_fail_open     = var.enable_waf_fail_open
+#   enable_xff_client_port   = var.enable_xff_client_port
+#   enable_zonal_shift       = var.enable_zonal_shift
+#   desync_mitigation_mode   = var.desync_mitigation_mode
+#   drop_invalid_header_fields = var.drop_invalid_header_fields
+#   enforce_security_group_inbound_rules_on_private_link_traffic = var.enforce_security_group_inbound_rules_on_private_link_traffic
+#   idle_timeout             = var.idle_timeout
+#   preserve_host_header     = var.preserve_host_header
+#   xff_header_processing_mode = var.xff_header_processing_mode
+#   customer_owned_ipv4_pool = var.customer_owned_ipv4_pool
+#   dns_record_client_routing_policy = var.dns_record_client_routing_policy
+#   client_keep_alive        = var.client_keep_alive
+#   enable_tls_version_and_cipher_suite_headers = var.enable_tls_version_and_cipher_suite_headers
+
+#   dynamic "subnet_mapping" {
+#     for_each = var.subnet_mapping
+#     content {
+#       subnet_id            = subnet_mapping.value.subnet_id
+#       allocation_id        = lookup(subnet_mapping.value, "allocation_id", null)
+#       ipv6_address         = lookup(subnet_mapping.value, "ipv6_address", null)
+#       private_ipv4_address = lookup(subnet_mapping.value, "private_ipv4_address", null)
+#     }
+#   }
+
+#   dynamic "access_logs" {
+#     for_each = var.access_logs.enabled ? [var.access_logs] : []
+#     content {
+#       bucket  = access_logs.value.bucket
+#       prefix  = access_logs.value.prefix
+#       enabled = access_logs.value.enabled
+#     }
+#   }
+
+#   dynamic "connection_logs" {
+#     for_each = var.connection_logs != null ? [var.connection_logs] : []
+#     content {
+#       bucket  = connection_logs.value.bucket
+#       prefix  = connection_logs.value.prefix
+#       enabled = connection_logs.value.enabled
+#     }
+#   }
+
+#   tags = module.tags.tags
+# }
+
 resource "aws_lb" "this" {
-  name                     = var.name
-  name_prefix              = var.name_prefix
-  load_balancer_type       = var.load_balancer_type
-  internal                 = var.internal
+  name                     = var.load_balancer_config.name
+  name_prefix              = var.load_balancer_config.name_prefix
+  load_balancer_type       = var.load_balancer_config.load_balancer_type
+  internal                 = var.load_balancer_config.internal
   security_groups          = [for sg in module.arc_security_group : sg.id]
-  ip_address_type          = var.ip_address_type
-  enable_deletion_protection = var.enable_deletion_protection
-  enable_cross_zone_load_balancing = var.enable_cross_zone_load_balancing
-  enable_http2             = var.enable_http2
-  enable_waf_fail_open     = var.enable_waf_fail_open
-  enable_xff_client_port   = var.enable_xff_client_port
-  enable_zonal_shift       = var.enable_zonal_shift
-  desync_mitigation_mode   = var.desync_mitigation_mode
-  drop_invalid_header_fields = var.drop_invalid_header_fields
-  enforce_security_group_inbound_rules_on_private_link_traffic = var.enforce_security_group_inbound_rules_on_private_link_traffic
-  idle_timeout             = var.idle_timeout
-  preserve_host_header     = var.preserve_host_header
-  xff_header_processing_mode = var.xff_header_processing_mode
-  customer_owned_ipv4_pool = var.customer_owned_ipv4_pool
-  dns_record_client_routing_policy = var.dns_record_client_routing_policy
-  client_keep_alive        = var.client_keep_alive
-  enable_tls_version_and_cipher_suite_headers = var.enable_tls_version_and_cipher_suite_headers
+  ip_address_type          = var.load_balancer_config.ip_address_type
+  enable_deletion_protection = var.load_balancer_config.enable_deletion_protection
+  enable_cross_zone_load_balancing = var.load_balancer_config.enable_cross_zone_load_balancing
+  enable_http2             = var.load_balancer_config.enable_http2
+  enable_waf_fail_open     = var.load_balancer_config.enable_waf_fail_open
+  enable_xff_client_port   = var.load_balancer_config.enable_xff_client_port
+  enable_zonal_shift       = var.load_balancer_config.enable_zonal_shift
+  desync_mitigation_mode   = var.load_balancer_config.desync_mitigation_mode
+  drop_invalid_header_fields = var.load_balancer_config.drop_invalid_header_fields
+  enforce_security_group_inbound_rules_on_private_link_traffic = var.load_balancer_config.enforce_security_group_inbound_rules_on_private_link_traffic
+  idle_timeout             = var.load_balancer_config.idle_timeout
+  preserve_host_header     = var.load_balancer_config.preserve_host_header
+  xff_header_processing_mode = var.load_balancer_config.xff_header_processing_mode
+  customer_owned_ipv4_pool = var.load_balancer_config.customer_owned_ipv4_pool
+  dns_record_client_routing_policy = var.load_balancer_config.dns_record_client_routing_policy
+  client_keep_alive        = var.load_balancer_config.client_keep_alive
+  enable_tls_version_and_cipher_suite_headers = var.load_balancer_config.enable_tls_version_and_cipher_suite_headers
 
   dynamic "subnet_mapping" {
-    for_each = var.subnet_mapping
+    for_each = var.load_balancer_config.subnet_mapping
     content {
       subnet_id            = subnet_mapping.value.subnet_id
       allocation_id        = lookup(subnet_mapping.value, "allocation_id", null)
@@ -75,7 +130,7 @@ resource "aws_lb" "this" {
   }
 
   dynamic "access_logs" {
-    for_each = var.access_logs.enabled ? [var.access_logs] : []
+    for_each = var.load_balancer_config.access_logs != null && var.load_balancer_config.access_logs.enabled ? [var.load_balancer_config.access_logs] : []
     content {
       bucket  = access_logs.value.bucket
       prefix  = access_logs.value.prefix
@@ -84,7 +139,7 @@ resource "aws_lb" "this" {
   }
 
   dynamic "connection_logs" {
-    for_each = var.connection_logs != null ? [var.connection_logs] : []
+    for_each = var.load_balancer_config.connection_logs != null ? [var.load_balancer_config.connection_logs] : []
     content {
       bucket  = connection_logs.value.bucket
       prefix  = connection_logs.value.prefix
@@ -94,6 +149,7 @@ resource "aws_lb" "this" {
 
   tags = module.tags.tags
 }
+
 
 ###################################################################
 #                 Target Group
