@@ -210,7 +210,6 @@ variable "tags" {
 variable "load_balancer_config" {
   type = object({
     name                              = string
-    name_prefix                       = optional(string)
     load_balancer_type               = string
     internal                         = bool
     security_groups                  = list(string)
@@ -218,7 +217,7 @@ variable "load_balancer_config" {
     enable_deletion_protection       = bool
     enable_cross_zone_load_balancing = bool
     enable_http2                     = bool
-    enable_waf_fail_open             = (bool, false)
+    enable_waf_fail_open             = bool
     enable_xff_client_port           = bool
     enable_zonal_shift               = bool
     desync_mitigation_mode           = string
@@ -248,8 +247,53 @@ variable "load_balancer_config" {
       prefix  = string
     }))
   })
-  default = {}
+
+  default = {
+    name                              = "my-load-balancer"
+    load_balancer_type                = "application"
+    internal                          = false
+    security_groups                   = ["sg-123456"]
+    ip_address_type                   = "ipv4"
+    enable_deletion_protection        = true
+    enable_cross_zone_load_balancing  = true
+    enable_http2                      = true
+    enable_waf_fail_open              = false  # Default set to false
+    enable_xff_client_port            = true
+    enable_zonal_shift                = true
+    desync_mitigation_mode            = "strict"
+    drop_invalid_header_fields        = false
+    enforce_security_group_inbound_rules_on_private_link_traffic = false
+    idle_timeout                      = 60
+    preserve_host_header              = true
+    xff_header_processing_mode        = "append"
+    customer_owned_ipv4_pool         = "my-ipv4-pool"
+    dns_record_client_routing_policy  = "round_robin"
+    client_keep_alive                 = true
+    enable_tls_version_and_cipher_suite_headers = true
+
+    subnet_mapping = [
+      {
+        subnet_id            = "subnet-12345"
+        allocation_id        = "eipalloc-67890"
+        ipv6_address         = "2001:db8::1"
+        private_ipv4_address = "10.0.1.1"
+      }
+    ]
+
+    access_logs = {
+      enabled = false
+      bucket  = "my-log-bucket"
+      prefix  = "access-logs"
+    }
+
+    connection_logs = {
+      enabled = false
+      bucket  = "my-log-bucket"
+      prefix  = "connection-logs"
+    }
+  }
 }
+
 
 
 
