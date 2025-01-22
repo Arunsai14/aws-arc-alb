@@ -232,7 +232,7 @@ variable "load_balancer_config" {
     client_keep_alive                = number
     enable_tls_version_and_cipher_suite_headers = bool
     subnet_mapping                   = list(object({
-      subnet_id            = list(string)
+      subnet_id            = string
       allocation_id        = optional(string)
       ipv6_address         = optional(string)
       private_ipv4_address = optional(string)
