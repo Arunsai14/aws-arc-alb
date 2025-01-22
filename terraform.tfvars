@@ -94,6 +94,7 @@ target_group_config = {
     type            = "lb_cookie"
     cookie_duration = 3600  # Cookie duration in seconds
   }
+}
 
 
  cidr_blocks = null
