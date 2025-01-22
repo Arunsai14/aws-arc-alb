@@ -20,7 +20,7 @@ load_balancer_config = {
   ip_address_type                   = "ipv4"
   enable_deletion_protection        = false
   enable_cross_zone_load_balancing  = true
-  # enable_http2                      = true
+  enable_http2                      = false
   enable_waf_fail_open              = false
   enable_xff_client_port            = false
   enable_zonal_shift                = false
@@ -35,14 +35,14 @@ load_balancer_config = {
   client_keep_alive                 = false
   enable_tls_version_and_cipher_suite_headers = false
 
-  # subnet_mapping = [
-  #   {
-  #     subnet_id            = ["subnet-6781cb49", "subnet-f55c1392"]
-  #     allocation_id        = "eipalloc-67890"
-  #     ipv6_address         = "2001:db8::1"
-  #     private_ipv4_address = "10.0.1.1"
-  #   }
-  # ]
+  subnet_mapping = [
+    {
+      subnet_id            = ["subnet-6781cb49", "subnet-f55c1392"]
+      allocation_id        = "eipalloc-67890"
+      ipv6_address         = "2001:db8::1"
+      private_ipv4_address = "10.0.1.1"
+    }
+  ]
 
   access_logs = {
     enabled = false
