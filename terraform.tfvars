@@ -233,7 +233,7 @@ listener_rules = {
 ssl_policy      = null
 # port            = 443
 # protocol        = "HTTPS"
-# alpn_policy     = "HTTP2"
+ alpn_policy     = null
 
 # Optional settings
 tcp_idle_timeout_seconds = 60
