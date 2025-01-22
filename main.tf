@@ -109,7 +109,7 @@ resource "aws_lb_target_group" "this" {
   load_balancing_cross_zone_enabled = var.target_group_config.load_balancing_cross_zone_enabled
   preserve_client_ip       = var.target_group_config.preserve_client_ip
   protocol_version         = var.target_group_config.protocol_version
-  load_balancing_algorithm_type = var.target_group_config.load_balancing_algorithm
+  load_balancing_algorithm_type = var.target_group_config.load_balancing_algorithm_type
   target_type                = var.target_group_config.target_type
   proxy_protocol_v2        = var.target_group_config.proxy_protocol_v2
   slow_start               = var.target_group_config.slow_start
@@ -143,29 +143,30 @@ resource "aws_lb_target_group" "this" {
   }
 
 
-  # Target Group Health
-  dynamic "target_group_health" {
-    for_each = var.target_group_config.target_group_health != null ? [var.target_group_config.target_group_health] : []
-    content {
-
+# Target Group Health
+dynamic "target_group_health" {
+  for_each = var.target_group_config.target_group_health != null ? [var.target_group_config.target_group_health] : []
+  content {
     # DNS Failover
-  dynamic "dns_failover" {
-    for_each = var.target_group_config.dns_failover != null ? [var.target_group_config.dns_failover] : []
-    content {
-      minimum_healthy_targets_count     = dns_failover.value.minimum_healthy_targets_count
-      minimum_healthy_targets_percentage = dns_failover.value.minimum_healthy_targets_percentage
+    dynamic "dns_failover" {
+      for_each = var.target_group_config.dns_failover != null ? [var.target_group_config.dns_failover] : []
+      content {
+        minimum_healthy_targets_count     = dns_failover.value.minimum_healthy_targets_count
+        minimum_healthy_targets_percentage = dns_failover.value.minimum_healthy_targets_percentage
+      }
+    }
+
+    # Unhealthy State Routing
+    dynamic "unhealthy_state_routing" {
+      for_each = var.target_group_config.unhealthy_state_routing != null ? [var.target_group_config.unhealthy_state_routing] : []
+      content {
+        minimum_healthy_targets_count     = unhealthy_state_routing.value.minimum_healthy_targets_count
+        minimum_healthy_targets_percentage = unhealthy_state_routing.value.minimum_healthy_targets_percentage
+      }
     }
   }
-       # Unhealthy State Routing
-  dynamic "unhealthy_state_routing" {
-    for_each = var.target_group_config.unhealthy_state_routing != null ? [var.target_group_config.unhealthy_state_routing] : []
-    content {
-      minimum_healthy_targets_count    = unhealthy_state_routing.value.minimum_healthy_targets_count
-      minimum_healthy_targets_percentage = unhealthy_state_routing.value.minimum_healthy_targets_percentage
-    }
-  }
-    }
-  }
+}
+
 
   # Target Failover
   dynamic "target_failover" {
