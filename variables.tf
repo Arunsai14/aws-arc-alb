@@ -369,6 +369,60 @@ variable "target_group_config" {
   default = null
 }
 
+variable "default_action" {
+  description = "A list of default actions for the load balancer listener"
+  type = list(object({
+    type                        = string
+    authenticate_oidc           = optional(object({
+      authorization_endpoint                = string
+      authentication_request_extra_params   = map(string)
+      client_id                             = string
+      client_secret                         = string
+      issuer                                = string
+      token_endpoint                        = string
+      user_info_endpoint                    = string
+      on_unauthenticated_request            = string
+      scope                                 = string
+      session_cookie_name                   = string
+      session_timeout                       = string
+    }))
+    authenticate_cognito           = optional(object({
+      user_pool_arn                       = string
+      user_pool_client_id                 = string
+      user_pool_domain                    = string
+      authentication_request_extra_params = map(string)
+      on_unauthenticated_request          = string
+      scope                                = string
+      session_cookie_name                 = string
+      session_timeout                     = string
+    }))
+    fixed_response                 = optional(object({
+      status_code   = string
+      content_type  = string
+      message_body  = string
+    }))
+    forward                        = optional(object({
+      target_group = list(object({
+        arn = string
+      }))
+      stickiness = optional(object({
+        duration = number
+        enabled  = bool
+      }))
+    }))
+    redirect                       = optional(object({
+      host         = string
+      path         = string
+      query        = string
+      protocol     = string
+      port         = string
+      status_code  = string
+    }))
+  }))
+  default = []
+}
+
+
 
 
 variable "listener_certificates" {
