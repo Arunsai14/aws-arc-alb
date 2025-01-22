@@ -308,7 +308,7 @@ variable "alb" {
 
 #########################################
 variable "target_group_config" {
-  type = object({
+  type = optional(object({
     name                       = string
     name_prefix               = string
     port                       = number
@@ -325,7 +325,7 @@ variable "target_group_config" {
     slow_start               = number
     tags                       = map(string)
 
-    health_check = object({
+    health_check = optional(object({
       enabled             = bool
       interval            = number
       path                = string
@@ -335,44 +335,39 @@ variable "target_group_config" {
       unhealthy_threshold = number
       healthy_threshold   = number
       matcher             = list(string)
-    })
+    }))
 
-    stickiness = object({
+    stickiness = optional(object({
       type            = string
       cookie_duration = number
       cookie_name    = string
-      enabled         = bool
-    })
+    }))
 
-    dns_failover = object({
-      enabled         = bool
+    dns_failover = optional(object({
       minimum_healthy_targets_count     = number
       minimum_healthy_targets_percentage = number
-    })
+    }))
 
-    target_group_health = object({
-      enabled = bool
+    target_group_health = optional(object({
       dns_failover = bool
       unhealthy_state_routing   = bool
-    })
+    }))
 
-    target_failover = object({
+    target_failover = optional(object({
       on_deregistration   = string
       on_unhealthy = string
-    })
+    }))
 
-    unhealthy_state_routing = object({
-      enabled    = bool
+    unhealthy_state_routing = optional(object({
       minimum_healthy_targets_count    = number
       minimum_healthy_targets_percentage = number
-    })
+    }))
 
-    target_health_state = object({
-      enabled = bool
+    target_health_state = optional(object({
       enable_unhealthy_connection_termination  = bool
       unhealthy_draining_interval = number
-    })
-  })
+    }))
+  }))
   default = null
 }
 
