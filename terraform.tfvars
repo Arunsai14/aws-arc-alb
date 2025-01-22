@@ -83,8 +83,9 @@ target_group_config = {
     path    = "/"
   }
   stickiness = {
-    enabled = true
-    type    = "lb_cookie"
+    enabled         = true
+    type            = "lb_cookie"
+    cookie_duration = 3600  
   }
 }
 
