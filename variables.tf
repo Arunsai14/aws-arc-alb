@@ -210,6 +210,7 @@ variable "tags" {
 variable "load_balancer_config" {
   type = object({
     name                              = string
+    name_prefix                         = optional(string)
     load_balancer_type               = string
     internal                         = bool
     security_groups                  = list(string)
@@ -228,7 +229,7 @@ variable "load_balancer_config" {
     xff_header_processing_mode       = string
     customer_owned_ipv4_pool        = string
     dns_record_client_routing_policy = string
-    client_keep_alive                = bool
+    client_keep_alive                = number
     enable_tls_version_and_cipher_suite_headers = bool
     subnet_mapping                   = list(object({
       subnet_id            = string
@@ -268,7 +269,7 @@ variable "load_balancer_config" {
     xff_header_processing_mode        = "append"
     customer_owned_ipv4_pool         = "my-ipv4-pool"
     dns_record_client_routing_policy  = "round_robin"
-    client_keep_alive                 = true
+    client_keep_alive                 = 60
     enable_tls_version_and_cipher_suite_headers = true
 
     subnet_mapping = [
