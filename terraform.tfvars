@@ -230,7 +230,7 @@ listener_rules = {
 
 # SSL and Listener settings
 # certificate_arn = "arn:aws:acm:region:account-id:certificate/certificate-id"
-# ssl_policy      = "ELBSecurityPolicy-2016-08"
+ssl_policy      = null
 # port            = 443
 # protocol        = "HTTPS"
 # alpn_policy     = "HTTP2"
