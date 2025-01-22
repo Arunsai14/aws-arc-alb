@@ -72,21 +72,22 @@ subnet_mapping = [
   }
 ]
 
-  target_group_config = [{
-    name        = "arc-poc-alb-tg"
-    port        = 80
-    protocol    = "HTTP"
-    vpc_id      = "vpc-68f96212"
-    target_type = "ip"
-    health_check = {
-      enabled = true
-      path    = "/"
-    }
-    stickiness = {
-      enabled = true
-      type    = "lb_cookie"
-    }
-  }]
+target_group_config = {
+  name        = "arc-poc-alb-tg"
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = "vpc-68f96212"
+  target_type = "ip"
+  health_check = {
+    enabled = true
+    path    = "/"
+  }
+  stickiness = {
+    enabled = true
+    type    = "lb_cookie"
+  }
+}
+
  cidr_blocks = null
   # listener_rules = []
 
