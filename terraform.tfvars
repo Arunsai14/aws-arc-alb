@@ -37,10 +37,7 @@ load_balancer_config = {
 
   subnet_mapping = [
     {
-      subnet_id            = ["subnet-6781cb49", "subnet-f55c1392"]
-      allocation_id        = "eipalloc-67890"
-      ipv6_address         = "2001:db8::1"
-      private_ipv4_address = "10.0.1.1"
+      subnet_id            = {"subnet-6781cb49", "subnet-f55c1392"}
     }
   ]
 
