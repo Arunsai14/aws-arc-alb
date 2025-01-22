@@ -239,43 +239,43 @@ variable "security_group_data" {
   }
 }
 
-variable "alb_target_group" {
-  description = "List of target groups to create"
-  type = list(object({
-    name                              = optional(string, "target-group")
-    port                              = number
-    protocol                          = optional(string, null)
-    protocol_version                  = optional(string, "HTTP1")
-    vpc_id                            = optional(string, "")
-    target_type                       = optional(string, "ip")
-    ip_address_type                   = optional(string, "ipv4")
-    load_balancing_algorithm_type     = optional(string, "round_robin")
-    load_balancing_cross_zone_enabled = optional(string, "use_load_balancer_configuration")
-    deregistration_delay              = optional(number, 300)
-    slow_start                        = optional(number, 0)
-    tags                              = optional(map(string), {})
+# variable "alb_target_group" {
+#   description = "List of target groups to create"
+#   type = list(object({
+#     name                              = optional(string, "target-group")
+#     port                              = number
+#     protocol                          = optional(string, null)
+#     protocol_version                  = optional(string, "HTTP1")
+#     vpc_id                            = optional(string, "")
+#     target_type                       = optional(string, "ip")
+#     ip_address_type                   = optional(string, "ipv4")
+#     load_balancing_algorithm_type     = optional(string, "round_robin")
+#     load_balancing_cross_zone_enabled = optional(string, "use_load_balancer_configuration")
+#     deregistration_delay              = optional(number, 300)
+#     slow_start                        = optional(number, 0)
+#     tags                              = optional(map(string), {})
 
-    health_check = optional(object({
-      enabled             = optional(bool, true)
-      protocol            = optional(string, "HTTP") # Allowed values: "HTTP", "HTTPS", "TCP", etc.
-      path                = optional(string, "/")
-      port                = optional(string, "traffic-port")
-      timeout             = optional(number, 6)
-      healthy_threshold   = optional(number, 3)
-      unhealthy_threshold = optional(number, 3)
-      interval            = optional(number, 30)
-      matcher             = optional(string, "200") # Default HTTP matcher. Range 200 to 499
-    }))
+#     health_check = optional(object({
+#       enabled             = optional(bool, true)
+#       protocol            = optional(string, "HTTP") # Allowed values: "HTTP", "HTTPS", "TCP", etc.
+#       path                = optional(string, "/")
+#       port                = optional(string, "traffic-port")
+#       timeout             = optional(number, 6)
+#       healthy_threshold   = optional(number, 3)
+#       unhealthy_threshold = optional(number, 3)
+#       interval            = optional(number, 30)
+#       matcher             = optional(string, "200") # Default HTTP matcher. Range 200 to 499
+#     }))
 
-    stickiness = optional(object({
-      enabled         = optional(bool, true)
-      type            = string
-      cookie_duration = optional(number, 86400)
-      })
-    )
+#     stickiness = optional(object({
+#       enabled         = optional(bool, true)
+#       type            = string
+#       cookie_duration = optional(number, 86400)
+#       })
+#     )
 
-  }))
-}
+#   }))
+# }
 
 
 variable "create_listener_rule" {
@@ -309,21 +309,21 @@ variable "alb" {
 #########################################
 variable "target_group_config" {
   type = object({
-    name                       = optional(string)
-    name_prefix               = optional(string)
-    port                       = optional(number)
-    protocol                   = optional(string)
-    vpc_id                     = optional(string)
-    ip_address_type        = optional(string)
-    load_balancing_anomaly_mitigation = optional(string)
-    load_balancing_cross_zone_enabled = optional(bool)
-    preserve_client_ip       = optional(string)
-    protocol_version         = optional(string)
-    load_balancing_algorithm_type = optional(string)
-    target_type                = optional(string)
-    proxy_protocol_v2        = optional(string)
-    slow_start               = optional(number)
-    tags                       = optional(map(string))
+    name                                = optional(string)
+    name_prefix                         = optional(string)
+    port                                = optional(number)
+    protocol                            = optional(string)
+    vpc_id                              = optional(string)
+    ip_address_type                     = optional(string)
+    load_balancing_anomaly_mitigation   = optional(bool)
+    load_balancing_cross_zone_enabled   = optional(bool)
+    preserve_client_ip                  = optional(bool)
+    protocol_version                    = optional(string)
+    load_balancing_algorithm_type       = optional(string, "round_robin")
+    target_type                         = optional(string)
+    proxy_protocol_v2                   = optional(bool)
+    slow_start                          = optional(number)
+    tags                                = optional(map(string))
 
     health_check = optional(object({
       enabled             = bool
@@ -334,42 +334,41 @@ variable "target_group_config" {
       timeout             = number
       unhealthy_threshold = number
       healthy_threshold   = number
-      matcher             = list(string)
+      matcher             = string
     }))
 
     stickiness = optional(object({
       type            = string
       cookie_duration = number
-      cookie_name    = string
-    }))
-
-    dns_failover = optional(object({
-      minimum_healthy_targets_count     = number
-      minimum_healthy_targets_percentage = number
+      cookie_name     = optional(string)
+      enabled         = bool
     }))
 
     target_group_health = optional(object({
-      dns_failover = bool
-      unhealthy_state_routing   = bool
+      dns_failover = optional(object({
+        minimum_healthy_targets_count     = number
+        minimum_healthy_targets_percentage = number
+      }))
+
+      unhealthy_state_routing = optional(object({
+        minimum_healthy_targets_count     = number
+        minimum_healthy_targets_percentage = number
+      }))
     }))
 
     target_failover = optional(object({
-      on_deregistration   = string
-      on_unhealthy = string
-    }))
-
-    unhealthy_state_routing = optional(object({
-      minimum_healthy_targets_count    = number
-      minimum_healthy_targets_percentage = number
+      on_deregistration = string
+      on_unhealthy      = string
     }))
 
     target_health_state = optional(object({
-      enable_unhealthy_connection_termination  = bool
-      unhealthy_draining_interval = number
+      enable_unhealthy_connection_termination = bool
+      unhealthy_draining_interval             = number
     }))
   })
   default = null
 }
+
 
 
 variable "listener_certificates" {

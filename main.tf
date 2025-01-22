@@ -142,7 +142,13 @@ resource "aws_lb_target_group" "this" {
     }
   }
 
-  # DNS Failover
+
+  # Target Group Health
+  dynamic "target_group_health" {
+    for_each = var.target_group_config.target_group_health != null ? [var.target_group_config.target_group_health] : []
+    content {
+
+    # DNS Failover
   dynamic "dns_failover" {
     for_each = var.target_group_config.dns_failover != null ? [var.target_group_config.dns_failover] : []
     content {
@@ -150,13 +156,14 @@ resource "aws_lb_target_group" "this" {
       minimum_healthy_targets_percentage = dns_failover.value.minimum_healthy_targets_percentage
     }
   }
-
-  # Target Group Health
-  dynamic "target_group_health" {
-    for_each = var.target_group_config.target_group_health != null ? [var.target_group_config.target_group_health] : []
+       # Unhealthy State Routing
+  dynamic "unhealthy_state_routing" {
+    for_each = var.target_group_config.unhealthy_state_routing != null ? [var.target_group_config.unhealthy_state_routing] : []
     content {
-      dns_failover = target_group_health.value.dns_failover
-      unhealthy_state_routing   = target_group_health.value.unhealthy_state_routing
+      minimum_healthy_targets_count    = unhealthy_state_routing.value.minimum_healthy_targets_count
+      minimum_healthy_targets_percentage = unhealthy_state_routing.value.minimum_healthy_targets_percentage
+    }
+  }
     }
   }
 
@@ -169,14 +176,6 @@ resource "aws_lb_target_group" "this" {
     }
   }
 
-  # Unhealthy State Routing
-  dynamic "unhealthy_state_routing" {
-    for_each = var.target_group_config.unhealthy_state_routing != null ? [var.target_group_config.unhealthy_state_routing] : []
-    content {
-      minimum_healthy_targets_count    = unhealthy_state_routing.value.minimum_healthy_targets_count
-      minimum_healthy_targets_percentage = unhealthy_state_routing.value.minimum_healthy_targets_percentage
-    }
-  }
 
   # Target Health State
   dynamic "target_health_state" {
