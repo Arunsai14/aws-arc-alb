@@ -307,62 +307,75 @@ variable "alb" {
 }
 
 #########################################
+variable "target_group_config" {
+  type = object({
+    name                       = string
+    name_prefix               = string
+    port                       = number
+    protocol                   = string
+    vpc_id                     = string
+    ip_address_type        = string
+    load_balancing_anomaly_mitigation = string
+    load_balancing_cross_zone_enabled = bool
+    preserve_client_ip       = string
+    protocol_version         = string
+    load_balancing_algorithm_type = string
+    target_type                = string
+    proxy_protocol_v2        = string
+    slow_start               = number
+    tags                       = map(string)
 
-variable "default_action" {
-  type = list(object({
-    type = string
-    authenticate_oidc = optional(object({
-      authorization_endpoint = string
-      client_id              = string
-      client_secret          = string
-      issuer                 = string
-      token_endpoint         = string
-      user_info_endpoint     = string
-      authentication_request_extra_params = map(string)
-      on_unauthenticated_request        = string
-      scope                             = string
-      session_cookie_name               = string
-      session_timeout                   = number
-    }))
-    authenticate_cognito = optional(object({
-      user_pool_arn                     = string
-      user_pool_client_id               = string
-      user_pool_domain                  = string
-      authentication_request_extra_params = map(string)
-      on_unauthenticated_request        = string
-      scope                             = string
-      session_cookie_name               = string
-      session_timeout                   = number
-    }))
-    fixed_response = optional(object({
-      status_code  = string
-      content_type = string
-      message_body = string
-    }))
-    forward = optional(object({
-      #target_group_arn = string
-      stickiness = optional(object({
-        duration = number
-        enabled  = bool
-      }))
-    }))
-    redirect = optional(object({
-      host        = string
-      path        = string
-      query       = string
-      protocol    = string
-      port        = string
-      status_code = string
-    }))
-      mutual_authentication = optional(object({
-      advertise_trust_store_ca_names      = string
-      ignore_client_certificate_expiry   = bool
-      mode                               = string
-      trust_store_arn                    = string
-    }))
-  }))
-   default = []
+    health_check = object({
+      enabled             = bool
+      interval            = number
+      path                = string
+      port                = number
+      protocol            = string
+      timeout             = number
+      unhealthy_threshold = number
+      healthy_threshold   = number
+      matcher             = list(string)
+    })
+
+    stickiness = object({
+      type            = string
+      cookie_duration = number
+      cookie_name    = string
+      enabled         = bool
+    })
+
+    dns_failover = object({
+      enabled         = bool
+      minimum_healthy_targets_count     = number
+      minimum_healthy_targets_percentage = number
+    })
+
+    target_group_health = object({
+      enabled = bool
+      dns_failover = bool
+      unhealthy_state_routing   = bool
+    })
+
+    target_failover = object({
+      on_deregistration   = string
+      on_unhealthy = string
+    })
+
+    unhealthy_state_routing = object({
+      enabled    = bool
+      minimum_healthy_targets_count    = number
+      minimum_healthy_targets_percentage = number
+    })
+
+    target_health_state = object({
+      enabled = bool
+      enable_unhealthy_connection_termination  = bool
+      unhealthy_draining_interval = number
+    })
+  })
+  default = null
 }
+
 
 variable "listener_certificates" {
   description = "A map of listener certificates with their ARN"
@@ -407,6 +420,19 @@ variable "listener_rules" {
   description = "A map of listener rules"
   type = map(object({
     priority   = number
+    authenticate_oidc = optional(object({
+      authorization_endpoint = string
+      client_id              = string
+      client_secret          = string
+      issuer                 = string
+      token_endpoint         = string
+      user_info_endpoint     = string
+      authentication_request_extra_params = map(string)
+      on_unauthenticated_request        = string
+      scope                             = string
+      session_cookie_name               = string
+      session_timeout                   = number
+    }))
     actions    = list(object({
       type             = string
       order            = number

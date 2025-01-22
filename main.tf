@@ -98,48 +98,100 @@ resource "aws_lb" "this" {
 ###################################################################
 #                 Target Group
 ###################################################################
-
 resource "aws_lb_target_group" "this" {
-  for_each = { for tg in var.alb_target_group : tg.name => tg }
+  name                       = var.target_group_config.name
+  name_prefix               = var.target_group_config.name_prefix
+  port                       = var.target_group_config.port
+  protocol                   = var.target_group_config.protocol
+  vpc_id                     = var.target_group_config.vpc_id
+  ip_address_type        = var.target_group_config.ip_address_type
+  load_balancing_anomaly_mitigation = var.target_group_config.load_balancing_anomaly_mitigation
+  load_balancing_cross_zone_enabled = var.target_group_config.load_balancing_cross_zone_enabled
+  preserve_client_ip       = var.target_group_config.preserve_client_ip
+  protocol_version         = var.target_group_config.protocol_version
+  load_balancing_algorithm_type = var.target_group_config.load_balancing_algorithm
+  target_type                = var.target_group_config.target_type
+  proxy_protocol_v2        = var.target_group_config.proxy_protocol_v2
+  slow_start               = var.target_group_config.slow_start
+  tags                       = var.target_group_config.tags
 
-  name                              = each.value.name
-  port                              = each.value.port
-  protocol                          = each.value.protocol
-  protocol_version                  = each.value.protocol_version
-  vpc_id                            = each.value.vpc_id
-  target_type                       = each.value.target_type
-  ip_address_type                   = each.value.ip_address_type
-  load_balancing_algorithm_type     = each.value.load_balancing_algorithm_type
-  load_balancing_cross_zone_enabled = each.value.load_balancing_cross_zone_enabled
-  deregistration_delay              = each.value.deregistration_delay
-  slow_start                        = each.value.slow_start
-
-  health_check {
-    enabled             = each.value.health_check.enabled
-    protocol            = each.value.health_check.protocol
-    path                = each.value.health_check.path
-    port                = each.value.health_check.port
-    timeout             = each.value.health_check.timeout
-    healthy_threshold   = each.value.health_check.healthy_threshold
-    unhealthy_threshold = each.value.health_check.unhealthy_threshold
-    interval            = each.value.health_check.interval
-    matcher             = each.value.health_check.matcher
-  }
-
-  dynamic "stickiness" {
-    for_each = each.value.stickiness != null ? [each.value.stickiness] : []
+  # Health Check
+  dynamic "health_check" {
+    for_each = var.target_group_config.health_check != null ? [var.target_group_config.health_check] : []
     content {
-      cookie_duration = stickiness.value.cookie_duration
-      type            = stickiness.value.type
+      enabled             = health_check.value.enabled
+      interval            = health_check.value.interval
+      path                = health_check.value.path
+      port                = health_check.value.port
+      protocol            = health_check.value.protocol
+      timeout             = health_check.value.timeout
+      unhealthy_threshold = health_check.value.unhealthy_threshold
+      healthy_threshold   = health_check.value.healthy_threshold
+      matcher             = health_check.value.matcher
     }
   }
 
-  lifecycle {
-    create_before_destroy = true
+  # Stickiness
+  dynamic "stickiness" {
+    for_each = var.target_group_config.stickiness != null ? [var.target_group_config.stickiness] : []
+    content {
+      type            = stickiness.value.type
+      cookie_duration = stickiness.value.cookie_duration
+      cookie_name    = stickiness.value.cookie_name
+      enabled         = stickiness.value.enabled
+    }
   }
 
-  tags = each.value.tags
+  # DNS Failover
+  dynamic "dns_failover" {
+    for_each = var.target_group_config.dns_failover != null ? [var.target_group_config.dns_failover] : []
+    content {
+      enabled         = dns_failover.value.enabled
+      minimum_healthy_targets_count     = dns_failover.value.minimum_healthy_targets_count
+      minimum_healthy_targets_percentage = dns_failover.value.minimum_healthy_targets_percentage
+    }
+  }
+
+  # Target Group Health
+  dynamic "target_group_health" {
+    for_each = var.target_group_config.target_group_health != null ? [var.target_group_config.target_group_health] : []
+    content {
+      enabled = target_group_health.value.enabled
+      dns_failover = target_group_health.value.dns_failover
+      unhealthy_state_routing   = target_group_health.value.unhealthy_state_routing
+    }
+  }
+
+  # Target Failover
+  dynamic "target_failover" {
+    for_each = var.target_group_config.target_failover != null ? [var.target_group_config.target_failover] : []
+    content {
+      on_deregistration   = target_failover.value.on_deregistration
+      on_unhealthy = target_failover.value.on_unhealthy
+    }
+  }
+
+  # Unhealthy State Routing
+  dynamic "unhealthy_state_routing" {
+    for_each = var.target_group_config.unhealthy_state_routing != null ? [var.target_group_config.unhealthy_state_routing] : []
+    content {
+      enabled    = unhealthy_state_routing.value.enabled
+      minimum_healthy_targets_count    = unhealthy_state_routing.value.minimum_healthy_targets_count
+      minimum_healthy_targets_percentage = unhealthy_state_routing.value.minimum_healthy_targets_percentage
+    }
+  }
+
+  # Target Health State
+  dynamic "target_health_state" {
+    for_each = var.target_group_config.target_health_state != null ? [var.target_group_config.target_health_state] : []
+    content {
+      enabled = target_health_state.value.enabled
+      enable_unhealthy_connection_termination  = target_health_state.value.enable_unhealthy_connection_termination
+      unhealthy_draining_interval = target_health_state.value.unhealthy_draining_interval
+    }
+  }
 }
+
 
 ###################################################################
 #                 Listener
@@ -162,16 +214,16 @@ resource "aws_lb_listener" "this" {
       for_each = lookup(default_action.value, "authenticate_oidc", null) != null ? [default_action.value.authenticate_oidc] : []
       content {
         authorization_endpoint = authenticate_oidc.value.authorization_endpoint
-        authentication_request_extra_params = authenticate_cognito.value.authentication_request_extra_params
+        authentication_request_extra_params = authenticate_oidc.value.authentication_request_extra_params
         client_id              = authenticate_oidc.value.client_id
         client_secret          = authenticate_oidc.value.client_secret
         issuer                 = authenticate_oidc.value.issuer
         token_endpoint         = authenticate_oidc.value.token_endpoint
         user_info_endpoint     = authenticate_oidc.value.user_info_endpoint
-        on_unauthenticated_request       = authenticate_cognito.value.on_unauthenticated_request
-        scope                            = authenticate_cognito.value.scope
-        session_cookie_name              = authenticate_cognito.value.session_cookie_name
-        session_timeout                  = authenticate_cognito.value.session_timeout
+        on_unauthenticated_request       = authenticate_oidc.value.on_unauthenticated_request
+        scope                            = authenticate_oidc.value.scope
+        session_cookie_name              = authenticate_oidc.value.session_cookie_name
+        session_timeout                  = authenticate_oidc.value.session_timeout
       }
     }
 
@@ -309,8 +361,29 @@ resource "aws_lb_listener_rule" "this" {
           user_pool_client_id             = authenticate_cognito.value.user_pool_client_id
           user_pool_domain                = authenticate_cognito.value.user_pool_domain
           on_unauthenticated_request      = authenticate_cognito.value.on_unauthenticated_request
+          authentication_request_extra_params = authenticate_cognito.value.authentication_request_extra_params
+          session_cookie_name              = authenticate_cognito.value.session_cookie_name
+          session_timeout                  = authenticate_cognito.value.session_timeout
+          on_unauthenticated_request       = authenticate_cognito.value.on_unauthenticated_request
         }
       }
+
+      dynamic "authenticate_oidc" {
+      for_each = lookup(action.value, "authenticate_oidc", null) != null ? [action.value.authenticate_oidc] : []
+      content {
+        authorization_endpoint = authenticate_oidc.value.authorization_endpoint
+        authentication_request_extra_params = authenticate_oidc.value.authentication_request_extra_params
+        client_id              = authenticate_oidc.value.client_id
+        client_secret          = authenticate_oidc.value.client_secret
+        issuer                 = authenticate_oidc.value.issuer
+        token_endpoint         = authenticate_oidc.value.token_endpoint
+        user_info_endpoint     = authenticate_oidc.value.user_info_endpoint
+        on_unauthenticated_request       = authenticate_oidc.value.on_unauthenticated_request
+        scope                            = authenticate_oidc.value.scope
+        session_cookie_name              = authenticate_oidc.value.session_cookie_name
+        session_timeout                  = authenticate_oidc.value.session_timeout
+      }
+    }
     }
   }
 
