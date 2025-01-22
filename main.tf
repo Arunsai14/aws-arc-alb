@@ -99,21 +99,21 @@ resource "aws_lb" "this" {
 #                 Target Group
 ###################################################################
 resource "aws_lb_target_group" "this" {
-  name                       = var.target_group_config.name
-  name_prefix               = var.target_group_config.name_prefix
-  port                       = var.target_group_config.port
-  protocol                   = var.target_group_config.protocol
-  vpc_id                     = var.target_group_config.vpc_id
-  ip_address_type        = var.target_group_config.ip_address_type
+  name                        = var.target_group_config.name
+  name_prefix                 = var.target_group_config.name_prefix
+  port                        = var.target_group_config.port
+  protocol                    = var.target_group_config.protocol
+  vpc_id                      = var.target_group_config.vpc_id
+  ip_address_type             = var.target_group_config.ip_address_type
   load_balancing_anomaly_mitigation = var.target_group_config.load_balancing_anomaly_mitigation
   load_balancing_cross_zone_enabled = var.target_group_config.load_balancing_cross_zone_enabled
-  preserve_client_ip       = var.target_group_config.preserve_client_ip
-  protocol_version         = var.target_group_config.protocol_version
+  preserve_client_ip          = var.target_group_config.preserve_client_ip
+  protocol_version            = var.target_group_config.protocol_version
   load_balancing_algorithm_type = var.target_group_config.load_balancing_algorithm_type
-  target_type                = var.target_group_config.target_type
-  proxy_protocol_v2        = var.target_group_config.proxy_protocol_v2
-  slow_start               = var.target_group_config.slow_start
-  tags                       = var.target_group_config.tags
+  target_type                 = var.target_group_config.target_type
+  proxy_protocol_v2           = var.target_group_config.proxy_protocol_v2
+  slow_start                  = var.target_group_config.slow_start
+  tags                        = var.target_group_config.tags
 
   # Health Check
   dynamic "health_check" {
@@ -137,53 +137,50 @@ resource "aws_lb_target_group" "this" {
     content {
       type            = stickiness.value.type
       cookie_duration = stickiness.value.cookie_duration
-      cookie_name    = stickiness.value.cookie_name
+      cookie_name     = stickiness.value.cookie_name
       enabled         = stickiness.value.enabled
     }
   }
 
-
-# Target Group Health
-dynamic "target_group_health" {
-  for_each = var.target_group_config.target_group_health != null ? [var.target_group_config.target_group_health] : []
-  content {
-    # DNS Failover
-    dynamic "dns_failover" {
-      for_each = var.target_group_config.dns_failover != null ? [var.target_group_config.dns_failover] : []
-      content {
-        minimum_healthy_targets_count     = dns_failover.value.minimum_healthy_targets_count
-        minimum_healthy_targets_percentage = dns_failover.value.minimum_healthy_targets_percentage
+  # Target Group Health (DNS Failover & Unhealthy State Routing)
+  dynamic "target_group_health" {
+    for_each = var.target_group_config.target_group_health != null ? [var.target_group_config.target_group_health] : []
+    content {
+      # DNS Failover
+      dynamic "dns_failover" {
+        for_each = var.target_group_config.target_group_health.dns_failover != null ? [var.target_group_config.target_group_health.dns_failover] : []
+        content {
+          minimum_healthy_targets_count      = dns_failover.value.minimum_healthy_targets_count
+          minimum_healthy_targets_percentage = dns_failover.value.minimum_healthy_targets_percentage
+        }
       }
-    }
 
-    # Unhealthy State Routing
-    dynamic "unhealthy_state_routing" {
-      for_each = var.target_group_config.unhealthy_state_routing != null ? [var.target_group_config.unhealthy_state_routing] : []
-      content {
-        minimum_healthy_targets_count     = unhealthy_state_routing.value.minimum_healthy_targets_count
-        minimum_healthy_targets_percentage = unhealthy_state_routing.value.minimum_healthy_targets_percentage
+      # Unhealthy State Routing
+      dynamic "unhealthy_state_routing" {
+        for_each = var.target_group_config.target_group_health.unhealthy_state_routing != null ? [var.target_group_config.target_group_health.unhealthy_state_routing] : []
+        content {
+          minimum_healthy_targets_count      = unhealthy_state_routing.value.minimum_healthy_targets_count
+          minimum_healthy_targets_percentage = unhealthy_state_routing.value.minimum_healthy_targets_percentage
+        }
       }
     }
   }
-}
-
 
   # Target Failover
   dynamic "target_failover" {
     for_each = var.target_group_config.target_failover != null ? [var.target_group_config.target_failover] : []
     content {
-      on_deregistration   = target_failover.value.on_deregistration
-      on_unhealthy = target_failover.value.on_unhealthy
+      on_deregistration = target_failover.value.on_deregistration
+      on_unhealthy      = target_failover.value.on_unhealthy
     }
   }
-
 
   # Target Health State
   dynamic "target_health_state" {
     for_each = var.target_group_config.target_health_state != null ? [var.target_group_config.target_health_state] : []
     content {
-      enable_unhealthy_connection_termination  = target_health_state.value.enable_unhealthy_connection_termination
-      unhealthy_draining_interval = target_health_state.value.unhealthy_draining_interval
+      enable_unhealthy_connection_termination = target_health_state.value.enable_unhealthy_connection_termination
+      unhealthy_draining_interval             = target_health_state.value.unhealthy_draining_interval
     }
   }
 }
