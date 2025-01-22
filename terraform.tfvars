@@ -72,7 +72,7 @@ subnet_mapping = [
   }
 ]
 
-  alb_target_group = [{
+  target_group_config = [{
     name        = "arc-poc-alb-tg"
     port        = 80
     protocol    = "HTTP"
