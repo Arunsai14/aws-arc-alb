@@ -218,7 +218,7 @@ variable "load_balancer_config" {
     enable_deletion_protection       = bool
     enable_cross_zone_load_balancing = bool
     enable_http2                     = bool
-    enable_waf_fail_open             = bool
+    enable_waf_fail_open             = (bool, false)
     enable_xff_client_port           = bool
     enable_zonal_shift               = bool
     desync_mitigation_mode           = string

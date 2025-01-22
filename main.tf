@@ -96,31 +96,31 @@ module "arc_security_group" {
 # }
 
 resource "aws_lb" "this" {
-  name                     = var.load_balancer_config.name
-  name_prefix              = var.load_balancer_config.name_prefix
-  load_balancer_type       = var.load_balancer_config.load_balancer_type
-  internal                 = var.load_balancer_config.internal
+  name                     = var.load_balancer_config.name 
+  name_prefix              = var.load_balancer_config.name_prefix 
+  load_balancer_type       = var.load_balancer_config.load_balancer_type 
+  internal                 = var.load_balancer_config.internal != null ? var.load_balancer_config.internal : false
   security_groups          = [for sg in module.arc_security_group : sg.id]
-  ip_address_type          = var.load_balancer_config.ip_address_type
-  enable_deletion_protection = var.load_balancer_config.enable_deletion_protection
-  enable_cross_zone_load_balancing = var.load_balancer_config.enable_cross_zone_load_balancing
-  enable_http2             = var.load_balancer_config.enable_http2
-  enable_waf_fail_open     = var.load_balancer_config.enable_waf_fail_open
-  enable_xff_client_port   = var.load_balancer_config.enable_xff_client_port
-  enable_zonal_shift       = var.load_balancer_config.enable_zonal_shift
-  desync_mitigation_mode   = var.load_balancer_config.desync_mitigation_mode
-  drop_invalid_header_fields = var.load_balancer_config.drop_invalid_header_fields
-  enforce_security_group_inbound_rules_on_private_link_traffic = var.load_balancer_config.enforce_security_group_inbound_rules_on_private_link_traffic
-  idle_timeout             = var.load_balancer_config.idle_timeout
-  preserve_host_header     = var.load_balancer_config.preserve_host_header
-  xff_header_processing_mode = var.load_balancer_config.xff_header_processing_mode
-  customer_owned_ipv4_pool = var.load_balancer_config.customer_owned_ipv4_pool
-  dns_record_client_routing_policy = var.load_balancer_config.dns_record_client_routing_policy
-  client_keep_alive        = var.load_balancer_config.client_keep_alive
-  enable_tls_version_and_cipher_suite_headers = var.load_balancer_config.enable_tls_version_and_cipher_suite_headers
+  ip_address_type          = var.load_balancer_config.ip_address_type != null ? var.load_balancer_config.ip_address_type : "ipv4"
+  enable_deletion_protection = var.load_balancer_config.enable_deletion_protection != null ? var.load_balancer_config.enable_deletion_protection : false
+  enable_cross_zone_load_balancing = var.load_balancer_config.enable_cross_zone_load_balancing != null ? var.load_balancer_config.enable_cross_zone_load_balancing : true
+  enable_http2             = var.load_balancer_config.enable_http2 != null ? var.load_balancer_config.enable_http2 : true
+  enable_waf_fail_open     = var.load_balancer_config.enable_waf_fail_open != null ? var.load_balancer_config.enable_waf_fail_open : false
+  enable_xff_client_port   = var.load_balancer_config.enable_xff_client_port != null ? var.load_balancer_config.enable_xff_client_port : false
+  enable_zonal_shift       = var.load_balancer_config.enable_zonal_shift != null ? var.load_balancer_config.enable_zonal_shift : true
+  desync_mitigation_mode   = var.load_balancer_config.desync_mitigation_mode != null ? var.load_balancer_config.desync_mitigation_mode : "default"
+  drop_invalid_header_fields = var.load_balancer_config.drop_invalid_header_fields != null ? var.load_balancer_config.drop_invalid_header_fields : false
+  enforce_security_group_inbound_rules_on_private_link_traffic = var.load_balancer_config.enforce_security_group_inbound_rules_on_private_link_traffic != null ? var.load_balancer_config.enforce_security_group_inbound_rules_on_private_link_traffic : false
+  idle_timeout             = var.load_balancer_config.idle_timeout != null ? var.load_balancer_config.idle_timeout : 60
+  preserve_host_header     = var.load_balancer_config.preserve_host_header != null ? var.load_balancer_config.preserve_host_header : false
+  xff_header_processing_mode = var.load_balancer_config.xff_header_processing_mode != null ? var.load_balancer_config.xff_header_processing_mode : "none"
+  customer_owned_ipv4_pool = var.load_balancer_config.customer_owned_ipv4_pool != null ? var.load_balancer_config.customer_owned_ipv4_pool : ""
+  dns_record_client_routing_policy = var.load_balancer_config.dns_record_client_routing_policy != null ? var.load_balancer_config.dns_record_client_routing_policy : "failover"
+  client_keep_alive        = var.load_balancer_config.client_keep_alive != null ? var.load_balancer_config.client_keep_alive : false
+  enable_tls_version_and_cipher_suite_headers = var.load_balancer_config.enable_tls_version_and_cipher_suite_headers != null ? var.load_balancer_config.enable_tls_version_and_cipher_suite_headers : false
 
   dynamic "subnet_mapping" {
-    for_each = var.load_balancer_config.subnet_mapping
+    for_each = var.load_balancer_config.subnet_mapping != null ? var.load_balancer_config.subnet_mapping : []
     content {
       subnet_id            = subnet_mapping.value.subnet_id
       allocation_id        = lookup(subnet_mapping.value, "allocation_id", null)
@@ -149,6 +149,7 @@ resource "aws_lb" "this" {
 
   tags = module.tags.tags
 }
+
 
 
 ###################################################################
