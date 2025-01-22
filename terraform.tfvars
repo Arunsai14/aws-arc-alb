@@ -37,7 +37,7 @@ load_balancer_config = {
 
   subnet_mapping = [
     {
-      subnet_id            = {"subnet-6781cb49", "subnet-f55c1392"}
+      subnet_id            = ["subnet-6781cb49", "subnet-f55c1392"]
     }
   ]
 
