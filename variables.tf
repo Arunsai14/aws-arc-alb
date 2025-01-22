@@ -308,22 +308,22 @@ variable "alb" {
 
 #########################################
 variable "target_group_config" {
-  type = optional(object({
-    name                       = string
-    name_prefix               = string
-    port                       = number
-    protocol                   = string
-    vpc_id                     = string
-    ip_address_type        = string
-    load_balancing_anomaly_mitigation = string
-    load_balancing_cross_zone_enabled = bool
-    preserve_client_ip       = string
-    protocol_version         = string
-    load_balancing_algorithm_type = string
-    target_type                = string
-    proxy_protocol_v2        = string
-    slow_start               = number
-    tags                       = map(string)
+  type = object({
+    name                       = optional(string)
+    name_prefix               = optional(string)
+    port                       = optional(number)
+    protocol                   = optional(string)
+    vpc_id                     = optional(string)
+    ip_address_type        = optional(string)
+    load_balancing_anomaly_mitigation = optional(string)
+    load_balancing_cross_zone_enabled = optional(bool)
+    preserve_client_ip       = optional(string)
+    protocol_version         = optional(string)
+    load_balancing_algorithm_type = optional(string)
+    target_type                = optional(string)
+    proxy_protocol_v2        = optional(string)
+    slow_start               = optional(number)
+    tags                       = optional(map(string))
 
     health_check = optional(object({
       enabled             = bool
@@ -367,7 +367,7 @@ variable "target_group_config" {
       enable_unhealthy_connection_termination  = bool
       unhealthy_draining_interval = number
     }))
-  }))
+  })
   default = null
 }
 
