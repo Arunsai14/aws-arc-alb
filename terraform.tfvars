@@ -32,7 +32,7 @@ load_balancer_config = {
   xff_header_processing_mode        = "append"
   customer_owned_ipv4_pool         = "my-ipv4-pool"
   dns_record_client_routing_policy  = "round_robin"
-  client_keep_alive                 = false
+  client_keep_alive                 = 60
   enable_tls_version_and_cipher_suite_headers = false
 
   subnet_mapping = [
