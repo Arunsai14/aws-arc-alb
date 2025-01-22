@@ -366,7 +366,7 @@ variable "target_group_config" {
       unhealthy_draining_interval             = number
     }))
   })
-  default = null
+  default = {}
 }
 
 variable "default_action" {
