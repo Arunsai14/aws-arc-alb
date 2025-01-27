@@ -4,6 +4,10 @@ internal                 = false
 idle_timeout             = 60           
 enable_deletion_protection = false      
 ip_address_type          = "ipv4"  
+region                   = "us-east-1"
+environment             = "dev"
+namespace               = "arc"
+
 
 # Subnets for the load balancer
 subnets = ["subnet-6781cb49", "subnet-f55c1392"]
@@ -14,7 +18,7 @@ vpc_id = "vpc-68f96212"
 
 load_balancer_config = {
   name                              = "arc-load-balancer"
-  load_balancer_type                = "application"
+  type                = "application"
   internal                          = false
   security_groups                   = ["sg-123456"]
   ip_address_type                   = "ipv4"
@@ -234,7 +238,14 @@ default_action = [
 
 port = 80
 protocol = "HTTP"
-
+alb_listener = {
+  port                     = 80               
+  protocol                 = "HTTP"            
+  #  alpn_policy              = "HTTP2Only"        
+  # certificate_arn          = ""
+  # ssl_policy               = "ELBSecurityPolicy-2016-08"  
+  # tcp_idle_timeout_seconds = 360           
+}
 
 listener_rules = {
   rule1 = {

@@ -44,7 +44,7 @@ variable "load_balancer_config" {
   type = object({
     name                              = optional(string, null)
     name_prefix                       = optional(string, null)
-    load_balancer_type                = optional(string, "application")
+    type                              = optional(string, "application")
     internal                          = optional(bool, false)
     ip_address_type                   = optional(string, "ipv4")
     enable_deletion_protection        = optional(bool, true)
@@ -163,7 +163,6 @@ variable "target_group_config" {
     target_type                         = optional(string)
     proxy_protocol_v2                   = optional(bool)
     slow_start                          = optional(number)
-    tags                                = optional(map(string))
 
     health_check = optional(object({
       enabled             = bool
@@ -227,7 +226,6 @@ variable "lb_trust_store_config" {
   type = list(object({
     name                               = string
     name_prefix                        = optional(string)
-    tags                               = optional(map(string))
     ca_certificates_bundle_s3_bucket   = string
     ca_certificates_bundle_s3_key      = string
     ca_certificates_bundle_s3_object_version =optional(string)

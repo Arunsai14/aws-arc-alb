@@ -16,24 +16,35 @@ provider "aws" {
   region = var.region
 }
 
+module "tags" {
+  source  = "sourcefuse/arc-tags/aws"
+  version = "1.2.6"
+
+  environment = terraform.workspace
+  project     = "terraform-aws-arc-alb"
+
+  extra_tags = {
+    Example = "True"
+  }
+}
+
 module "alb" {
-  source               = "../.."
+  source               = "../"
   alb_name             = var.alb_name
   internal             = var.internal
-  load_balancer_type   = var.load_balancer_type
-  security_groups      = var.security_groups
+  type                 = var.load_balancer_config.type
+  security_group_data  = var.security_group_data
   subnets              = var.subnets
-  enable_deletion_protection = var.enable_deletion_protection
-  tags                 = var.tags
-  listener_port        = var.listener_port
-  listener_protocol    = var.listener_protocol
-  target_group_name    = var.target_group_name
-  target_group_port    = var.target_group_port
-  target_group_protocol = var.target_group_protocol
+  enable_deletion_protection = var.load_balancer_config.enable_deletion_protection
+  listener_port        = var.alb_listener.port
+  listener_protocol    = var.alb_listener.protocol
+  target_group_name    = var.target_group_config.name
+  target_group_port    = var.target_group_config.port
+  target_group_protocol = var.target_group_config.protocol
   vpc_id               = var.vpc_id
   host_header_values   = var.host_header_values
   target_instance_id   = var.target_instance_id
   target_instance_port = var.target_instance_port
-
-
+  tags                = module.tags.tags
 }
+

@@ -6,92 +6,158 @@ variable "region" {
   default     = "us-east-1"
   description = "AWS region"
 }
-variable "alb_name" {
-  description = "The name of the ALB"
+
+variable "environment" {
   type        = string
-  default     = "my-app-alb"
+  description = "Name of the environment, i.e. dev, stage, prod"
 }
 
-variable "internal" {
-  description = "Whether the ALB is internal"
-  type        = bool
-  default     = false
-}
-
-variable "load_balancer_type" {
-  description = "Type of the load balancer"
+variable "namespace" {
   type        = string
-  default     = "application"
+  description = "Namespace of the project, i.e. arc"
 }
 
 variable "security_groups" {
-  description = "The security groups to associate with the ALB"
-  type        = list(string)
-  default     = ["sg-0123456789abcdef0"]
+  type    = list(string)
+  default = []  
 }
 
-variable "subnets" {
-  description = "The subnets to associate with the ALB"
-  type        = list(string)
-  default     = ["subnet-0123456789abcdef0", "subnet-abcdef0123456789"]
-}
-
-variable "enable_deletion_protection" {
-  description = "Whether to enable deletion protection"
-  type        = bool
-  default     = true
-}
-
-variable "listener_port" {
-  description = "Port to listen on"
-  type        = number
-  default     = 80
-}
-
-variable "listener_protocol" {
-  description = "Protocol for the listener"
+variable "name" {
+  description = "The name used in resource names"
   type        = string
-  default     = "HTTP"
-}
-
-variable "target_group_name" {
-  description = "The name of the target group"
-  type        = string
-  default     = "my-target-group"
-}
-
-variable "target_group_port" {
-  description = "The port on which the targets are listening"
-  type        = number
-  default     = 80
-}
-
-variable "target_group_protocol" {
-  description = "The protocol used by the targets"
-  type        = string
-  default     = "HTTP"
 }
 
 variable "vpc_id" {
-  description = "VPC ID to associate with the target group"
+  description = "The VPC ID for the resources"
   type        = string
-  default     = ""
 }
 
-variable "host_header_values" {
-  description = "List of host header values for listener rules"
-  type        = list(string)
-  default     = ["myapp.example.com"]
+variable "tags" {
+  description = "Tags to assign to the resource."
+  type        = map(string)
+  default     = {}
 }
 
-variable "target_instance_id" {
-  description = "Instance ID for the target group attachment"
-  type        = string
-  default     = "i-0123456789abcdef0"
+variable "load_balancer_config" {
+  type = object({
+    name                              = optional(string, null)
+    name_prefix                       = optional(string, null)
+    type                              = optional(string, "application")
+    internal                          = optional(bool, false)
+    ip_address_type                   = optional(string, "ipv4")
+    enable_deletion_protection        = optional(bool, true)
+    enable_cross_zone_load_balancing  = optional(bool, true)
+    enable_http2                      = optional(bool, true)
+    enable_waf_fail_open              = optional(bool, false)
+    enable_xff_client_port            = optional(bool, true)
+    enable_zonal_shift                = optional(bool, true)
+    desync_mitigation_mode            = optional(string, "defensive")
+    drop_invalid_header_fields        = optional(bool, false)
+    enforce_security_group_inbound_rules_on_private_link_traffic = optional(string, "off")
+    idle_timeout                      = optional(number, 60)
+    preserve_host_header              = optional(bool, true)
+    xff_header_processing_mode        = optional(string, "append")
+    customer_owned_ipv4_pool          = optional(string, null)
+    dns_record_client_routing_policy  = optional(string, "any_availability_zone")
+    client_keep_alive                 = optional(number, 60)
+    enable_tls_version_and_cipher_suite_headers = optional(bool, true)
+    subnet_mapping = optional(list(object({
+      subnet_id            = string
+      allocation_id        = optional(string, null)
+      ipv6_address         = optional(string, null)
+      private_ipv4_address = optional(string, null)
+    })))
+    access_logs = optional(object({
+      enabled = optional(bool, false)
+      bucket  = string
+      prefix  = optional(string, "access-logs")
+    }))
+    connection_logs = optional(object({
+      enabled = optional(bool, false)
+      bucket  = string
+      prefix  = optional(string, "connection-logs")
+    }))
+  })
 }
 
-variable "target_instance_port" {
-  description = "Port for the target instance"
-  type        = number
-  default     = 80
+variable "security_group_data" {
+  type = object({
+    security_group_ids_to_attach = optional(list(string), []),
+    create                       = optional(bool, true),
+    description                  = optional(string, null),
+    ingress_rules = optional(list(object({
+      description              = optional(string, null)
+      cidr_block               = optional(string, null)
+      source_security_group_id = optional(string, null)
+      from_port                = number
+      ip_protocol              = string
+      to_port                  = string
+      self                     = optional(bool, false)
+    })), []),
+    egress_rules = optional(list(object({
+      description                   = optional(string, null)
+      cidr_block                    = optional(string, null)
+      destination_security_group_id = optional(string, null)
+      from_port                     = number
+      ip_protocol                   = string
+      to_port                       = string
+      prefix_list_id                = optional(string, null)
+    })), [])
+  })
+  default = {
+    create = false
+  }
 }
+
+variable "target_group_config" {
+  type = object({
+    name                                = optional(string)
+    name_prefix                         = optional(string)
+    port                                = optional(number)
+    protocol                            = optional(string)
+    vpc_id                              = optional(string)
+    ip_address_type                     = optional(string)
+    load_balancing_anomaly_mitigation   = optional(bool)
+    load_balancing_cross_zone_enabled   = optional(bool)
+    preserve_client_ip                  = optional(bool)
+    protocol_version                    = optional(string)
+    load_balancing_algorithm_type       = optional(string)
+    target_type                         = optional(string)
+    proxy_protocol_v2                   = optional(bool)
+    slow_start                          = optional(number)
+
+    health_check = optional(object({
+      enabled             = bool
+      interval            = number
+      path                = string
+      port                = number
+      protocol            = string
+      timeout             = number
+      unhealthy_threshold = number
+      healthy_threshold   = number
+      matcher             = string
+    }))
+
+    stickiness = optional(object({
+      type            = string
+      cookie_duration = number
+      cookie_name     = optional(string)
+      enabled         = bool
+    }))
+  })
+  default = null
+}
+
+variable "alb_listener" {
+  type = object({
+    port                     = optional(number, 80)
+    protocol                 = optional(string, "HTTP")
+    alpn_policy              = optional(string, null)
+    certificate_arn          = optional(string, "")
+    ssl_policy               = optional(string, "")
+    tcp_idle_timeout_seconds = optional(number, 350)
+  })
+}
+
+# Include other variables as needed
+

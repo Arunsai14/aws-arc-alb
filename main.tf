@@ -48,7 +48,7 @@ module "arc_security_group" {
 resource "aws_lb" "this" {
   name                     = var.load_balancer_config.name
   name_prefix              = var.load_balancer_config.name_prefix
-  load_balancer_type       = var.load_balancer_config.load_balancer_type
+  load_balancer_type       = var.load_balancer_config.type
   internal                 = var.load_balancer_config.internal
   security_groups          = [for sg in module.arc_security_group : sg.id]
   ip_address_type          = var.load_balancer_config.ip_address_type
@@ -97,7 +97,7 @@ resource "aws_lb" "this" {
     }
   }
 
-  tags = module.tags.tags
+  tags = var.tags
 }
 
 
@@ -121,7 +121,7 @@ for_each = var.target_group_config != null ? { "config" = var.target_group_confi
   target_type                 = var.target_group_config.target_type
   proxy_protocol_v2           = var.target_group_config.proxy_protocol_v2
   slow_start                  = var.target_group_config.slow_start
-  tags                        = var.target_group_config.tags
+  tags = var.tags
 
   # Health Check
   dynamic "health_check" {
@@ -218,11 +218,11 @@ resource "aws_lb_trust_store" "this" {
 
   name                     = each.value.name
   name_prefix              = each.value.name_prefix
-  tags                     = each.value.tags
   ca_certificates_bundle_s3_bucket = each.value.ca_certificates_bundle_s3_bucket
   ca_certificates_bundle_s3_key    = each.value.ca_certificates_bundle_s3_key
   ca_certificates_bundle_s3_object_version = each.value.ca_certificates_bundle_s3_object_version
 
+ tags = var.tags
 }
 
 
@@ -319,7 +319,7 @@ resource "aws_lb_listener" "this" {
   }
 }
 
-  tags = module.tags.tags 
+  tags = var.tags
 }
 
 
@@ -420,5 +420,5 @@ resource "aws_lb_listener_rule" "this" {
       }
     }
   }
-
+ tags = var.tags
 }
