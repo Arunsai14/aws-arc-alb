@@ -202,7 +202,7 @@ for_each = var.target_group_config != null ? { "config" = var.target_group_confi
 resource "aws_lb_target_group_attachment" "this" {
   for_each = var.target_group_attachment_config != null ? { for idx, attachment in var.target_group_attachment_config : idx => attachment } : {}
 
-  target_group_arn = aws_lb_target_group.this[each.key].arn
+  target_group_arn = aws_lb_target_group.this["config"].arn
   target_id        = each.value.target_id
   port             = each.value.port
 
