@@ -22,6 +22,11 @@ variable "security_groups" {
   default = []  
 }
 
+variable "security_group_name" {
+  type        = string
+  description = "The name of the security group"
+}
+
 variable "name" {
   description = "The name used in resource names"
   type        = string

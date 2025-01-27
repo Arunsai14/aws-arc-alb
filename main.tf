@@ -34,7 +34,7 @@ module "arc_security_group" {
   version = "0.0.1"
 
   count = length(var.security_groups) == 0 ? 1 : 0
-  name          = "${var.namespace}-${var.environment}-${var.name}-sg"
+  name          = var.security_group_name
   vpc_id        = var.vpc_id
   ingress_rules = var.security_group_data.ingress_rules
   egress_rules  = var.security_group_data.egress_rules
@@ -111,7 +111,7 @@ for_each = var.target_group_config != null ? { "config" = var.target_group_confi
   name_prefix                 = var.target_group_config.name_prefix
   port                        = var.target_group_config.port
   protocol                    = var.target_group_config.protocol
-  vpc_id                      = var.target_group_config.vpc_id
+  vpc_id                      = var.vpc_id
   ip_address_type             = var.target_group_config.ip_address_type
   load_balancing_anomaly_mitigation = var.target_group_config.load_balancing_anomaly_mitigation
   load_balancing_cross_zone_enabled = var.target_group_config.load_balancing_cross_zone_enabled

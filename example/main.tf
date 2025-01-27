@@ -35,6 +35,7 @@ module "alb" {
   internal             = var.internal
   type                 = var.load_balancer_config.type
   security_group_data  = var.security_group_data
+  security_group_name  = var.security_group_name
   subnets              = var.subnets
   enable_deletion_protection = var.load_balancer_config.enable_deletion_protection
   listener_port        = var.alb_listener.port

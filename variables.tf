@@ -3,31 +3,16 @@ variable "region" {
   type        = string
 }
 
-variable "environment" {
+variable "security_group_name" {
   type        = string
-  description = "Name of the environment, i.e. dev, stage, prod"
+  description = "alb security group name"
 }
-
-variable "namespace" {
-  type        = string
-  description = "Namespace of the project, i.e. arc"
-}
-
-# variable "project_name" {
-#   type        = string
-#   default     = "sourcefuse"
-#   description = "Project name"
-# }
 
 variable "security_groups" {
   type    = list(string)
   default = []  
 }
 
-variable "name" {
-  description = "The name used in resource names"
-  type        = string
-}
 
 variable "vpc_id" {
   description = "The VPC ID for the resources"
@@ -153,7 +138,6 @@ variable "target_group_config" {
     name_prefix                         = optional(string)
     port                                = optional(number)
     protocol                            = optional(string)
-    vpc_id                              = optional(string)
     ip_address_type                     = optional(string)
     load_balancing_anomaly_mitigation   = optional(bool)
     load_balancing_cross_zone_enabled   = optional(bool)
