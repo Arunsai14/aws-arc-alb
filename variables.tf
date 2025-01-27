@@ -265,7 +265,7 @@ variable "load_balancer_config" {
     idle_timeout                      = 60
     preserve_host_header              = true
     xff_header_processing_mode        = "append"
-    customer_owned_ipv4_pool         = "my-ipv4-pool"
+    customer_owned_ipv4_pool         = null
     dns_record_client_routing_policy  = "any_availability_zone"
     client_keep_alive                 = 60
     enable_tls_version_and_cipher_suite_headers = true
