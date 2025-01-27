@@ -209,91 +209,48 @@ variable "tags" {
 
 variable "load_balancer_config" {
   type = object({
-    name                              = string
-    name_prefix                         = optional(string)
-    load_balancer_type               = string
-    internal                         = bool
-    ip_address_type                  = string
-    enable_deletion_protection       = bool
-    enable_cross_zone_load_balancing = bool
-    enable_http2                     = bool
-    enable_waf_fail_open             = bool
-    enable_xff_client_port           = bool
-    enable_zonal_shift               = bool
-    desync_mitigation_mode           = string
-    drop_invalid_header_fields       = bool
-    enforce_security_group_inbound_rules_on_private_link_traffic = string
-    idle_timeout                     = number
-    preserve_host_header             = bool
-    xff_header_processing_mode       = string
-    customer_owned_ipv4_pool        = string
-    dns_record_client_routing_policy = string
-    client_keep_alive                = number
-    enable_tls_version_and_cipher_suite_headers = bool
-    subnet_mapping                   = list(object({
+    name                              = optional(string, null)
+    name_prefix                       = optional(string, null)
+    load_balancer_type                = optional(string, "application")
+    internal                          = optional(bool, false)
+    ip_address_type                   = optional(string, "ipv4")
+    enable_deletion_protection        = optional(bool, true)
+    enable_cross_zone_load_balancing  = optional(bool, true)
+    enable_http2                      = optional(bool, true)
+    enable_waf_fail_open              = optional(bool, false)
+    enable_xff_client_port            = optional(bool, true)
+    enable_zonal_shift                = optional(bool, true)
+    desync_mitigation_mode            = optional(string, "defensive")
+    drop_invalid_header_fields        = optional(bool, false)
+    enforce_security_group_inbound_rules_on_private_link_traffic = optional(string, "off")
+    idle_timeout                      = optional(number, 60)
+    preserve_host_header              = optional(bool, true)
+    xff_header_processing_mode        = optional(string, "append")
+    customer_owned_ipv4_pool          = optional(string, null)
+    dns_record_client_routing_policy  = optional(string, "any_availability_zone")
+    client_keep_alive                 = optional(number, 60)
+    enable_tls_version_and_cipher_suite_headers = optional(bool, true)
+
+    subnet_mapping = optional(list(object({
       subnet_id            = string
-      allocation_id        = optional(string)
-      ipv6_address         = optional(string)
-      private_ipv4_address = optional(string)
-    }))
+      allocation_id        = optional(string, null)
+      ipv6_address         = optional(string, null)
+      private_ipv4_address = optional(string, null)
+    })))
+
     access_logs = optional(object({
-      enabled = bool
+      enabled = optional(bool, false)
       bucket  = string
-      prefix  = string
+      prefix  = optional(string, "access-logs")
     }))
+
     connection_logs = optional(object({
-      enabled = bool
+      enabled = optional(bool, false)
       bucket  = string
-      prefix  = string
-    }))
+      prefix  = optional(string, "connection-logs")
+    }),)
   })
-
-  default = {
-    name                              = "my-load-balancer"
-    load_balancer_type                = "application"
-    internal                          = false
-    ip_address_type                   = "ipv4"
-    enable_deletion_protection        = true
-    enable_cross_zone_load_balancing  = true
-    enable_http2                      = true
-    enable_waf_fail_open              = false  # Default set to false
-    enable_xff_client_port            = true
-    enable_zonal_shift                = true
-    desync_mitigation_mode            = "defensive"
-    drop_invalid_header_fields        = false
-    enforce_security_group_inbound_rules_on_private_link_traffic = "off"
-    idle_timeout                      = 60
-    preserve_host_header              = true
-    xff_header_processing_mode        = "append"
-    customer_owned_ipv4_pool         = null
-    dns_record_client_routing_policy  = "any_availability_zone"
-    client_keep_alive                 = 60
-    enable_tls_version_and_cipher_suite_headers = true
-
-    subnet_mapping = [
-      {
-        subnet_id            = "subnet-12345"
-        allocation_id        = "eipalloc-67890"
-        ipv6_address         = "2001:db8::1"
-        private_ipv4_address = "10.0.1.1"
-      }
-    ]
-
-    access_logs = {
-      enabled = false
-      bucket  = "my-log-bucket"
-      prefix  = "access-logs"
-    }
-
-    connection_logs = {
-      enabled = false
-      bucket  = "my-log-bucket"
-      prefix  = "connection-logs"
-    }
-  }
 }
-
-
 
 
 variable "security_group_data" {
