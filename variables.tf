@@ -295,7 +295,7 @@ variable "alb_listener" {
     protocol                 = optional(string, "HTTP")
     alpn_policy              = optional(string, "None")
     certificate_arn          = optional(string, "")
-    ssl_policy               = optional(string, "ELBSecurityPolicy-2016-08")
+    ssl_policy               = optional(string, "")
     tcp_idle_timeout_seconds = optional(number, 350)
   })
 }
