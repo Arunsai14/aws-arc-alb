@@ -7,15 +7,6 @@ variable "region" {
   description = "AWS region"
 }
 
-variable "environment" {
-  type        = string
-  description = "Name of the environment, i.e. dev, stage, prod"
-}
-
-variable "namespace" {
-  type        = string
-  description = "Namespace of the project, i.e. arc"
-}
 
 variable "security_groups" {
   type    = list(string)
@@ -25,11 +16,6 @@ variable "security_groups" {
 variable "security_group_name" {
   type        = string
   description = "The name of the security group"
-}
-
-variable "name" {
-  description = "The name used in resource names"
-  type        = string
 }
 
 variable "vpc_id" {
@@ -43,16 +29,6 @@ variable "tags" {
   default     = {}
 }
 
-
-variable "alb_name" {
-  description = "ALB name"
-  type        = string
-}
-
-variable "internal" {
-  description = "Whether the ALB is internal"
-  type        = bool
-}
 
 variable "subnets" {
   description = "Subnets for the ALB"
