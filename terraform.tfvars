@@ -145,10 +145,10 @@ target_group_config = {
 
 target_group_attachment_config = [
   {
-    target_id       = "i-024cca3753df50299"  # Instance ID
-    target_type     = "instance"
+    target_id       = "100.26.104.246"  # Instance ID
+    target_type     = "ip"
     port            = 80
-  }
+    availability_zone = "us-east-1a"  }
 ]
 
 
