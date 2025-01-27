@@ -209,7 +209,7 @@ variable "target_group_config" {
       unhealthy_draining_interval             = number
     }))
   })
-  default = {}
+  default = null
 }
 
 ########## alb target group attachment config ##########
