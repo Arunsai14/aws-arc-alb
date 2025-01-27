@@ -4,6 +4,10 @@ internal                 = false
 idle_timeout             = 60           
 enable_deletion_protection = false      
 ip_address_type          = "ipv4"  
+region                   = "us-east-1"
+environment             = "dev"
+namespace               = "arc"
+
 
 # Subnets for the load balancer
 subnets = ["subnet-6781cb49", "subnet-f55c1392"]
@@ -236,7 +240,7 @@ port = 80
 protocol = "HTTP"
 alb_listener = {
   port                     = 443                
-  protocol                 = "HTTPS"            
+  protocol                 = "HTTP"            
   alpn_policy              = "HTTP2Only"        
   certificate_arn          = ""
   ssl_policy               = "ELBSecurityPolicy-2016-08"  

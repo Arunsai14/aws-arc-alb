@@ -106,7 +106,6 @@ resource "aws_lb" "this" {
 #                 Target Group
 ###################################################################
 resource "aws_lb_target_group" "this" {
-  # for_each = var.target_group_config != null ? { for idx, target_group in var.target_group_config : idx => target_group } : {}
 for_each = var.target_group_config != null ? { "config" = var.target_group_config } : {}
   name                        = var.target_group_config.name
   name_prefix                 = var.target_group_config.name_prefix
@@ -126,7 +125,6 @@ for_each = var.target_group_config != null ? { "config" = var.target_group_confi
 
   # Health Check
   dynamic "health_check" {
-    # for_each = each.value.health_check != null ? [each.value.health_check] : []
     for_each = each.value.health_check != null ? [each.value.health_check] : []
     content {
       enabled             = health_check.value.enabled
@@ -318,16 +316,6 @@ resource "aws_lb_listener" "this" {
       }
     }
 
-   # Dynamic mutual_authentication block
-  # dynamic "mutual_authentication" {
-  #   for_each = lookup(default_action.value, "mutual_authentication", null) != null ? [default_action.value.mutual_authentication] : []
-  #   content {
-  #     advertise_trust_store_ca_names = mutual_authentication.value.advertise_trust_store_ca_names
-  #     ignore_client_certificate_expiry = mutual_authentication.value.ignore_client_certificate_expiry
-  #     mode                           = mutual_authentication.value.mode
-  #     trust_store_arn                = mutual_authentication.value.trust_store_arn
-  #   }
-  # }
   }
 }
 

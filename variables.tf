@@ -1,26 +1,23 @@
 variable "region" {
   description = "AWS region"
   type        = string
-  default     = "us-east-1"  # Change as needed
 }
 
 variable "environment" {
   type        = string
   description = "Name of the environment, i.e. dev, stage, prod"
-  default     = "dev"
 }
 
 variable "namespace" {
   type        = string
-  default     = "arc"
   description = "Namespace of the project, i.e. arc"
 }
 
-variable "project_name" {
-  type        = string
-  default     = "sourcefuse"
-  description = "Project name"
-}
+# variable "project_name" {
+#   type        = string
+#   default     = "sourcefuse"
+#   description = "Project name"
+# }
 
 variable "security_groups" {
   type    = list(string)
