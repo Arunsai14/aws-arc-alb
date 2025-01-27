@@ -213,7 +213,6 @@ variable "load_balancer_config" {
     name_prefix                         = optional(string)
     load_balancer_type               = string
     internal                         = bool
-    security_groups                  = list(string)
     ip_address_type                  = string
     enable_deletion_protection       = bool
     enable_cross_zone_load_balancing = bool
@@ -253,7 +252,6 @@ variable "load_balancer_config" {
     name                              = "my-load-balancer"
     load_balancer_type                = "application"
     internal                          = false
-    security_groups                   = ["sg-123456"]
     ip_address_type                   = "ipv4"
     enable_deletion_protection        = true
     enable_cross_zone_load_balancing  = true
