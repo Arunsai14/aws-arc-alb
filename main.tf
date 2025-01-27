@@ -125,7 +125,7 @@ resource "aws_lb_target_group" "this" {
 
   # Health Check
   dynamic "health_check" {
-    for_each = var.target_group_config.health_check != null ? [var.target_group_config.health_check] : []
+    for_each = var.target_group_config.health_check != null ? [var.target_group_config.health_check] : {}
     content {
       enabled             = health_check.value.enabled
       interval            = health_check.value.interval
