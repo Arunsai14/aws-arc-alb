@@ -24,14 +24,14 @@ load_balancer_config = {
   enable_waf_fail_open              = false
   enable_xff_client_port            = false
   enable_zonal_shift                = false
-  desync_mitigation_mode            = "strict"
+
   drop_invalid_header_fields        = false
-  enforce_security_group_inbound_rules_on_private_link_traffic = false
+
   idle_timeout                      = 60
   preserve_host_header              = false
   xff_header_processing_mode        = "append"
   customer_owned_ipv4_pool         = "my-ipv4-pool"
-  dns_record_client_routing_policy  = "round_robin"
+
   client_keep_alive                 = 60
   enable_tls_version_and_cipher_suite_headers = false
 
