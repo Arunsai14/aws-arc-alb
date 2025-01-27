@@ -27,6 +27,16 @@ variable "security_groups" {
   default = []  
 }
 
+variable "name" {
+  description = "The name used in resource names"
+  type        = string
+}
+
+variable "vpc_id" {
+  description = "The VPC ID for the resources"
+  type        = string
+}
+
 variable "tags" {
   description = "Tags to assign to the resource."
   type        = map(string)
