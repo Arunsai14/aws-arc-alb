@@ -199,24 +199,13 @@ resource "aws_lb_target_group_attachment" "this" {
   target_id        = each.value.target_id
   port             = each.value.port
 
-  # Handle optional availability_zone for IP type targets
-  dynamic "ip" {
-    for_each = each.value.target_type == "ip" ? [each.value] : []
-    content {
-      availability_zone = lookup(ip.value, "availability_zone", null)
-    }
-  }
+  # For IP targets, optionally set availability_zone
+  availability_zone = lookup(each.value, "availability_zone", null)
 
-  # Handle Lambda targets separately
-  dynamic "lambda" {
-    for_each = each.value.target_type == "lambda" ? [each.value] : []
-    content {
-      target_id = lambda.value.target_id
-    }
-  }
-
-  depends_on = [aws_lambda_permission.this]
+  # For Lambda targets, no availability_zone is required
+  # depends_on = each.value.target_type == "lambda" ? [aws_lambda_permission.this] : []
 }
+
 
 
 ###################################################################
