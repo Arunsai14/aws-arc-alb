@@ -223,7 +223,7 @@ variable "load_balancer_config" {
     enable_zonal_shift               = bool
     desync_mitigation_mode           = string
     drop_invalid_header_fields       = bool
-    enforce_security_group_inbound_rules_on_private_link_traffic = bool
+    enforce_security_group_inbound_rules_on_private_link_traffic = string
     idle_timeout                     = number
     preserve_host_header             = bool
     xff_header_processing_mode       = string
@@ -263,7 +263,7 @@ variable "load_balancer_config" {
     enable_zonal_shift                = true
     desync_mitigation_mode            = "defensive"
     drop_invalid_header_fields        = false
-    enforce_security_group_inbound_rules_on_private_link_traffic = off
+    enforce_security_group_inbound_rules_on_private_link_traffic = "off"
     idle_timeout                      = 60
     preserve_host_header              = true
     xff_header_processing_mode        = "append"
