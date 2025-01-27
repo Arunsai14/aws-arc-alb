@@ -232,9 +232,12 @@ resource "aws_lb_trust_store" "this" {
 
 resource "aws_lb_listener" "this" {
   load_balancer_arn = aws_lb.this.arn
-  port              = var.port           
-  protocol          = var.protocol       
-  alpn_policy       = var.alpn_policy     
+  port              = var.alb_listener.port
+  protocol          = var.alb_listener.protocol
+  alpn_policy       = var.alb_listener.alpn_policy
+  certificate_arn   = var.alb_listener.certificate_arn
+  ssl_policy        = var.alb_listener.ssl_policy
+  tcp_idle_timeout_seconds = var.alb_listener.tcp_idle_timeout_seconds
 
   # Optional: Default action with dynamic actions
   dynamic "default_action" {
@@ -325,9 +328,6 @@ resource "aws_lb_listener" "this" {
   # }
   }
 }
-  certificate_arn = var.certificate_arn   # Only if using HTTPS
-  ssl_policy = var.ssl_policy             # Only if using HTTPS
-  tcp_idle_timeout_seconds = var.tcp_idle_timeout_seconds # Only for TCP
 
   tags = module.tags.tags 
 }

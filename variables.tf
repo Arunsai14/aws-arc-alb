@@ -277,34 +277,15 @@ variable "default_action" {
   default = []
 }
 
-variable "port" {
-  description = "Port number"
-  type        = optional(string, "80")
-}
-
-variable "protocol" {
-  description = "Protocol for listener"
-  type        = optional(string, "HTTP")
-}
-
-variable "alpn_policy" {
-  description = "ALPN policy for TLS"
-  type        = optional(string, "None")
-}
-
-variable "certificate_arn" {
-  description = "SSL certificate ARN for HTTPS"
-  type        = optional(string, "")
-}
-
-variable "ssl_policy" {
-  description = "SSL policy"
-  type        = optional(string, "ELBSecurityPolicy-2016-08")
-}
-
-variable "tcp_idle_timeout_seconds" {
-  description = "TCP idle timeout seconds"
-  type        = optional(number, 350)
+variable "alb_listener" {
+  type = object({
+    port                     = optional(number, 80)
+    protocol                 = optional(string, "HTTP")
+    alpn_policy              = optional(string, "None")
+    certificate_arn          = optional(string, "")
+    ssl_policy               = optional(string, "ELBSecurityPolicy-2016-08")
+    tcp_idle_timeout_seconds = optional(number, 350)
+  })
 }
 
 ########## alb listener certificate config ##########
