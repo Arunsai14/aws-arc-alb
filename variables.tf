@@ -293,7 +293,7 @@ variable "alb_listener" {
   type = object({
     port                     = optional(number, 80)
     protocol                 = optional(string, "HTTP")
-    alpn_policy              = optional(string, "None")
+    alpn_policy              = optional(string, null)
     certificate_arn          = optional(string, "")
     ssl_policy               = optional(string, "")
     tcp_idle_timeout_seconds = optional(number, 350)
