@@ -21,192 +21,13 @@ variable "project_name" {
   default     = "sourcefuse"
   description = "Project name"
 }
-variable "name" {
-  description = "Name of the Load Balancer. Must be unique."
-  type        = string
-}
-
-variable "name_prefix" {
-  description = "Creates a unique name beginning with the specified prefix. Conflicts with name."
-  type        = string
-  default     = null
-}
-
-variable "load_balancer_type" {
-  description = "Type of load balancer to create. Possible values: application, gateway, network."
-  type        = string
-  default     = "application"
-}
-
-variable "internal" {
-  description = "Whether the Load Balancer is internal."
-  type        = bool
-  default     = false
-}
-
-variable "security_groups" {
-  description = "List of security group IDs to assign to the Load Balancer."
-  type        = list(string)
-  default     = []
-}
-
-variable "vpc_id" {
-  description = "VPC ID where the security group is created."
-  type        = string
-}
-
-variable "subnets" {
-  description = "List of subnet IDs to attach to the Load Balancer."
-  type        = list(string)
-}
-
-variable "ip_address_type" {
-  description = "Type of IP addresses used by the subnets. Possible values: ipv4, dualstack."
-  type        = string
-  default     = "ipv4"
-}
-
-variable "enable_deletion_protection" {
-  description = "If true, deletion of the Load Balancer will be disabled."
-  type        = bool
-  default     = false
-}
-
-variable "enable_cross_zone_load_balancing" {
-  description = "If true, cross-zone load balancing of the Load Balancer will be enabled."
-  type        = bool
-  default     = false
-}
-
-variable "enable_http2" {
-  description = "Whether HTTP/2 is enabled for application Load Balancers."
-  type        = bool
-  default     = true
-}
-
-variable "enable_waf_fail_open" {
-  description = "Whether to allow WAF-enabled Load Balancers to route requests if unable to forward to AWS WAF."
-  type        = bool
-  default     = false
-}
-
-variable "enable_xff_client_port" {
-  description = "Whether the X-Forwarded-For header should preserve the source port."
-  type        = bool
-  default     = false
-}
-
-variable "enable_zonal_shift" {
-  description = "Whether zonal shift is enabled."
-  type        = bool
-  default     = false
-}
-
-variable "desync_mitigation_mode" {
-  description = "How the Load Balancer handles requests that pose a security risk due to HTTP desync."
-  type        = string
-  default     = "defensive"
-}
-
-variable "drop_invalid_header_fields" {
-  description = "Whether HTTP headers with invalid fields are removed by the Load Balancer."
-  type        = bool
-  default     = false
-}
-
-variable "enforce_security_group_inbound_rules_on_private_link_traffic" {
-  description = "Whether inbound security group rules are enforced for traffic originating from a PrivateLink."
-  type        = string
-  default     = "off"
-}
-
-variable "idle_timeout" {
-  description = "Time in seconds that the connection is allowed to be idle."
-  type        = number
-  default     = 60
-}
-
-variable "preserve_host_header" {
-  description = "Whether the Load Balancer should preserve the Host header."
-  type        = bool
-  default     = false
-}
-
-variable "xff_header_processing_mode" {
-  description = "Determines how the X-Forwarded-For header is modified."
-  type        = string
-  default     = "append"
-}
-
-variable "customer_owned_ipv4_pool" {
-  description = "ID of the customer-owned IPv4 pool to use for this Load Balancer."
-  type        = string
-  default     = null
-}
-
-variable "dns_record_client_routing_policy" {
-  description = "How traffic is distributed among Availability Zones."
-  type        = string
-  default     = "any_availability_zone"
-}
-
-variable "client_keep_alive" {
-  description = "Client keep alive value in seconds."
-  type        = number
-  default     = 3600
-}
-
-variable "enable_tls_version_and_cipher_suite_headers" {
-  description = "Whether TLS headers are added to the client request."
-  type        = bool
-  default     = false
-}
-
-variable "access_logs" {
-  description = "Access Logs configuration for the Load Balancer."
-  type = object({
-    enabled = bool
-    bucket  = string
-    prefix  = string
-  })
-  default = {
-    enabled = false
-    bucket  = null
-    prefix  = null
-  }
-}
-
-variable "connection_logs" {
-  description = "Connection Logs configuration for the Load Balancer."
-  type = object({
-    enabled = bool
-    bucket  = string
-    prefix  = string
-  })
-  default = {
-    enabled = false
-    bucket  = null
-    prefix  = null
-  }
-}
-
-variable "subnet_mapping" {
-  description = "Subnet mapping configuration for the Load Balancer."
-  type = list(object({
-    subnet_id            = string
-    allocation_id        = string
-    ipv6_address         = string
-    private_ipv4_address = string
-  }))
-  default = []
-}
 
 variable "tags" {
   description = "Tags to assign to the resource."
   type        = map(string)
   default     = {}
 }
-
+########## alb security group config ##########
 variable "load_balancer_config" {
   type = object({
     name                              = optional(string, null)
@@ -252,7 +73,7 @@ variable "load_balancer_config" {
   })
 }
 
-
+########## alb security group config ##########
 variable "security_group_data" {
   type = object({
     security_group_ids_to_attach = optional(list(string), [])
@@ -285,35 +106,35 @@ variable "security_group_data" {
 
 
 
-variable "create_listener_rule" {
-  type    = bool
-  default = false
-}
+# variable "create_listener_rule" {
+#   type    = bool
+#   default = false
+# }
 
 
-variable "alb" {
-  type = object({
-    name                       = optional(string, null)
-    port                       = optional(number)
-    protocol                   = optional(string, "HTTP")
-    internal                   = optional(bool, false)
-    load_balancer_type         = optional(string, "application")
-    idle_timeout               = optional(number, 60)
-    enable_deletion_protection = optional(bool, false)
-    enable_http2               = optional(bool, true)
-    certificate_arn            = optional(string, null)
+# variable "alb" {
+#   type = object({
+#     name                       = optional(string, null)
+#     port                       = optional(number)
+#     protocol                   = optional(string, "HTTP")
+#     internal                   = optional(bool, false)
+#     load_balancer_type         = optional(string, "application")
+#     idle_timeout               = optional(number, 60)
+#     enable_deletion_protection = optional(bool, false)
+#     enable_http2               = optional(bool, true)
+#     certificate_arn            = optional(string, null)
 
-    access_logs = optional(object({
-      bucket  = string
-      enabled = optional(bool, true)
-      prefix  = optional(string, "")
-    }))
+#     access_logs = optional(object({
+#       bucket  = string
+#       enabled = optional(bool, true)
+#       prefix  = optional(string, "")
+#     }))
 
-    tags = optional(map(string), {})
-  })
-}
+#     tags = optional(map(string), {})
+#   })
+# }
 
-#########################################
+########## alb target group config ##########
 variable "target_group_config" {
   type = object({
     name                                = optional(string)
@@ -326,7 +147,7 @@ variable "target_group_config" {
     load_balancing_cross_zone_enabled   = optional(bool)
     preserve_client_ip                  = optional(bool)
     protocol_version                    = optional(string)
-    load_balancing_algorithm_type       = optional(string, "round_robin")
+    load_balancing_algorithm_type       = optional(string)
     target_type                         = optional(string)
     proxy_protocol_v2                   = optional(bool)
     slow_start                          = optional(number)
@@ -385,6 +206,7 @@ variable "target_group_attachment_config" {
     port        = optional(number)
     availability_zone = optional(string)
   }))
+  default = null
 }
 
 ########## alb trsut store config ##########
@@ -401,6 +223,7 @@ variable "lb_trust_store_config" {
   default = null
 }
 
+########## alb listener config ##########
 variable "default_action" {
   description = "A list of default actions for the load balancer listener"
   type = list(object({
@@ -454,9 +277,37 @@ variable "default_action" {
   default = []
 }
 
+variable "port" {
+  description = "Port number"
+  type        = optional(string, "80")
+}
 
+variable "protocol" {
+  description = "Protocol for listener"
+  type        = optional(string, "HTTP")
+}
 
+variable "alpn_policy" {
+  description = "ALPN policy for TLS"
+  type        = optional(string, "None")
+}
 
+variable "certificate_arn" {
+  description = "SSL certificate ARN for HTTPS"
+  type        = optional(string, "")
+}
+
+variable "ssl_policy" {
+  description = "SSL policy"
+  type        = optional(string, "ELBSecurityPolicy-2016-08")
+}
+
+variable "tcp_idle_timeout_seconds" {
+  description = "TCP idle timeout seconds"
+  type        = optional(number, 350)
+}
+
+########## alb listener certificate config ##########
 variable "listener_certificates" {
   description = "A map of listener certificates with their ARN"
   type = map(object({
@@ -465,37 +316,7 @@ variable "listener_certificates" {
   default = {}
 }
 
-# Example variables for other options
-variable "port" {
-  description = "Port number"
-  default = "80"
-}
-
-variable "protocol" {
-  description = "Protocol for listener"
-  default = "HTTP"
-}
-
-variable "alpn_policy" {
-  description = "ALPN policy for TLS"
-  default = "None"
-}
-
-variable "certificate_arn" {
-  description = "SSL certificate ARN for HTTPS"
-  default = ""
-}
-
-variable "ssl_policy" {
-  description = "SSL policy"
-  default = "ELBSecurityPolicy-2016-08"
-}
-
-variable "tcp_idle_timeout_seconds" {
-  description = "TCP idle timeout seconds"
-  default = 350
-}
-
+########## alb listener rule config ##########
 variable "listener_rules" {
   description = "A map of listener rules"
   type = map(object({
