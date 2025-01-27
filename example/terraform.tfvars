@@ -7,6 +7,7 @@ ip_address_type          = "ipv4"
 region                   = "us-east-1"
 environment             = "dev"
 namespace               = "arc"
+security_group_name      = "arc-alb-sg"
 
 
 # Subnets for the load balancer

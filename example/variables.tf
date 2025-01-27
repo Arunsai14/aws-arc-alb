@@ -43,6 +43,27 @@ variable "tags" {
   default     = {}
 }
 
+
+variable "alb_name" {
+  description = "ALB name"
+  type        = string
+}
+
+variable "internal" {
+  description = "Whether the ALB is internal"
+  type        = bool
+}
+
+variable "subnets" {
+  description = "Subnets for the ALB"
+  type        = list(string)
+}
+
+variable "enable_deletion_protection" {
+  description = "Enable deletion protection for the ALB"
+  type        = bool
+}
+
 variable "load_balancer_config" {
   type = object({
     name                              = optional(string, null)

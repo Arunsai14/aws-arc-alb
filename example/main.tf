@@ -47,6 +47,9 @@ module "alb" {
   host_header_values   = var.host_header_values
   target_instance_id   = var.target_instance_id
   target_instance_port = var.target_instance_port
+  alb_listener      = var.alb_listener
+  load_balancer_config = var.load_balancer_config
+  listener_rules    = var.listener_rules
   tags                = module.tags.tags
 }
 
