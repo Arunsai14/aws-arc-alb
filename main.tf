@@ -188,6 +188,36 @@ resource "aws_lb_target_group" "this" {
   }
 }
 
+###################################################################
+#                Target Group Attachment
+###################################################################
+
+resource "aws_lb_target_group_attachment" "this" {
+  for_each = var.target_group_attachment_config != null ? { for idx, attachment in var.target_group_attachment_config : idx => attachment } : {}
+
+  target_group_arn = aws_lb_target_group.this[each.key].arn
+  target_id        = each.value.target_id
+  port             = each.value.port
+
+  # Handle optional availability_zone for IP type targets
+  dynamic "ip" {
+    for_each = each.value.target_type == "ip" ? [each.value] : []
+    content {
+      availability_zone = lookup(ip.value, "availability_zone", null)
+    }
+  }
+
+  # Handle Lambda targets separately
+  dynamic "lambda" {
+    for_each = each.value.target_type == "lambda" ? [each.value] : []
+    content {
+      target_id = lambda.value.target_id
+    }
+  }
+
+  depends_on = [aws_lambda_permission.this]
+}
+
 
 ###################################################################
 #                 Listener

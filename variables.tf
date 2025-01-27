@@ -376,6 +376,16 @@ variable "target_group_config" {
   default = {}
 }
 
+variable "target_group_attachment_config" {
+  description = "List of target group attachment configurations"
+  type = list(object({
+    target_id   = string
+    target_type = string  # Values: "instance", "ip", or "lambda"
+    port        = optional(number)
+    availability_zone = optional(string)
+  }))
+}
+
 variable "default_action" {
   description = "A list of default actions for the load balancer listener"
   type = list(object({
