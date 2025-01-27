@@ -261,14 +261,14 @@ variable "load_balancer_config" {
     enable_waf_fail_open              = false  # Default set to false
     enable_xff_client_port            = true
     enable_zonal_shift                = true
-    desync_mitigation_mode            = "strict"
+    desync_mitigation_mode            = "defensive"
     drop_invalid_header_fields        = false
-    enforce_security_group_inbound_rules_on_private_link_traffic = false
+    enforce_security_group_inbound_rules_on_private_link_traffic = off
     idle_timeout                      = 60
     preserve_host_header              = true
     xff_header_processing_mode        = "append"
     customer_owned_ipv4_pool         = "my-ipv4-pool"
-    dns_record_client_routing_policy  = "round_robin"
+    dns_record_client_routing_policy  = "any_availability_zone"
     client_keep_alive                 = 60
     enable_tls_version_and_cipher_suite_headers = true
 
