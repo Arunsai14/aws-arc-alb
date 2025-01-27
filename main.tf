@@ -106,7 +106,7 @@ resource "aws_lb" "this" {
 #                 Target Group
 ###################################################################
 resource "aws_lb_target_group" "this" {
-for_each = var.target_group_config != null ? { "target_group" = var.target_group_config } : {}
+for_each = var.target_group_config != null ? var.target_group_config : {}
   name                        = var.target_group_config.name
   name_prefix                 = var.target_group_config.name_prefix
   port                        = var.target_group_config.port
