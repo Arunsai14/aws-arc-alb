@@ -106,8 +106,7 @@ resource "aws_lb" "this" {
 #                 Target Group
 ###################################################################
 resource "aws_lb_target_group" "this" {
- for_each = var.target_group_config != null ? 
-    { for idx, target_group in var.target_group_config : idx => merge(target_group, { health_check = target_group.health_check != null ? target_group.health_check : {} }) } : {}
+  for_each = var.target_group_config != null ? { for idx, target_group in var.target_group_config : idx => target_group } : {}
 
   name                        = var.target_group_config.name
   name_prefix                 = var.target_group_config.name_prefix
@@ -127,7 +126,7 @@ resource "aws_lb_target_group" "this" {
 
   # Health Check
   dynamic "health_check" {
-    for_each = var.target_group_config.health_check != null ? [var.target_group_config.health_check] : []
+    for_each = each.value.health_check != null ? [each.value.health_check] : []
     content {
       enabled             = health_check.value.enabled
       interval            = health_check.value.interval
