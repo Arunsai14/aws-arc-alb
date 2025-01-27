@@ -106,7 +106,9 @@ resource "aws_lb" "this" {
 #                 Target Group
 ###################################################################
 resource "aws_lb_target_group" "this" {
- for_each = var.target_group_config != null ? { for idx, target_group in var.target_group_config : idx => target_group } : {}
+ for_each = var.target_group_config != null ? 
+    { for idx, target_group in var.target_group_config : idx => merge(target_group, { health_check = target_group.health_check != null ? target_group.health_check : {} }) } : {}
+
   name                        = var.target_group_config.name
   name_prefix                 = var.target_group_config.name_prefix
   port                        = var.target_group_config.port
