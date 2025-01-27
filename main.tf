@@ -106,7 +106,7 @@ resource "aws_lb" "this" {
 #                 Target Group
 ###################################################################
 resource "aws_lb_target_group" "this" {
-for_each = var.target_group_config != {} ? { "target_group" = var.target_group_config } : {}
+for_each = var.target_group_config != null ? { "target_group" = var.target_group_config } : {}
   name                        = var.target_group_config.name
   name_prefix                 = var.target_group_config.name_prefix
   port                        = var.target_group_config.port
@@ -125,7 +125,7 @@ for_each = var.target_group_config != {} ? { "target_group" = var.target_group_c
 
   # Health Check
   dynamic "health_check" {
-    for_each = var.target_group_config.health_check != {} ? [var.target_group_config.health_check] : {}
+    for_each = var.target_group_config.health_check != null ? [var.target_group_config.health_check] : {}
     content {
       enabled             = health_check.value.enabled
       interval            = health_check.value.interval
@@ -141,7 +141,7 @@ for_each = var.target_group_config != {} ? { "target_group" = var.target_group_c
 
   # Stickiness
   dynamic "stickiness" {
-    for_each = var.target_group_config.stickiness != {} ? [var.target_group_config.stickiness] : {}
+    for_each = var.target_group_config.stickiness != null ? [var.target_group_config.stickiness] : {}
     content {
       type            = stickiness.value.type
       cookie_duration = stickiness.value.cookie_duration
@@ -152,11 +152,11 @@ for_each = var.target_group_config != {} ? { "target_group" = var.target_group_c
 
   # Target Group Health (DNS Failover & Unhealthy State Routing)
   dynamic "target_group_health" {
-    for_each = var.target_group_config.target_group_health != {} ? [var.target_group_config.target_group_health] : {}
+    for_each = var.target_group_config.target_group_health != null ? [var.target_group_config.target_group_health] : {}
     content {
       # DNS Failover
       dynamic "dns_failover" {
-        for_each = var.target_group_config.target_group_health.dns_failover != {} ? [var.target_group_config.target_group_health.dns_failover] : {}
+        for_each = var.target_group_config.target_group_health.dns_failover != null ? [var.target_group_config.target_group_health.dns_failover] : {}
         content {
           minimum_healthy_targets_count      = dns_failover.value.minimum_healthy_targets_count
           minimum_healthy_targets_percentage = dns_failover.value.minimum_healthy_targets_percentage
@@ -165,7 +165,7 @@ for_each = var.target_group_config != {} ? { "target_group" = var.target_group_c
 
       # Unhealthy State Routing
       dynamic "unhealthy_state_routing" {
-        for_each = var.target_group_config.target_group_health.unhealthy_state_routing != {} ? [var.target_group_config.target_group_health.unhealthy_state_routing] : {}
+        for_each = var.target_group_config.target_group_health.unhealthy_state_routing != null ? [var.target_group_config.target_group_health.unhealthy_state_routing] : {}
         content {
           minimum_healthy_targets_count      = unhealthy_state_routing.value.minimum_healthy_targets_count
           minimum_healthy_targets_percentage = unhealthy_state_routing.value.minimum_healthy_targets_percentage
@@ -176,7 +176,7 @@ for_each = var.target_group_config != {} ? { "target_group" = var.target_group_c
 
   # Target Failover
   dynamic "target_failover" {
-    for_each = var.target_group_config.target_failover != {} ? [var.target_group_config.target_failover] : {}
+    for_each = var.target_group_config.target_failover != null ? [var.target_group_config.target_failover] : {}
     content {
       on_deregistration = target_failover.value.on_deregistration
       on_unhealthy      = target_failover.value.on_unhealthy
@@ -185,7 +185,7 @@ for_each = var.target_group_config != {} ? { "target_group" = var.target_group_c
 
   # Target Health State
   dynamic "target_health_state" {
-    for_each = var.target_group_config.target_health_state != {} ? [var.target_group_config.target_health_state] : {}
+    for_each = var.target_group_config.target_health_state != null ? [var.target_group_config.target_health_state] : {}
     content {
       enable_unhealthy_connection_termination = target_health_state.value.enable_unhealthy_connection_termination
       unhealthy_draining_interval             = target_health_state.value.unhealthy_draining_interval
