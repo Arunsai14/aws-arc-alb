@@ -34,10 +34,11 @@ module "alb" {
   load_balancer_config            = var.load_balancer_config
   target_group_config            = var.target_group_config
   alb_listener            = var.alb_listener
+  listener_rules          = var.listener_rules
   security_group_data  = var.security_group_data
   security_group_name  = var.security_group_name
-  subnets              = var.subnets
-  enable_deletion_protection = var.load_balancer_config.enable_deletion_protection
+  vpc_id               = var.vpc_id
+  # enable_deletion_protection = var.load_balancer_config.enable_deletion_protection
   tags                = module.tags.tags
 }
 

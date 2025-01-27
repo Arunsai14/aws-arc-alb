@@ -23,22 +23,11 @@ variable "vpc_id" {
   type        = string
 }
 
-variable "tags" {
-  description = "Tags to assign to the resource."
-  type        = map(string)
-  default     = {}
-}
 
-
-variable "subnets" {
-  description = "Subnets for the ALB"
-  type        = list(string)
-}
-
-variable "enable_deletion_protection" {
-  description = "Enable deletion protection for the ALB"
-  type        = bool
-}
+# variable "enable_deletion_protection" {
+#   description = "Enable deletion protection for the ALB"
+#   type        = bool
+# }
 
 variable "load_balancer_config" {
   type = object({
@@ -161,5 +150,54 @@ variable "alb_listener" {
   })
 }
 
-# Include other variables as needed
-
+########## alb listener rule config ##########
+variable "listener_rules" {
+  description = "A map of listener rules"
+  type = map(object({
+    priority   = number
+    authenticate_oidc = optional(object({
+      authorization_endpoint = string
+      client_id              = string
+      client_secret          = string
+      issuer                 = string
+      token_endpoint         = string
+      user_info_endpoint     = string
+      authentication_request_extra_params = map(string)
+      on_unauthenticated_request        = string
+      scope                             = string
+      session_cookie_name               = string
+      session_timeout                   = number
+    }))
+    actions    = list(object({
+      type             = string
+      order            = number
+      redirect         = optional(object({
+        host        = string
+        path        = string
+        query       = string
+        protocol    = string
+        port        = number
+        status_code = string
+      }))
+      fixed_response = optional(object({
+        status_code  = string
+        content_type = string
+        message_body = string
+      }))
+      authenticate_cognito = optional(object({
+        user_pool_arn       = string
+        user_pool_client_id = string
+        user_pool_domain    = string
+        on_unauthenticated_request = string
+      }))
+    }))
+    conditions = list(object({
+      host_header = optional(object({
+        values = list(string)
+      }))
+      path_pattern = optional(object({
+        values = list(string)
+      }))
+    }))
+  }))
+}
