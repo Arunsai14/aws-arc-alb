@@ -22,6 +22,11 @@ variable "project_name" {
   description = "Project name"
 }
 
+variable "security_groups" {
+  type    = list(string)
+  default = []  
+}
+
 variable "tags" {
   description = "Tags to assign to the resource."
   type        = map(string)
