@@ -278,14 +278,14 @@ variable "default_action" {
 }
 
 variable "alb_listener" {
-  type = object({
+  type = optional(object({
     port                     = optional(number, 80)
     protocol                 = optional(string, "HTTP")
     alpn_policy              = optional(string, "None")
     certificate_arn          = optional(string, "")
     ssl_policy               = optional(string, "ELBSecurityPolicy-2016-08")
     tcp_idle_timeout_seconds = optional(number, 350)
-  })
+  }))
 }
 
 ########## alb listener certificate config ##########

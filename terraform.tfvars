@@ -234,7 +234,14 @@ default_action = [
 
 port = 80
 protocol = "HTTP"
-
+alb_listener = {
+  port                     = 443                
+  protocol                 = "HTTPS"            
+  alpn_policy              = "HTTP2Only"        
+  certificate_arn          = ""
+  ssl_policy               = "ELBSecurityPolicy-2016-08"  
+  tcp_idle_timeout_seconds = 360           
+}
 
 listener_rules = {
   rule1 = {
