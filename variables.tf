@@ -398,6 +398,7 @@ variable "lb_trust_store_config" {
     ca_certificates_bundle_s3_key      = string
     ca_certificates_bundle_s3_object_version =optional(string)
   }))
+  default = null
 }
 
 variable "default_action" {
