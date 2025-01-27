@@ -376,6 +376,7 @@ variable "target_group_config" {
   default = {}
 }
 
+########## alb target group attachment config ##########
 variable "target_group_attachment_config" {
   description = "List of target group attachment configurations"
   type = list(object({
@@ -383,6 +384,19 @@ variable "target_group_attachment_config" {
     target_type = string  # Values: "instance", "ip", or "lambda"
     port        = optional(number)
     availability_zone = optional(string)
+  }))
+}
+
+########## alb trsut store config ##########
+variable "lb_trust_store_config" {
+  description = "The configuration for the Load Balancer Trust Stores"
+  type = list(object({
+    name                               = string
+    name_prefix                        = optional(string)
+    tags                               = optional(map(string))
+    ca_certificates_bundle_s3_bucket   = string
+    ca_certificates_bundle_s3_key      = string
+    ca_certificates_bundle_s3_object_version =optional(string)
   }))
 }
 

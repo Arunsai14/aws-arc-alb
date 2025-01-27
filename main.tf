@@ -202,10 +202,23 @@ resource "aws_lb_target_group_attachment" "this" {
   # For IP targets, optionally set availability_zone
   availability_zone = lookup(each.value, "availability_zone", null)
 
-  # For Lambda targets, no availability_zone is required
-  # depends_on = each.value.target_type == "lambda" ? [aws_lambda_permission.this] : []
 }
 
+###################################################################
+#                Load Balancer Trust Store
+###################################################################
+
+resource "aws_lb_trust_store" "this" {
+  for_each = var.lb_trust_store_config != null ? { for idx, trust_store in var.lb_trust_store_config : idx => trust_store } : {}
+
+  name                     = each.value.name
+  name_prefix              = each.value.name_prefix
+  tags                     = each.value.tags
+  ca_certificates_bundle_s3_bucket = each.value.ca_certificates_bundle_s3_bucket
+  ca_certificates_bundle_s3_key    = each.value.ca_certificates_bundle_s3_key
+  ca_certificates_bundle_s3_object_version = each.value.ca_certificates_bundle_s3_object_version
+
+}
 
 
 ###################################################################
