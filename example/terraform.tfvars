@@ -194,12 +194,27 @@ target_group_attachment_config = [
   # },
 # ]
 
-  default_action = [
-    {
-      type = "forward"
-      forward = {}
+ default_action = [
+  {
+    type = "forward"
+    forward = {
+      target_groups = [
+        # { 
+        #   arn    = "arn:aws:elasticloadbalancing:region:account-id:targetgroup/example-tg1/abc123" 
+        #   weight = 1
+        # },
+        # { 
+        #   arn    = "arn:aws:elasticloadbalancing:region:account-id:targetgroup/example-tg2/xyz456" 
+        #   weight = 2
+        # }
+      ]
+      # stickiness = {
+      #   duration = 300
+      #   enabled  = true
+      # }
     }
-  ]
+  }
+]
 
 
 alb_listener = {
