@@ -37,10 +37,9 @@ module "alb" {
   alb_listener            = var.alb_listener
   default_action          = var.default_action
   listener_rules          = var.listener_rules
-  security_group_data  = var.security_group_data
-  security_group_name  = var.security_group_name
-  vpc_id               = var.vpc_id
-  # enable_deletion_protection = var.load_balancer_config.enable_deletion_protection
-  tags                = module.tags.tags
+  security_group_data     = var.security_group_data
+  security_group_name     = var.security_group_name
+  vpc_id                  = var.vpc_id
+  tags                   = module.tags.tags
 }
 

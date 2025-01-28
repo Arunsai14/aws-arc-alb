@@ -1,5 +1,5 @@
 name                     = "arc-load-balancer"
-load_balancer_type       = "application" 
+load_balancer_type       = "network" 
 internal                 = false         
 idle_timeout             = 60           
 enable_deletion_protection = false      
