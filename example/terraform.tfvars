@@ -96,7 +96,7 @@ security_group_data = {
 
 
 target_group_config = {
-  name        = "arc-poc-alb-tg"
+  name        = "arc-poc-alb"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = "vpc-68f96212"
