@@ -297,7 +297,7 @@ resource "aws_lb_listener" "this" {
         }
 
         stickiness {
-          duration = lookup(forward.value, "stickiness", null) != null ? forward.value.stickiness.duration : 0
+          duration = lookup(forward.value, "stickiness", null) != null ? forward.value.stickiness.duration : 1
           enabled  = lookup(forward.value, "stickiness", null) != null ? forward.value.stickiness.enabled : false
         }
       }
