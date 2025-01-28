@@ -200,17 +200,10 @@ variable "default_action" {
       message_body = optional(string, "")
     }))
 
-    forward = optional(object({
+ forward                = optional(object({
+      arn           = optional(string)
       target_groups = list(object({
-        arn    = string
-        # weight = optional(number, 1)
-      }))
-    }))
-
-    weighted_forward = optional(object({
-      target_groups = list(object({
-        arn    = string
-        weight = optional(number, 1)
+        weight = number
       }))
       stickiness = optional(object({
         duration = number
