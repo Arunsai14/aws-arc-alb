@@ -34,6 +34,7 @@ module "alb" {
   region               = var.region
   load_balancer_config            = var.load_balancer_config
   target_group_config            = var.target_group_config
+  target_group_attachment_config = var.target_group_attachment_config
   alb_listener            = var.alb_listener
    default_action          = var.default_action
   listener_rules          = var.listener_rules

@@ -139,6 +139,18 @@ variable "target_group_config" {
   default = null
 }
 
+########## alb target group attachment config ##########
+variable "target_group_attachment_config" {
+  description = "List of target group attachment configurations"
+  type = list(object({
+    target_id   = string
+    target_type = string  # Values: "instance", "ip", or "lambda"
+    port        = optional(number)
+    availability_zone = optional(string)
+  }))
+  default = null
+}
+
 variable "alb_listener" {
   type = object({
     port                     = optional(number, 80)
