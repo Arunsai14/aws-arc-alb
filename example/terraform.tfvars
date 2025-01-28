@@ -95,35 +95,6 @@ security_group_data = {
 }
 
 
-# Access logs configuration
-access_logs = {
-  enabled = false
-  bucket  = "arc-terraform-alb-logs"
-  prefix  = "load-balancer-logs"
-}
-
-connection_logs = {
-    bucket  = "arc-terraform-alb-logs"
-    prefix  = "lb-logs"
-    enabled = false
-  }
-
-# Subnet mapping (optional, use if needed)
-subnet_mapping = [
-  {
-    subnet_id            = "subnet-6781cb49"
-    allocation_id        = null
-    ipv6_address         = null
-    private_ipv4_address = null
-  },
-  {
-    subnet_id            = "subnet-f55c1392"
-    allocation_id        = null
-    ipv6_address         = null
-    private_ipv4_address = null
-  }
-]
-
 target_group_config = {
   name        = "arc-poc-alb-tg"
   port        = 80
@@ -241,7 +212,7 @@ port = 80
 protocol = "HTTP"
 alb_listener = {
   port                     = 80               
-  protocol                 = "HTTP"            
+  protocol                 = "TCP"            
   #  alpn_policy              = "HTTP2Only"        
   # certificate_arn          = ""
   # ssl_policy               = "ELBSecurityPolicy-2016-08"  
