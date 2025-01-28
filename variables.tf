@@ -276,7 +276,7 @@ variable "default_action" {
     }))
 
  forward                = optional(object({
-      arn           = string
+      arn           = optional(string)
       target_groups = list(object({
         weight = number
       }))
