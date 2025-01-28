@@ -150,17 +150,17 @@ default_action = [
   #     message_body = "Hello, World!"
   #   }
   # },
-  # {
-  #   type             = "redirect"
-  #   redirect = {
-  #     host        = "divyasf.sourcef.us"
-  #     path        = "/new-path"
-  #     query       = "?id=123"
-  #     protocol    = "HTTPS"
-  #     port        = "443"
-  #     status_code = "HTTP_301"
-  #   }
-  # },
+  {
+    type             = "redirect"
+    redirect = {
+      host        = "divyasf.sourcef.us"
+      path        = "/new-path"
+      query       = "?id=123"
+      protocol    = "HTTPS"
+      port        = "443"
+      status_code = "HTTP_301"
+    }
+  },
   # {
   #   type             = "authenticate-oidc"
   #   authenticate_oidc = {
