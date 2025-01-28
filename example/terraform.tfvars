@@ -170,11 +170,11 @@ default_action = [
     authenticate_cognito = {
       user_pool_arn                     = "arn:aws:cognito-idp:us-east-1:804295906245:userpool/us-east-1_9XOuJux4d"
       user_pool_client_id               = "1dks0el3q70530ove0dp8mj6gp"
-      user_pool_domain                  = ""
+      user_pool_domain                  = "us-east-19xoujux4d"
       authentication_request_extra_params = { "param1" = "value1" }
       on_unauthenticated_request        = "deny"
       scope                             = "openid profile"
-      session_cookie_name               = "my-session-cookie"
+      session_cookie_name               = "AWSELBAuthSessionCookie"
       session_timeout                   = 3600
     }
     },
