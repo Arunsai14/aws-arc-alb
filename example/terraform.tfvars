@@ -197,19 +197,7 @@ target_group_attachment_config = [
   default_action = [
     {
       type = "forward"
-      forward = {
-        # arn = "arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/my-target-group/1234567890abcdef"
-        target_groups = [
-          # {
-          #   # arn    = "arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/my-target-group-2/abcdef123456"
-          #   weight = 10
-          # },
-          # {
-          #   # arn    = "arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/my-target-group-3/abcdef654321"
-          #   weight = 20
-          # }
-        ]
-      }
+      forward = {}
     }
   ]
 
