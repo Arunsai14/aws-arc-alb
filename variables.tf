@@ -311,7 +311,7 @@ variable "listener_rules" {
       }))
     }))
   }))
-   default = []
+   default = {}
 }
 
 
