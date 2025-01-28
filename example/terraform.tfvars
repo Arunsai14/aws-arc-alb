@@ -199,10 +199,10 @@ target_group_attachment_config = [
     type = "forward"
     forward = {
       target_groups = [
-        # { 
-        #   arn    = "arn:aws:elasticloadbalancing:region:account-id:targetgroup/example-tg1/abc123" 
-        #   weight = 1
-        # },
+        { 
+          arn    = "arn:aws:elasticloadbalancing:us-east-1:804295906245:targetgroup/arc-poc-alb/f76a4caff6f84376" 
+          # weight = 1
+        },
         # { 
         #   arn    = "arn:aws:elasticloadbalancing:region:account-id:targetgroup/example-tg2/xyz456" 
         #   weight = 2
