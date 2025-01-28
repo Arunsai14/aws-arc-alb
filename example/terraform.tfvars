@@ -155,7 +155,7 @@ default_action = [
       host        = "divyasf.sourcef.us"
       path        = "/new-path"
       query       = "?id=123"
-      protocol    = "HTTPs"
+      protocol    = "HTTPS"
       port        = "443"
       status_code = "HTTP_301"
     }
