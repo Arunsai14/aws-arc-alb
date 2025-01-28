@@ -19,7 +19,7 @@ vpc_id = "vpc-68f96212"
 
 load_balancer_config = {
   name                              = "arc-load-balancer"
-  type                = "application"
+  type                = "network" 
   internal                          = false
   security_groups                   = ["sg-123456"]
   ip_address_type                   = "ipv4"
