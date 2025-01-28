@@ -227,31 +227,26 @@ listener_rules = {
   },
 
   rule2 = {
-  priority = 999
-  actions = [
-    {
-      type  = "redirect"
-      order = 1
-      redirect = {
-        host        = "divyasf.sourcef.us"
-        path        = "/redirect"
-        query       = "action=redirect"
-        protocol    = "HTTPS"
-        port        = 443
-        status_code = "HTTP_301"
+    priority = 999
+    actions = [
+      {
+        type  = "fixed-response"
+        order = 1
+        fixed_response = {
+          status_code  = "200"
+          content_type = "text/plain"
+          message_body = "OK"
+        }
       }
-    },
-    {
-      type  = "fixed-response"
-      fixed_response = {
-        status_code  = "200"
-        content_type = "text/plain"
-        message_body = "OK"
+    ]
+    conditions = [
+      {
+        path_pattern = {
+          values = ["/status"]
+        }
       }
-    }
-  ]
-}
-
+    ]
+  }
 }
 
 # listener_certificates = [
