@@ -200,17 +200,17 @@ variable "default_action" {
       message_body = optional(string, "")
     }))
 
- forward                = optional(object({
-      arn           = optional(string)
-       target_groups = optional(list(object({
-        weight =optional(number)
+   forward = optional(object({
+      arn = optional(string)
+      target_groups = optional(list(object({
+        arn    = string
+        weight = optional(number)
       })))
       stickiness = optional(object({
         duration = number
         enabled  = bool
       }))
     }))
-
     redirect = optional(object({
       host        = optional(string)
       path        = optional(string)

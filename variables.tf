@@ -274,10 +274,10 @@ variable "default_action" {
       content_type = optional(string, "text/plain")
       message_body = optional(string, "")
     }))
-
- forward                = optional(object({
-      arn           = optional(string)
+   forward = optional(object({
+      arn = optional(string)
       target_groups = optional(list(object({
+        arn    = string
         weight = optional(number)
       })))
       stickiness = optional(object({
