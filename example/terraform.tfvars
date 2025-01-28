@@ -142,14 +142,7 @@ default_action = [
   #     }
   #   }
   # },
-  {
-    type             = "fixed-response"
-    fixed_response = {
-      status_code  = "200"
-      content_type = "text/plain"
-      message_body = "Hello, World!"
-    }
-  },
+
   # {
   #   type             = "redirect"
   #   redirect = {
@@ -185,6 +178,14 @@ default_action = [
       session_timeout                   = 3600
     }
     },
+      {
+    type             = "fixed-response"
+    fixed_response = {
+      status_code  = "200"
+      content_type = "text/plain"
+      message_body = "Hello, World!"
+    }
+  },
 ]
 
 
@@ -226,26 +227,31 @@ listener_rules = {
   },
 
   rule2 = {
-    priority = 999
-    actions = [
-      {
-        type  = "fixed-response"
-        order = 1
-        fixed_response = {
-          status_code  = "200"
-          content_type = "text/plain"
-          message_body = "OK"
-        }
+  priority = 999
+  actions = [
+    {
+      type  = "redirect"
+      order = 1
+      redirect = {
+        host        = "divyasf.sourcef.us"
+        path        = "/redirect"
+        query       = "action=redirect"
+        protocol    = "HTTPS"
+        port        = 443
+        status_code = "HTTP_301"
       }
-    ]
-    conditions = [
-      {
-        path_pattern = {
-          values = ["/status"]
-        }
+    },
+    {
+      type  = "fixed-response"
+      fixed_response = {
+        status_code  = "200"
+        content_type = "text/plain"
+        message_body = "OK"
       }
-    ]
-  }
+    }
+  ]
+}
+
 }
 
 # listener_certificates = [
