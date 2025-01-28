@@ -325,7 +325,7 @@ resource "aws_lb_listener" "this" {
             for_each = forward.value.target_groups
             content {
               arn    = aws_lb_target_group.this["config"].arn
-              # weight = lookup(target_group.value, "weight", null)
+               weight = lookup(target_group.value, "weight", null) != null ? target_group.value.weight : null
             }
           }
 
