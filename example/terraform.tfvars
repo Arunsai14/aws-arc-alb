@@ -170,7 +170,7 @@ default_action = [
     authenticate_cognito = {
       user_pool_arn                     = "arn:aws:cognito-idp:us-east-1:804295906245:userpool/us-east-1_9XOuJux4d"
       user_pool_client_id               = "1dks0el3q70530ove0dp8mj6gp"
-      user_pool_domain                  = "https://us-east-19xoujux4d.auth.us-east-1.amazoncognito.com"
+      user_pool_domain                  = "your-cognito-domain"
       authentication_request_extra_params = { "param1" = "value1" }
       on_unauthenticated_request        = "deny"
       scope                             = "openid profile"
