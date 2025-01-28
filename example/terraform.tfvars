@@ -132,15 +132,15 @@ target_group_attachment_config = [
 
 
 default_action = [
-  {
-    type             = "forward"
-    forward = {
-      stickiness = {
-        duration = 300
-        enabled  = true
-      }
-    }
-  },
+  # {
+  #   type             = "forward"
+  #   forward = {
+  #     stickiness = {
+  #       duration = 300
+  #       enabled  = true
+  #     }
+  #   }
+  # },
   # {
   #   type             = "fixed-response"
   #   fixed_response = {
