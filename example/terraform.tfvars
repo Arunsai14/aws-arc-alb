@@ -142,25 +142,25 @@ default_action = [
   #     }
   #   }
   # },
-  # {
-  #   type             = "fixed-response"
-  #   fixed_response = {
-  #     status_code  = "200"
-  #     content_type = "text/plain"
-  #     message_body = "Hello, World!"
-  #   }
-  # },
   {
-    type             = "redirect"
-    redirect = {
-      host        = "divyasf.sourcef.us"
-      path        = "/new-path"
-      query       = "?id=123"
-      protocol    = "HTTPS"
-      port        = "443"
-      status_code = "HTTP_301"
+    type             = "fixed-response"
+    fixed_response = {
+      status_code  = "200"
+      content_type = "text/plain"
+      message_body = "Hello, World!"
     }
   },
+  # {
+  #   type             = "redirect"
+  #   redirect = {
+  #     host        = "divyasf.sourcef.us"
+  #     path        = "/new-path"
+  #     query       = "?id=123"
+  #     protocol    = "HTTPS"
+  #     port        = "443"
+  #     status_code = "HTTP_301"
+  #   }
+  # },
   # {
   #   type             = "authenticate-oidc"
   #   authenticate_oidc = {
