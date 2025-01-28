@@ -174,7 +174,7 @@ default_action = [
   {
     type             = "authenticate_cognito"
     authenticate_cognito = {
-      user_pool_arn                     = "arn:aws:cognito-idp:us-east-1:804295906245:userpool/us-east-1_1uLL77XMi
+      user_pool_arn                     = "arn:aws:cognito-idp:us-east-1:804295906245:userpool/us-east-1_1uLL77XMi"
       user_pool_client_id               = "us-east-1_1uLL77XMi"
       user_pool_domain                  = "your-cognito-domain"
       authentication_request_extra_params = { "param1" = "value1" }
@@ -183,7 +183,7 @@ default_action = [
       session_cookie_name               = "my-session-cookie"
       session_timeout                   = 3600
     }
-  }
+    },
 ]
 
 
