@@ -132,22 +132,22 @@ target_group_attachment_config = [
  cidr_blocks = null
 
 
-default_action = [
-  {
-    type             = "forward"
-    forward = {
-      # arn = null
-      target_groups = [
-        {
-          weight           = 100
-        }
-      ]
-      # stickiness = {
-      #   duration = 300
-      #   enabled  = true
-      # }
-    }
-  },
+# default_action = [
+#   {
+#     type             = "forward"
+#     forward = {
+#       # arn = null
+#       target_groups = [
+#         {
+#           weight           = 20
+#         }
+#       ]
+#       # stickiness = {
+#       #   duration = 300
+#       #   enabled  = true
+#       # }
+#     }
+#   },
 
   # {
   #   type             = "redirect"
@@ -192,7 +192,28 @@ default_action = [
   #     message_body = "Hello, World!"
   #   }
   # },
-]
+# ]
+
+variable "default_action" {
+  default = [
+    {
+      type = "forward"
+      forward = {
+        # arn = "arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/my-target-group/1234567890abcdef"
+        target_groups = [
+          {
+            # arn    = "arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/my-target-group-2/abcdef123456"
+            weight = 10
+          },
+          {
+            # arn    = "arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/my-target-group-3/abcdef654321"
+            weight = 20
+          }
+        ]
+      }
+    }
+  ]
+}
 
 
 alb_listener = {
