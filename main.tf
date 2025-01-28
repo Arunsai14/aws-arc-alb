@@ -314,8 +314,8 @@ resource "aws_lb_listener" "this" {
   }
 
   # Weighted Forward action - Only if weighted_forward is provided
-  dynamic "weighted_forward" {
-    for_each = lookup(default_action.value, "weighted_forward", null) != null ? [default_action.value.weighted_forward] : []
+  dynamic "forward" {
+    for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
     content {
       dynamic "target_group" {
         for_each = forward.value.target_groups
