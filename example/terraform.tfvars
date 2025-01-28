@@ -141,14 +141,14 @@ default_action = [
   #     }
   #   }
   # },
-  {
-    type             = "fixed-response"
-    fixed_response = {
-      status_code  = "200"
-      content_type = "text/plain"
-      message_body = "Hello, World!"
-    }
-  },
+  # {
+  #   type             = "fixed-response"
+  #   fixed_response = {
+  #     status_code  = "200"
+  #     content_type = "text/plain"
+  #     message_body = "Hello, World!"
+  #   }
+  # },
   {
     type             = "redirect"
     redirect = {
