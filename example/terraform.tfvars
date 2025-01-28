@@ -199,30 +199,30 @@ alb_listener = {
 }
 
 listener_rules = {
-  # rule1 = {
-  #   priority = 1
-  #   actions = [
-  #     {
-  #       type  = "redirect"
-  #       order = 1
-  #       redirect = {
-  #         host        = "divyasf.sourcef.us"
-  #         path        = "/redirect"
-  #         query       = "action=redirect"
-  #         protocol    = "HTTPS"
-  #         port        = 443
-  #         status_code = "HTTP_301"
-  #       }
-  #     }
-  #   ]
-  #   conditions = [
-  #     {
-  #       host_header = {
-  #         values = ["example.com"]
-  #       }
-  #     }
-  #   ]
-  # },
+  rule1 = {
+    priority = 1
+    actions = [
+      {
+        type  = "redirect"
+        order = 1
+        redirect = {
+          host        = "divyasf.sourcef.us"
+          path        = "/redirect"
+          query       = "action=redirect"
+          protocol    = "HTTPS"
+          port        = 443
+          status_code = "HTTP_301"
+        }
+      }
+    ]
+    conditions = [
+      {
+        host_header = {
+          values = ["example.com"]
+        }
+      }
+    ]
+  },
 
   rule2 = {
     priority = 2
@@ -257,11 +257,11 @@ listener_rules = {
 
 # SSL and Listener settings
 # certificate_arn = "arn:aws:acm:region:account-id:certificate/certificate-id"
-ssl_policy      = null
+# ssl_policy      = null
 # port            = 443
 # protocol        = "HTTPS"
- alpn_policy     = null
+#  alpn_policy     = null
 
 # Optional settings
-tcp_idle_timeout_seconds = 60
+# tcp_idle_timeout_seconds = 60
 
