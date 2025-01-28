@@ -322,7 +322,7 @@ resource "aws_lb_listener" "this" {
         for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
         content {
           dynamic "target_group" {
-            for_each = lookup(forward.value, "target_groups", [])
+            for_each = forward.value.target_groups
             content {
               arn    = aws_lb_target_group.this["config"].arn
               weight = lookup(target_group.value, "weight", null)
