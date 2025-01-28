@@ -275,14 +275,13 @@ variable "default_action" {
       message_body = optional(string, "")
     }))
    forward = optional(object({
-      arn = optional(string)
-      target_groups = optional(list(object({
+      target_groups = list(object({
         arn    = string
         weight = optional(number)
-      })))
+      }))
       stickiness = optional(object({
         duration = number
-        enabled  = bool
+        enabled  = optional(bool, false)
       }))
     }))
 

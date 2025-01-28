@@ -288,34 +288,56 @@ resource "aws_lb_listener" "this" {
 
       # Forward action
 
-       dynamic "forward" {
-        for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
-        content {
-          target_group {
-            arn = lookup(default_action.value.forward, "arn", null) != null ? default_action.value.forward.arn : aws_lb_target_group.this["config"].arn
-          }
-       }
-       }
+      #  dynamic "forward" {
+      #   for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
+      #   content {
+      #     target_group {
+      #       arn = lookup(default_action.value.forward, "arn", null) != null ? default_action.value.forward.arn : aws_lb_target_group.this["config"].arn
+      #     }
+      #  }
+      #  }
 
+      # dynamic "forward" {
+      #   for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
+
+      #     dynamic "target_group" {
+      #       for_each = lookup(default_action.value.forward, "target_groups", null) != null ? default_action.value.forward.target_groups : []
+      #       content {
+      #         arn    = aws_lb_target_group.this["config"].arn
+      #         weight = target_group.value.weight
+      #       }
+      #     }
+
+      #     dynamic "stickiness" {
+      #       for_each = lookup(default_action.value.forward, "stickiness", null) != null ? [default_action.value.forward.stickiness] : []
+      #       content {
+      #         duration = stickiness.value.duration
+      #         enabled  = stickiness.value.enabled
+      #       }
+      #     }
+      #   }
+
+      # Forward action with multiple target groups
       dynamic "forward" {
         for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
-
+        content {
           dynamic "target_group" {
-            for_each = lookup(default_action.value.forward, "target_groups", null) != null ? default_action.value.forward.target_groups : []
+            for_each = lookup(forward.value, "target_groups", [])
             content {
               arn    = aws_lb_target_group.this["config"].arn
-              weight = target_group.value.weight
+              weight = lookup(target_group.value, "weight", null)
             }
           }
 
           dynamic "stickiness" {
-            for_each = lookup(default_action.value.forward, "stickiness", null) != null ? [default_action.value.forward.stickiness] : []
+            for_each = lookup(forward.value, "stickiness", null) != null ? [forward.value.stickiness] : []
             content {
               duration = stickiness.value.duration
-              enabled  = stickiness.value.enabled
+              enabled  = lookup(stickiness.value, "enabled", false)
             }
           }
         }
+      }
 
       # Redirect action
       dynamic "redirect" {
