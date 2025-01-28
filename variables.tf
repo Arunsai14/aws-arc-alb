@@ -305,8 +305,13 @@ variable "alb_listener" {
     certificate_arn          = optional(string, "")
     ssl_policy               = optional(string, "")
     tcp_idle_timeout_seconds = optional(number, 350)
+  default_action   = object({
+      type             = string
+      target_group_arn = string
+      order            = number
+    })
   })
-}
+  }
 
 ########## alb listener certificate config ##########
 variable "listener_certificates" {
