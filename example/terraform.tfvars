@@ -133,15 +133,15 @@ target_group_attachment_config = [
 
 
 default_action = [
-  # {
-  #   type             = "forward"
-  #   forward = {
-  #     stickiness = {
-  #       duration = 300
-  #       enabled  = true
-  #     }
-  #   }
-  # },
+  {
+    type             = "forward"
+    forward = {
+      stickiness = {
+        duration = 300
+        enabled  = true
+      }
+    }
+  },
 
   # {
   #   type             = "redirect"
@@ -178,14 +178,14 @@ default_action = [
   #     session_timeout                   = 3600
   #   }
   #   },
-      {
-    type             = "fixed-response"
-    fixed_response = {
-      status_code  = "200"
-      content_type = "text/plain"
-      message_body = "Hello, World!"
-    }
-  },
+  #     {
+  #   type             = "fixed-response"
+  #   fixed_response = {
+  #     status_code  = "200"
+  #     content_type = "text/plain"
+  #     message_body = "Hello, World!"
+  #   }
+  # },
 ]
 
 
