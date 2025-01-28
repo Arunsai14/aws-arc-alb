@@ -156,7 +156,7 @@ default_action = [
       path        = "/new-path"
       query       = "?id=123"
       protocol    = "HTTPS"
-      port        = "444"
+      port        = "443"
       status_code = "HTTP_301"
     }
   },
@@ -190,7 +190,7 @@ default_action = [
 port = 80
 protocol = "HTTP"
 alb_listener = {
-  port                     = 444               
+  port                     = 443               
   protocol                 = "HTTPS"            
   #  alpn_policy              = "HTTP2Only"        
   certificate_arn          = "arn:aws:acm:us-east-1:804295906245:certificate/08759044-ad33-4bdb-b18c-7de7f85e272a"
@@ -210,7 +210,7 @@ listener_rules = {
           path        = "/redirect"
           query       = "action=redirect"
           protocol    = "HTTPS"
-          port        = 444
+          port        = 443
           status_code = "HTTP_301"
         }
       }
