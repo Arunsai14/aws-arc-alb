@@ -203,7 +203,7 @@ variable "default_action" {
  forward                = optional(object({
       arn           = optional(string)
        target_groups = optional(list(object({
-        weight = number
+        weight =optional(number)
       })))
       stickiness = optional(object({
         duration = number
