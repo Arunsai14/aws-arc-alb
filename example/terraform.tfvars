@@ -136,7 +136,11 @@ default_action = [
   {
     type             = "forward"
     forward = {
-      weight = 100
+      target_groups = [
+        {
+          weight           = 100
+        }
+      ]
       # stickiness = {
       #   duration = 300
       #   enabled  = true
