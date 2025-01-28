@@ -19,7 +19,7 @@ vpc_id = "vpc-68f96212"
 
 load_balancer_config = {
   name                              = "arc-load-balancer"
-  type                =  "application" 
+  type                =  "network" 
   internal                          = false
   security_groups                   = ["sg-123456"]
   ip_address_type                   = "ipv4"
@@ -189,11 +189,9 @@ default_action = [
 ]
 
 
-port = 80
-protocol = "HTTP"
 alb_listener = {
-  port                     = 443               
-  protocol                 = "HTTPS"            
+  port                     = 88               
+  protocol                 = "TCP"            
   #  alpn_policy              = "HTTP2Only"        
   certificate_arn          = "arn:aws:acm:us-east-1:804295906245:certificate/08759044-ad33-4bdb-b18c-7de7f85e272a"
   ssl_policy               = "ELBSecurityPolicy-TLS13-1-2-2021-06"  
