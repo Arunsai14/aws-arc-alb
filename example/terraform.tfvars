@@ -190,8 +190,8 @@ default_action = [
 port = 80
 protocol = "HTTP"
 alb_listener = {
-  port                     = 80               
-  protocol                 = "HTTP"            
+  port                     = 443               
+  protocol                 = "HTTPS"            
   #  alpn_policy              = "HTTP2Only"        
   certificate_arn          = "arn:aws:acm:us-east-1:804295906245:certificate/08759044-ad33-4bdb-b18c-7de7f85e272a"
   ssl_policy               = "ELBSecurityPolicy-TLS13-1-2-2021-06"  
@@ -209,7 +209,7 @@ listener_rules = {
           host        = "divyasf.sourcef.us"
           path        = "/redirect"
           query       = "action=redirect"
-          protocol    = "HTTPs"
+          protocol    = "HTTPS"
           port        = 444
           status_code = "HTTP_301"
         }
