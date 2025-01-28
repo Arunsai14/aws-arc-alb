@@ -294,6 +294,7 @@ resource "aws_lb_listener" "this" {
       content {
         target_group {
           arn = aws_lb_target_group.this["config"].arn
+          weight = forward.value.target_group.weight
         }
 
         stickiness {

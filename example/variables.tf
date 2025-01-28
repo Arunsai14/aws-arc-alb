@@ -196,6 +196,7 @@ variable "default_action" {
       message_body  = string
     }))
   forward                        = optional(object({
+    weight     = number
       stickiness = optional(object({
         duration = number
         enabled  = bool
