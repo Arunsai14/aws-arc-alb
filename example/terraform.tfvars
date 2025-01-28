@@ -159,7 +159,7 @@ default_action = [
   #     port        = "80"
   #     status_code = "HTTP_301"
   #   }
-  },
+  # },
   # {
   #   type             = "authenticate_oidc"
   #   authenticate_oidc = {
