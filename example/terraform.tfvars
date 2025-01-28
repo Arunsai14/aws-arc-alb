@@ -135,10 +135,10 @@ default_action = [
   {
     type             = "forward"
     forward = {
-      # stickiness = {
-      #   duration = 300
-      #   enabled  = true
-      # }
+      stickiness = {
+        duration = 300
+        enabled  = true
+      }
     }
   },
   # {
