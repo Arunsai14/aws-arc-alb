@@ -194,8 +194,7 @@ target_group_attachment_config = [
   # },
 # ]
 
-variable "default_action" {
-  default = [
+  default_action = [
     {
       type = "forward"
       forward = {
@@ -213,7 +212,6 @@ variable "default_action" {
       }
     }
   ]
-}
 
 
 alb_listener = {
