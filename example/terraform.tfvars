@@ -173,7 +173,7 @@ default_action = [
       user_pool_domain                  = "us-east-19xoujux4d"
       authentication_request_extra_params = { "param1" = "value1" }
       on_unauthenticated_request        = "deny"
-      scope                             = "openid profile"
+      scope                             = "openid"
       session_cookie_name               = "AWSELBAuthSessionCookie"
       session_timeout                   = 3600
     }
