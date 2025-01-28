@@ -161,7 +161,7 @@ default_action = [
   #   }
   # },
   # {
-  #   type             = "authenticate_oidc"
+  #   type             = "authenticate-oidc"
   #   authenticate_oidc = {
   #     authorization_endpoint = "https://example.com/authorize"
   #     client_id              = "your-client-id"
@@ -172,7 +172,7 @@ default_action = [
   #   }
   # },
   {
-    type             = "authenticate_cognito"
+    type             = "authenticate-cognito"
     authenticate_cognito = {
       user_pool_arn                     = "arn:aws:cognito-idp:us-east-1:804295906245:userpool/us-east-1_1uLL77XMi"
       user_pool_client_id               = "us-east-1_1uLL77XMi"
