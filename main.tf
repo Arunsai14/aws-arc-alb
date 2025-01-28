@@ -293,7 +293,7 @@ resource "aws_lb_listener" "this" {
       for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
       content {
         target_group {
-          arn = aws_lb_target_group.this[var.alb_target_group[0].name].arn
+          arn = aws_lb_target_group.this["config"].arn
         }
 
         stickiness {
