@@ -221,9 +221,9 @@ variable "default_action" {
       message_body  = string
     }))
     forward                        = optional(object({
-      target_group = list(object({
-        arn = string
-      }))
+      # target_group = list(object({
+      #   arn = string
+      # }))
       stickiness = optional(object({
         duration = number
         enabled  = bool
