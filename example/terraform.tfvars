@@ -165,19 +165,19 @@ default_action = [
   #     user_info_endpoint     = "https://example.com/userinfo"
   #   }
   # },
-  {
-    type             = "authenticate-cognito"
-    authenticate_cognito = {
-      user_pool_arn                     = "arn:aws:cognito-idp:us-east-1:804295906245:userpool/us-east-1_Wnl0Romuu"
-      user_pool_client_id               = "drv7gbtshd8o9nq3q8u7fhgsd"
-      user_pool_domain                  = "your-cognito-domain"
-      authentication_request_extra_params = { "param1" = "value1" }
-      on_unauthenticated_request        = "deny"
-      scope                             = "openid profile"
-      session_cookie_name               = "my-session-cookie"
-      session_timeout                   = 3600
-    }
-    },
+  # {
+  #   type             = "authenticate-cognito"
+  #   authenticate_cognito = {
+  #     user_pool_arn                     = "arn:aws:cognito-idp:us-east-1:804295906245:userpool/us-east-1_Wnl0Romuu"
+  #     user_pool_client_id               = "drv7gbtshd8o9nq3q8u7fhgsd"
+  #     user_pool_domain                  = "your-cognito-domain"
+  #     authentication_request_extra_params = { "param1" = "value1" }
+  #     on_unauthenticated_request        = "deny"
+  #     scope                             = "openid profile"
+  #     session_cookie_name               = "my-session-cookie"
+  #     session_timeout                   = 3600
+  #   }
+  #   },
       {
     type             = "fixed-response"
     fixed_response = {
