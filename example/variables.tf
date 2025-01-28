@@ -163,52 +163,68 @@ variable "alb_listener" {
 }
 
 ######### alb listener config ##########
+
 variable "default_action" {
-  description = "A list of default actions for the load balancer listener"
+  description = "Default actions for the ALB listener."
   type = list(object({
-    type                        = string
-    authenticate_oidc           = optional(object({
-      authorization_endpoint                = string
-      authentication_request_extra_params   = map(string)
-      client_id                             = string
-      client_secret                         = string
-      issuer                                = string
-      token_endpoint                        = string
-      user_info_endpoint                    = string
-      on_unauthenticated_request            = string
-      scope                                 = string
-      session_cookie_name                   = string
-      session_timeout                       = string
+    type = string
+
+    authenticate_oidc = optional(object({
+      authorization_endpoint             = string
+      authentication_request_extra_params = optional(map(string), {})
+      client_id                           = string
+      client_secret                       = string
+      issuer                              = string
+      token_endpoint                      = string
+      user_info_endpoint                  = string
+      on_unauthenticated_request          = optional(string, "deny")
+      scope                               = optional(string)
+      session_cookie_name                 = optional(string)
+      session_timeout                     = optional(number)
     }))
-    authenticate_cognito           = optional(object({
-      user_pool_arn                       = string
-      user_pool_client_id                 = string
-      user_pool_domain                    = string
-      authentication_request_extra_params = map(string)
-      on_unauthenticated_request          = string
-      scope                                = string
-      session_cookie_name                 = string
-      session_timeout                     = string
+
+    authenticate_cognito = optional(object({
+      user_pool_arn                     = string
+      user_pool_client_id               = string
+      user_pool_domain                  = string
+      authentication_request_extra_params = optional(map(string), {})
+      on_unauthenticated_request        = optional(string, "deny")
+      scope                             = optional(string)
+      session_cookie_name               = optional(string)
+      session_timeout                   = optional(number)
     }))
-    fixed_response                 = optional(object({
-      status_code   = string
-      content_type  = string
-      message_body  = string
+
+    fixed_response = optional(object({
+      status_code  = string
+      content_type = optional(string, "text/plain")
+      message_body = optional(string, "")
     }))
-  forward                        = optional(object({
-    weight     = number
+
+    forward = optional(object({
+      target_groups = list(object({
+        arn    = string
+        # weight = optional(number, 1)
+      }))
+    }))
+
+    weighted_forward = optional(object({
+      target_groups = list(object({
+        arn    = string
+        weight = optional(number, 1)
+      }))
       stickiness = optional(object({
         duration = number
         enabled  = bool
       }))
     }))
-    redirect                       = optional(object({
-      host         = string
-      path         = string
-      query        = string
-      protocol     = string
-      port         = string
-      status_code  = string
+
+    redirect = optional(object({
+      host        = optional(string)
+      path        = optional(string)
+      query       = optional(string)
+      protocol    = optional(string)
+      port        = optional(number)
+      status_code = string
     }))
   }))
   default = []

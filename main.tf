@@ -288,21 +288,52 @@ resource "aws_lb_listener" "this" {
       }
     }
 
-    # Forward action - Only if forward is provided
-    dynamic "forward" {
-      for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
-      content {
-        target_group {
-          arn = aws_lb_target_group.this["config"].arn
-          weight = forward.value.target_group.weight
-        }
+    # # Forward action - Only if forward is provided
+    # dynamic "forward" {
+    #   for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
+    #   content {
+    #     target_group {
+    #       arn = aws_lb_target_group.this["config"].arn
+    #     }
 
-        stickiness {
-          duration = forward.value.stickiness.duration
-          enabled  = forward.value.stickiness.enabled
+    #     stickiness {
+    #       duration = forward.value.stickiness.duration
+    #       enabled  = forward.value.stickiness.enabled
+    #     }
+    #   }
+    # }
+
+      # Forward action - Only if forward is provided
+  dynamic "forward" {
+    for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
+    content {
+      target_group {
+        arn = lookup(default_action.value.forward, "arn", null) != null ? default_action.value.forward.arn : aws_lb_target_group.this["config"].arn
+      }
+    }
+  }
+
+  # Weighted Forward action - Only if weighted_forward is provided
+  dynamic "weighted_forward" {
+    for_each = lookup(default_action.value, "weighted_forward", null) != null ? [default_action.value.weighted_forward] : []
+    content {
+      dynamic "target_group" {
+        for_each = forward.value.target_groups
+        content {
+          arn    = aws_lb_target_group.this["config"].arn
+          weight = target_group.value.weight
+        }
+      }
+
+      dynamic "stickiness" {
+        for_each = lookup(default_action.value, "stickiness", null) != null ? [default_action.value.stickiness] : []
+        content {
+          duration = stickiness.value.duration
+          enabled  = stickiness.value.enabled
         }
       }
     }
+  }
 
     # Redirect action - Only if redirect is provided
     dynamic "redirect" {
