@@ -222,7 +222,7 @@ listener_rules = {
         }
       }
     ]
-  }
+  },
 
   rule2 = {
     priority = 2
