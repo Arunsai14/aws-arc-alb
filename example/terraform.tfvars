@@ -201,7 +201,7 @@ alb_listener = {
 
 listener_rules = {
   rule1 = {
-    priority = 999
+    priority = 998
     actions = [
       {
         type  = "redirect"
@@ -226,7 +226,7 @@ listener_rules = {
   },
 
   rule2 = {
-    priority = 289
+    priority = 999
     actions = [
       {
         type  = "fixed-response"
