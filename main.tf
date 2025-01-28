@@ -322,7 +322,7 @@ resource "aws_lb_listener" "this" {
       type             = "forward"
       target_group_arn = aws_lb_target_group.this["config"].arn
       order            = 100
-  }
+  }}
       # Forward action with multiple target groups
       dynamic "forward" {
         for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
