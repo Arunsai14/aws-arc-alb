@@ -199,30 +199,30 @@ alb_listener = {
 }
 
 listener_rules = {
-  rule1 = {
-    priority = 1
-    actions = [
-      {
-        type  = "redirect"
-        order = 1
-        redirect = {
-          host        = "divyasf.sourcef.us"
-          path        = "/redirect"
-          query       = "action=redirect"
-          protocol    = "HTTPS"
-          port        = 443
-          status_code = "HTTP_301"
-        }
-      }
-    ]
-    conditions = [
-      {
-        host_header = {
-          values = ["example.com"]
-        }
-      }
-    ]
-  },
+  # rule1 = {
+  #   priority = 1
+  #   actions = [
+  #     {
+  #       type  = "redirect"
+  #       order = 1
+  #       redirect = {
+  #         host        = "divyasf.sourcef.us"
+  #         path        = "/redirect"
+  #         query       = "action=redirect"
+  #         protocol    = "HTTPS"
+  #         port        = 443
+  #         status_code = "HTTP_301"
+  #       }
+  #     }
+  #   ]
+  #   conditions = [
+  #     {
+  #       host_header = {
+  #         values = ["example.com"]
+  #       }
+  #     }
+  #   ]
+  # },
 
   rule2 = {
     priority = 2
