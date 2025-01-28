@@ -220,12 +220,12 @@ variable "default_action" {
       content_type  = string
       message_body  = string
     }))
-   forward = optional(object({
-  stickiness = optional(object({
-    duration = number
-    enabled  = bool
-  }), null) # Default to null, meaning no stickiness for NLB
-}))
+    forward                        = optional(object({
+      stickiness = optional(object({
+        duration = number
+        enabled  = bool
+      }))
+    }))
     redirect                       = optional(object({
       host         = string
       path         = string
