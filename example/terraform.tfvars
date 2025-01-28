@@ -112,11 +112,11 @@ target_group_config = {
     healthy_threshold   = 2          # Number of consecutive successful health checks
     matcher             = "200"      # Expected response code from the health check
   }
-  stickiness = {
-    enabled         = true
-    type            = "lb_cookie"
-    cookie_duration = 3600  # Cookie duration in seconds
-  }
+  # stickiness = {
+  #   enabled         = true
+  #   type            = "lb_cookie"
+  #   cookie_duration = 3600  # Cookie duration in seconds
+  # }
 }
 
 target_group_attachment_config = [
