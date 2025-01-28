@@ -136,7 +136,7 @@ default_action = [
   {
     type             = "forward"
     forward = {
-      arn = null
+      # arn = null
       target_groups = [
         {
           weight           = 100
