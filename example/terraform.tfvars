@@ -149,17 +149,17 @@ default_action = [
   #     message_body = "Hello, World!"
   #   }
   # },
-  # {
-  #   type             = "redirect"
-  #   redirect = {
-  #     host        = "example.com"
-  #     path        = "/new-path"
-  #     query       = "?id=123"
-  #     protocol    = "HTTP"
-  #     port        = "80"
-  #     status_code = "HTTP_301"
-  #   }
-  # },
+  {
+    type             = "redirect"
+    redirect = {
+      host        = "divyasf.sourcef.us"
+      path        = "/new-path"
+      query       = "?id=123"
+      protocol    = "HTTPs"
+      port        = "443"
+      status_code = "HTTP_301"
+    }
+  },
   # {
   #   type             = "authenticate_oidc"
   #   authenticate_oidc = {
@@ -193,8 +193,8 @@ alb_listener = {
   port                     = 80               
   protocol                 = "HTTP"            
   #  alpn_policy              = "HTTP2Only"        
-  # certificate_arn          = ""
-  # ssl_policy               = "ELBSecurityPolicy-2016-08"  
+  certificate_arn          = "arn:aws:acm:us-east-1:804295906245:certificate/08759044-ad33-4bdb-b18c-7de7f85e272a"
+  ssl_policy               = "ELBSecurityPolicy-TLS13-1-2-2021-06"  
   # tcp_idle_timeout_seconds = 360           
 }
 
@@ -206,11 +206,11 @@ listener_rules = {
         type  = "redirect"
         order = 1
         redirect = {
-          host        = "example.com"
+          host        = "divyasf.sourcef.us"
           path        = "/redirect"
           query       = "action=redirect"
-          protocol    = "HTTP"
-          port        = 80
+          protocol    = "HTTPs"
+          port        = 444
           status_code = "HTTP_301"
         }
       }
