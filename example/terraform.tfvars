@@ -129,39 +129,18 @@ target_group_attachment_config = [
 
 
  cidr_blocks = null
-  # listener_rules = []
-
-    alb = {
-    name       = "arc-poc-alb"
-    internal   = false
-    port       = 80
-    create_alb = false
-  }
-
-
-#   default_actions = [
-#   {
-#     type = "forward"
-#     forward = {
-#       stickiness = {
-#         enabled  = true
-#         duration = 60
-#       }
-#     }
-#   }
-# ]
 
 
 default_action = [
-  # {
-  #   type             = "forward"
-  #   forward = {
-  #     stickiness = {
-  #       duration = 300
-  #       enabled  = true
-  #     }
-  #   }
-  # },
+  {
+    type             = "forward"
+    forward = {
+      stickiness = {
+        duration = 300
+        enabled  = true
+      }
+    }
+  },
   # {
   #   type             = "fixed-response"
   #   fixed_response = {
@@ -170,16 +149,16 @@ default_action = [
   #     message_body = "Hello, World!"
   #   }
   # },
-  {
-    type             = "redirect"
-    redirect = {
-      host        = "example.com"
-      path        = "/new-path"
-      query       = "?id=123"
-      protocol    = "HTTP"
-      port        = "80"
-      status_code = "HTTP_301"
-    }
+  # {
+  #   type             = "redirect"
+  #   redirect = {
+  #     host        = "example.com"
+  #     path        = "/new-path"
+  #     query       = "?id=123"
+  #     protocol    = "HTTP"
+  #     port        = "80"
+  #     status_code = "HTTP_301"
+  #   }
   },
   # {
   #   type             = "authenticate_oidc"
