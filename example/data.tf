@@ -58,8 +58,8 @@ data "aws_subnets" "private" {
   filter {
     name   = "tag:Name"
     values = length(var.subnet_names) > 0 ? var.subnet_names : [
-      "${var.namespace}-${var.environment}-private-subnet-private-${var.region}a",
-      "${var.namespace}-${var.environment}-private-subnet-private-${var.region}b"
+      "vnk-1",
+      "vnk-2"
     ]
   }
 }
