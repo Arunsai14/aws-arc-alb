@@ -201,7 +201,12 @@ default_action = [{
   forward = {
     target_groups = [{
       # arn = aws_lb_target_group.this.arn
+      weight = 20
     }]
+     stickiness = {
+        duration = 300
+        enabled  = true
+      }
   }
 }]
 
