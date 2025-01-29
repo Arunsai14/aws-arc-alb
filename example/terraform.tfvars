@@ -194,14 +194,14 @@ target_group_attachment_config = [
   # },
 # ]
 
-# default_action = [{
-#   type = "forward"
-#   forward = {
-#     target_groups = [{
-#       # arn = aws_lb_target_group.this.arn
-#     }]
-#   }
-# }]
+default_action = [{
+  type = "forward"
+  forward = {
+    target_groups = [{
+      # arn = aws_lb_target_group.this.arn
+    }]
+  }
+}]
 
 
 alb_listener = {
