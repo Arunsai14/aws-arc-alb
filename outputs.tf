@@ -37,13 +37,3 @@ output "listener_arn" {
   description = "ARN of the load balancer listener"
   value       = aws_lb_listener.this.arn
 }
-
-output "lb_trust_store_name" {
-  description = "Name of the load balancer trust store"
-  value       = aws_lb_trust_store.this[*].name
-}
-
-output "target_group_attachment_ids" {
-  description = "IDs of target group attachments"
-  value       = aws_lb_target_group_attachment.this[*].id
-}
