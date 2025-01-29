@@ -1,7 +1,7 @@
 locals {
 load_balancer_config = {
   name                              = "arc-load-balancer"
-  type                =  "application"
+  type                =  "network"
   internal                          = false
   security_groups                   = ["sg-123456"]
   ip_address_type                   = "ipv4"
@@ -32,7 +32,7 @@ load_balancer_config = {
   ]
 
   access_logs = {
-    enabled = true
+    enabled = false
     bucket  = "arc-terraform-alb-logs-1"
     prefix  = "alb-logs"
   }
