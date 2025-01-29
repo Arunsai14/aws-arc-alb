@@ -106,7 +106,7 @@ resource "aws_lb" "this" {
 #                 Target Group
 ###################################################################
 resource "aws_lb_target_group" "this" {
-for_each = var.target_group_config != null ? { "config" = var.target_group_config } : {}
+for_each = var.target_group_config != null ? { "config" = var.target_group_config } : {} // TODO: Change this to a list of target groups
   name                        = var.target_group_config.name
   name_prefix                 = var.target_group_config.name_prefix
   port                        = var.target_group_config.port
@@ -308,6 +308,7 @@ resource "aws_lb_listener" "this" {
           target_group {
             # arn = lookup(default_action.value.forward, "arn", null) != null ? default_action.value.forward.arn : aws_lb_target_group.this["config"].arn
             arn = aws_lb_target_group.this["config"].arn
+            weight = target_group.value.weight != null ? target_group.value.weight : null
           }
        }
        }
