@@ -101,12 +101,11 @@ resource "aws_lb" "this" {
 }
 
 
-
 ###################################################################
 #                 Target Group
 ###################################################################
 resource "aws_lb_target_group" "this" {
-for_each = var.target_group_config != null ? { "config" = var.target_group_config } : {} // TODO: Change this to a list of target groups
+  count = var.target_group_config != null ? 1 : 0  # If the target group config is defined, create 1 resource; otherwise, create 0.
   name                        = var.target_group_config.name
   name_prefix                 = var.target_group_config.name_prefix
   port                        = var.target_group_config.port
@@ -121,11 +120,11 @@ for_each = var.target_group_config != null ? { "config" = var.target_group_confi
   target_type                 = var.target_group_config.target_type
   proxy_protocol_v2           = var.target_group_config.proxy_protocol_v2
   slow_start                  = var.target_group_config.slow_start
-  tags = var.tags
+  tags                        = var.tags
 
   # Health Check
   dynamic "health_check" {
-    for_each = each.value.health_check != null ? [each.value.health_check] : []
+    for_each = var.target_group_config.health_check != null ? [var.target_group_config.health_check] : []
     content {
       enabled             = health_check.value.enabled
       interval            = health_check.value.interval
@@ -192,6 +191,7 @@ for_each = var.target_group_config != null ? { "config" = var.target_group_confi
     }
   }
 }
+
 
 ###################################################################
 #                Target Group Attachment
