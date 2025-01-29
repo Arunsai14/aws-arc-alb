@@ -74,7 +74,7 @@ statement {
     ]
 
     resources = [
-      arn:aws:s3:::${var.bucket_name},
+      "arn:aws:s3:::${var.bucket_name}",
     ]
 
   }
