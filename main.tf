@@ -308,7 +308,7 @@ resource "aws_lb_listener" "this" {
           target_group {
             # arn = lookup(default_action.value.forward, "arn", null) != null ? default_action.value.forward.arn : aws_lb_target_group.this["config"].arn
             arn = aws_lb_target_group.this["config"].arn
-            order            = 100
+            # order            = 100
           }
        }
        }
