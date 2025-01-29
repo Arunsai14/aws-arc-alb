@@ -36,7 +36,7 @@ module "alb" {
   target_group_config            = var.target_group_config
   target_group_attachment_config = var.target_group_attachment_config
   alb_listener            = var.alb_listener
-default_target_group_arn = var.default_target_group_arn
+# default_forward_action = var.default_target_group_arn
   default_action          = var.default_action
   listener_rules          = var.listener_rules
   security_group_data     = var.security_group_data

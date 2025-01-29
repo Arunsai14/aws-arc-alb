@@ -164,11 +164,12 @@ variable "alb_listener" {
 
 ######### alb listener config ##########
 
-variable "default_target_group_arn" {
-  description = "The ARN of the default target group."
-  type        = string
-  default     = "" 
+variable "default_forward_action"{
+  description = "Default forward action for the ALB listener."
+  type = bool
+default = true
 }
+
 
 variable "default_action" {
   description = "Default actions for the ALB listener."
