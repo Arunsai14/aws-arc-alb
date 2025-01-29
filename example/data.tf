@@ -49,3 +49,17 @@ data "aws_subnet" "private" {
 }
 
 
+data "aws_subnet" "private_subnet" {
+  id = data.aws_subnets.private.ids[0] # Selects only the first private subnet
+}
+
+
+data "aws_subnets" "private" {
+  filter {
+    name   = "tag:Name"
+    values = length(var.subnet_names) > 0 ? var.subnet_names : [
+      "${var.namespace}-${var.environment}-private-subnet-private-${var.region}a",
+      "${var.namespace}-${var.environment}-private-subnet-private-${var.region}b"
+    ]
+  }
+}
