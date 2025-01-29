@@ -44,33 +44,34 @@ load_balancer_config = {
   }
 }
 
-  bucket_policy_doc = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Principal = {
-          Service = "delivery.logs.amazonaws.com"
-        }
-        Action = "s3:PutObject"
-        Resource = "arn:aws:s3:::${var.bucket_name}/*"
-        Condition = {
-          StringEquals = {
-            "aws:SourceAccount" = data.aws_caller_identity.current
-          }
-          ArnLike = {
-            "aws:SourceArn" = "${module.alb.load_balancer_arn}/*"
-          }
-        }
-      },
-      {
-        Effect = "Allow"
-        Principal = {
-          Service = "delivery.logs.amazonaws.com"
-        }
-        Action = "s3:GetBucketAcl"
-        Resource = "arn:aws:s3:::${var.bucket_name}"
+bucket_policy_doc = jsonencode({
+  Version = "2012-10-17"
+  Statement = [
+    {
+      Effect = "Allow"
+      Principal = {
+        Service = "delivery.logs.amazonaws.com"
       }
-    ]
-  })
+      Action = "s3:PutObject"
+      Resource = "arn:aws:s3:::${var.bucket_name}/AWSLogs/${data.aws_caller_identity.current.account_id}/*"
+      Condition = {
+        StringEquals = {
+          "aws:SourceAccount" = "${data.aws_caller_identity.current.account_id}"
+        }
+        ArnLike = {
+          "aws:SourceArn" = "arn:aws:elasticloadbalancing:*:${data.aws_caller_identity.current.account_id}:loadbalancer/*"
+        }
+      }
+    },
+    {
+      Effect = "Allow"
+      Principal = {
+        Service = "delivery.logs.amazonaws.com"
+      }
+      Action = "s3:GetBucketAcl"
+      Resource = "arn:aws:s3:::${var.bucket_name}"
+    }
+  ]
+})
+
 }
