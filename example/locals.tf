@@ -59,7 +59,7 @@ load_balancer_config = {
             "aws:SourceAccount" = data.aws_caller_identity.current
           }
           ArnLike = {
-            "aws:SourceArn" = "${module.alb.alb_arn}/*"
+            "aws:SourceArn" = "${module.alb.arn}/*"
           }
         }
       },
