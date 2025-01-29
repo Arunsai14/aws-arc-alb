@@ -52,7 +52,10 @@ bucket_policy_doc = jsonencode({
       Principal = {
         Service = "delivery.logs.amazonaws.com"
       }
-      Action = "s3:PutObject"
+      "Action": [
+            "s3:PutObject",
+            "s3:PutObjectAcl"
+      ],
       Resource = "arn:aws:s3:::${var.bucket_name}/alb-logs/*"
       Condition = {
         StringEquals = {
