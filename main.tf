@@ -234,11 +234,11 @@ resource "aws_lb_listener" "this" {
   port              = 80
   protocol          = "TCP"
 
-  # default_action {
-  #   type             = "forward"
-  #   target_group_arn = aws_lb_target_group.this["config"].arn
-  #   order            = 100
-  # }
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.this["config"].arn
+    order            = 100
+  }
 }
 
 
