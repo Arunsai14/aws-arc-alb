@@ -53,7 +53,7 @@ bucket_policy_doc = jsonencode({
         Service = "delivery.logs.amazonaws.com"
       }
       Action = "s3:PutObject"
-      Resource = "arn:aws:s3:::${var.bucket_name}/AWSLogs/alb-logs/*"
+      Resource = "arn:aws:s3:::${var.bucket_name}/alb-logs/*"
       Condition = {
         StringEquals = {
           "aws:SourceAccount" = "${data.aws_caller_identity.current.account_id}"
