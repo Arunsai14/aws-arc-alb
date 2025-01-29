@@ -32,93 +32,51 @@ data "aws_iam_policy_document" "alb_logs_policy" {
 #       service = "delivery.logs.amazonaws.com"
 #     }
 #   }
-  
-  # ALB Log Delivery - Allow Writing Logs to S3
-statement {
-  sid = "AWSLogDeliveryWrite"
-
-  principals {
-    type        = "Service"
-    identifiers = ["delivery.logs.amazonaws.com"]
-  }
-
-  effect = "Allow"
-
-  actions = [
-    "s3:PutObject",
-  ]
-
-  resources = [
-    "arn:aws:s3:::${var.bucket_name}/*",
-  ]
-
-  condition {
-    test     = "StringEquals"
-    variable = "s3:x-amz-acl"
-    values   = ["bucket-owner-full-control"]
-  }
-}
 
 statement {
-  sid = "AWSLogDeliveryAclCheck"
+    sid = "AWSLogDeliveryWrite"
 
-  effect = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["delivery.logs.amazonaws.com"]
+    }
 
-  principals {
-    type        = "Service"
-    identifiers = ["delivery.logs.amazonaws.com"]
+    effect = "Allow"
+
+    actions = [
+      "s3:PutObject",
+    ]
+
+    resources = [
+      "arn:aws:s3:::${var.bucket_name}/*",
+    ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "s3:x-amz-acl"
+      values   = ["bucket-owner-full-control"]
+    }
   }
 
-  actions = [
-    "s3:GetBucketAcl",
-    "s3:ListBucket",
-  ]
+  statement {
+    sid = "AWSLogDeliveryAclCheck"
 
-  resources = [
-    "arn:aws:s3:::${var.bucket_name}",
-  ]
-}
+    effect = "Allow"
 
-statement {
-  sid = "ELBLogDelivery"
+    principals {
+      type        = "Service"
+      identifiers = ["delivery.logs.amazonaws.com"]
+    }
 
-  effect = "Allow"
+    actions = [
+      "s3:GetBucketAcl",
+      "s3:ListBucket",
+    ]
 
-  principals {
-    type        = "Service"
-    identifiers = ["logdelivery.elasticloadbalancing.amazonaws.com"]
+    resources = [
+      "arn:aws:s3:::${var.bucket_name}",
+    ]
+
   }
-
-  actions = [
-    "s3:PutObject",
-  ]
-
-  resources = [
-    "arn:aws:s3:::${var.bucket_name}/*",
-  ]
 }
-
-statement {
-  sid = "ELBLogDeliveryAclCheck"
-
-  effect = "Allow"
-
-  principals {
-    type        = "Service"
-    identifiers = ["logdelivery.elasticloadbalancing.amazonaws.com"]
-  }
-
-  actions = [
-    "s3:GetBucketAcl",
-    "s3:ListBucket",
-  ]
-
-  resources = [
-    "arn:aws:s3:::${var.bucket_name}",
-  ]
-}
-
-
-}
-
 
