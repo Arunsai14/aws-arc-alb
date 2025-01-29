@@ -51,7 +51,7 @@ module "s3" {
   acl              = "log-delivery-write"
   force_destroy   = true
   object_ownership = "ObjectWriter"
-  acl = local.acl
+  bucket_policy_doc = local.bucket_policy_doc
   tags             = module.tags.tags
 }
 

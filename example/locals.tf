@@ -44,7 +44,7 @@ load_balancer_config = {
   }
 }
 
-  acl = jsonencode({
+  bucket_policy_doc = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
@@ -56,7 +56,7 @@ load_balancer_config = {
         Resource = "arn:aws:s3:::${var.bucket_name}/AWSLogs/${data.aws_caller_identity.current}/*"
         Condition = {
           StringEquals = {
-            "aws:SourceAccount" = ${data.aws_caller_identity.current}
+            "aws:SourceAccount" = data.aws_caller_identity.current
           }
           ArnLike = {
             "aws:SourceArn" = "${module.alb.alb_arn}/*"
