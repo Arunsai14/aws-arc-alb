@@ -53,7 +53,7 @@ load_balancer_config = {
           Service = "delivery.logs.amazonaws.com"
         }
         Action = "s3:PutObject"
-        Resource = "arn:aws:s3:::${var.bucket_name}/AWSLogs/${data.aws_caller_identity.current}/*"
+        Resource = "arn:aws:s3:::${var.bucket_name}/*"
         Condition = {
           StringEquals = {
             "aws:SourceAccount" = data.aws_caller_identity.current
