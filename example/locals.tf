@@ -1,0 +1,76 @@
+locals {
+load_balancer_config = {
+  name                              = "arc-load-balancer"
+  type                =  "application"
+  internal                          = false
+  security_groups                   = ["sg-123456"]
+  ip_address_type                   = "ipv4"
+  enable_deletion_protection        = false
+  enable_cross_zone_load_balancing  = true
+  enable_http2                      = false
+  enable_waf_fail_open              = false
+  enable_xff_client_port            = false
+  enable_zonal_shift                = false
+  desync_mitigation_mode            = "defensive"
+  drop_invalid_header_fields        = false
+  enforce_security_group_inbound_rules_on_private_link_traffic = "off"
+  idle_timeout                      = 60
+  preserve_host_header              = false
+  xff_header_processing_mode        = "append"
+  customer_owned_ipv4_pool         = null
+  dns_record_client_routing_policy  = "any_availability_zone"
+  client_keep_alive                 = 60
+  enable_tls_version_and_cipher_suite_headers = false
+
+  subnet_mapping = [
+    {
+      subnet_id            = "subnet-6781cb49"
+    },
+    {
+      subnet_id            = "subnet-f55c1392"
+    }
+  ]
+
+  access_logs = {
+    enabled = false
+    bucket  = "my-log-bucket"
+    prefix  = "access-logs"
+  }
+
+  connection_logs = {
+    enabled = false
+    bucket  = "my-log-bucket"
+    prefix  = "connection-logs"
+  }
+}
+
+  acl = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "delivery.logs.amazonaws.com"
+        }
+        Action = "s3:PutObject"
+        Resource = "arn:aws:s3:::${var.bucket_name}/AWSLogs/${data.aws_caller_identity.current}/*"
+        Condition = {
+          StringEquals = {
+            "aws:SourceAccount" = ${data.aws_caller_identity.current}
+          }
+          ArnLike = {
+            "aws:SourceArn" = "${module.alb.alb_arn}/*"
+          }
+        }
+      },
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "delivery.logs.amazonaws.com"
+        }
+        Action = "s3:GetBucketAcl"
+        Resource = "arn:aws:s3:::${var.bucket_name}"
+      }
+    ]
+  })
+}

@@ -32,15 +32,27 @@ module "tags" {
 module "alb" {
   source               = "../"
   region               = var.region
-  load_balancer_config            = var.load_balancer_config
+  load_balancer_config            = local.load_balancer_config
   target_group_config            = var.target_group_config
   target_group_attachment_config = var.target_group_attachment_config
   alb_listener            = var.alb_listener
   default_action          = var.default_action
-  # listener_rules          = var.listener_rules
+  listener_rules          = var.listener_rules
   security_group_data     = var.security_group_data
   security_group_name     = var.security_group_name
   vpc_id                  = var.vpc_id
   tags                   = module.tags.tags
 }
 
+module "s3" {
+  source      = "sourcefuse/arc-s3/aws"
+  version     = "0.0.4"
+  name             = var.bucket_name
+  acl              = "log-delivery-write"
+  force_destroy   = true
+  object_ownership = "ObjectWriter"
+  acl = local.acl
+  tags             = module.tags.tags
+}
+
+data "aws_caller_identity" "current" {}
