@@ -1,7 +1,7 @@
 locals {
 load_balancer_config = {
   name                              = "arc-load-balancer"
-  type                =  "application"
+  type                =  "network" 
   internal                          = false
   security_groups                   = ["sg-123456"]
   ip_address_type                   = "ipv4"
@@ -24,10 +24,10 @@ load_balancer_config = {
 
   subnet_mapping = [
     {
-      subnet_id            = "subnet-6781cb49"
+      subnet_id            = element([for subnet in data.aws_subnet.private : subnet.id], 0)
     },
     {
-      subnet_id            = "subnet-f55c1392"
+      subnet_id            = element([for subnet in data.aws_subnet.private : subnet.id], 1)
     }
   ]
 

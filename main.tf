@@ -239,10 +239,8 @@ resource "aws_lb_listener" "this" {
   tcp_idle_timeout_seconds = var.alb_listener.tcp_idle_timeout_seconds
 
  dynamic "default_action" {
-  # for_each = var.default_forward_action != false ? [var.default_forward_action] : null
-  for_each = var.default_forward_action ? [1] : []
+  for_each = var.network_forward_action ? [1] : []
   content {
-    # target_group_arn = aws_lb_target_group.this["config"].arn
     target_group_arn = aws_lb_target_group.this[0].arn
     type             = "forward"
   }

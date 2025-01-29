@@ -7,10 +7,39 @@ variable "region" {
   description = "AWS region"
 }
 
+variable "region" {
+  type        = string
+  default     = "us-east-1"
+  description = "AWS region"
+}
 
-variable "security_groups" {
-  type    = list(string)
-  default = []  
+variable "environment" {
+  type        = string
+  description = "Name of the environment, i.e. dev, stage, prod"
+  default     = "dev"
+}
+
+variable "namespace" {
+  type        = string
+  default     = "arc"
+  description = "Namespace of the project, i.e. arc"
+}
+
+variable "security_group_name" {
+  type        = string
+  description = "The name of the security group"
+}
+
+variable "subnet_names" {
+  type        = list(string)
+  description = "List of subnet names to lookup"
+  default     = ["arc-poc-private-subnet-private-us-east-1a", "arc-poc-private-subnet-private-us-east-1b"]
+}
+
+variable "vpc_name" {
+  type        = string
+  description = "Name of the VPC to add the resources"
+  default     = "arc-poc-vpc"
 }
 
 variable "security_group_name" {
@@ -164,12 +193,11 @@ variable "alb_listener" {
 
 ######### alb listener config ##########
 
-variable "default_forward_action"{
+variable "network_forward_action"{
   description = "Default forward action for the ALB listener."
   type = bool
-default = true
+default = false
 }
-
 
 variable "default_action" {
   description = "Default actions for the ALB listener."
