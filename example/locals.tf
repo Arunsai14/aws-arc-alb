@@ -34,7 +34,7 @@ load_balancer_config = {
   access_logs = {
     enabled = true
     bucket  = "arc-terraform-alb-logs-1"
-    prefix  = "access-logs"
+    prefix  = "AWSLogs/${data.aws_caller_identity.current.account_id}"
   }
 
   connection_logs = {
@@ -59,7 +59,7 @@ bucket_policy_doc = jsonencode({
           "aws:SourceAccount" = "${data.aws_caller_identity.current.account_id}"
         }
         ArnLike = {
-          "aws:SourceArn" = "arn:aws:elasticloadbalancing:*:${data.aws_caller_identity.current.account_id}:loadbalancer/*"
+          "aws:SourceArn" = "arn:aws:elasticloadbalancing:${var.region}:${data.aws_caller_identity.current.account_id}:loadbalancer/*"
         }
       }
     },
