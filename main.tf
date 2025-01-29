@@ -231,136 +231,147 @@ resource "aws_lb_trust_store" "this" {
 ###################################################################
 resource "aws_lb_listener" "this" {
   load_balancer_arn = aws_lb.this.arn
-  port              = var.alb_listener.port
-  protocol          = var.alb_listener.protocol
-  alpn_policy       = var.alb_listener.alpn_policy
-  certificate_arn   = var.alb_listener.certificate_arn
-  ssl_policy        = var.alb_listener.ssl_policy
-  tcp_idle_timeout_seconds = var.alb_listener.tcp_idle_timeout_seconds
+  port              = 80
+  protocol          = "TCP"
 
-  dynamic "default_action" {
-    for_each = var.default_action
-    content {
-      type = default_action.value.type
-
-      # OIDC Authentication action
-      dynamic "authenticate_oidc" {
-        for_each = lookup(default_action.value, "authenticate_oidc", null) != null ? [default_action.value.authenticate_oidc] : []
-        content {
-          authorization_endpoint = authenticate_oidc.value.authorization_endpoint
-          authentication_request_extra_params = authenticate_oidc.value.authentication_request_extra_params
-          client_id              = authenticate_oidc.value.client_id
-          client_secret          = authenticate_oidc.value.client_secret
-          issuer                 = authenticate_oidc.value.issuer
-          token_endpoint         = authenticate_oidc.value.token_endpoint
-          user_info_endpoint     = authenticate_oidc.value.user_info_endpoint
-          on_unauthenticated_request       = authenticate_oidc.value.on_unauthenticated_request
-          scope                            = authenticate_oidc.value.scope
-          session_cookie_name              = authenticate_oidc.value.session_cookie_name
-          session_timeout                  = authenticate_oidc.value.session_timeout
-        }
-      }
-
-      # Cognito Authentication action
-      dynamic "authenticate_cognito" {
-        for_each = lookup(default_action.value, "authenticate_cognito", null) != null ? [default_action.value.authenticate_cognito] : []
-        content {
-          user_pool_arn                    = authenticate_cognito.value.user_pool_arn
-          user_pool_client_id              = authenticate_cognito.value.user_pool_client_id
-          user_pool_domain                 = authenticate_cognito.value.user_pool_domain
-          authentication_request_extra_params = authenticate_cognito.value.authentication_request_extra_params
-          on_unauthenticated_request       = authenticate_cognito.value.on_unauthenticated_request
-          scope                            = authenticate_cognito.value.scope
-          session_cookie_name              = authenticate_cognito.value.session_cookie_name
-          session_timeout                  = authenticate_cognito.value.session_timeout
-        }
-      }
-
-      # Fixed Response action
-      dynamic "fixed_response" {
-        for_each = lookup(default_action.value, "fixed_response", null) != null ? [default_action.value.fixed_response] : []
-        content {
-          status_code  = fixed_response.value.status_code
-          content_type = fixed_response.value.content_type
-          message_body = fixed_response.value.message_body
-        }
-      }
-
-      # Forward action
-
-       dynamic "forward" {
-        for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
-        content {
-          target_group {
-            # arn = lookup(default_action.value.forward, "arn", null) != null ? default_action.value.forward.arn : aws_lb_target_group.this["config"].arn
-            arn = aws_lb_target_group.this["config"].arn
-          }
-       }
-       }
-
-      # dynamic "forward" {
-      #   for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
-
-      #     dynamic "target_group" {
-      #       for_each = lookup(default_action.value.forward, "target_groups", null) != null ? default_action.value.forward.target_groups : []
-      #       content {
-      #         arn    = aws_lb_target_group.this["config"].arn
-      #         weight = target_group.value.weight
-      #       }
-      #     }
-
-      #     dynamic "stickiness" {
-      #       for_each = lookup(default_action.value.forward, "stickiness", null) != null ? [default_action.value.forward.stickiness] : []
-      #       content {
-      #         duration = stickiness.value.duration
-      #         enabled  = stickiness.value.enabled
-      #       }
-      #     }
-      #   }
-# default_action {
-#     type             = "forward"
-#     target_group_arn = aws_lb_target_group.this["config"].arn
-#     order            = 100
-#   }
-      # Forward action with multiple target groups
-      # dynamic "forward" {
-      #   for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
-      #   content {
-      #     dynamic "target_group" {
-      #       for_each = forward.value.target_groups
-      #       content {
-      #         arn    = aws_lb_target_group.this["config"].arn
-      #          weight = lookup(target_group.value, "weight", null) != null ? target_group.value.weight : null
-      #       }
-      #     }
-
-      #     dynamic "stickiness" {
-      #       for_each = lookup(forward.value, "stickiness", null) != null ? [forward.value.stickiness] : []
-      #       content {
-      #         duration = stickiness.value.duration
-      #         enabled  = lookup(stickiness.value, "enabled", false)
-      #       }
-      #     }
-      #   }
-      # }
-
-      # Redirect action
-      dynamic "redirect" {
-        for_each = lookup(default_action.value, "redirect", null) != null ? [default_action.value.redirect] : []
-        content {
-          host        = redirect.value.host
-          path        = redirect.value.path
-          query       = redirect.value.query
-          protocol    = redirect.value.protocol
-          port        = redirect.value.port
-          status_code = redirect.value.status_code
-        }
-      }
-    }
-  }
-
-  tags = var.tags
+  # default_action {
+  #   type             = "forward"
+  #   target_group_arn = aws_lb_target_group.this["config"].arn
+  #   order            = 100
+  # }
 }
+
+
+
+# resource "aws_lb_listener" "this" {
+#   load_balancer_arn = aws_lb.this.arn
+#   port              = var.alb_listener.port
+#   protocol          = var.alb_listener.protocol
+#   alpn_policy       = var.alb_listener.alpn_policy
+#   certificate_arn   = var.alb_listener.certificate_arn
+#   ssl_policy        = var.alb_listener.ssl_policy
+#   tcp_idle_timeout_seconds = var.alb_listener.tcp_idle_timeout_seconds
+
+#   dynamic "default_action" {
+#     for_each = var.default_action
+#     content {
+#       type = default_action.value.type
+
+#       # OIDC Authentication action
+#       dynamic "authenticate_oidc" {
+#         for_each = lookup(default_action.value, "authenticate_oidc", null) != null ? [default_action.value.authenticate_oidc] : []
+#         content {
+#           authorization_endpoint = authenticate_oidc.value.authorization_endpoint
+#           authentication_request_extra_params = authenticate_oidc.value.authentication_request_extra_params
+#           client_id              = authenticate_oidc.value.client_id
+#           client_secret          = authenticate_oidc.value.client_secret
+#           issuer                 = authenticate_oidc.value.issuer
+#           token_endpoint         = authenticate_oidc.value.token_endpoint
+#           user_info_endpoint     = authenticate_oidc.value.user_info_endpoint
+#           on_unauthenticated_request       = authenticate_oidc.value.on_unauthenticated_request
+#           scope                            = authenticate_oidc.value.scope
+#           session_cookie_name              = authenticate_oidc.value.session_cookie_name
+#           session_timeout                  = authenticate_oidc.value.session_timeout
+#         }
+#       }
+
+#       # Cognito Authentication action
+#       dynamic "authenticate_cognito" {
+#         for_each = lookup(default_action.value, "authenticate_cognito", null) != null ? [default_action.value.authenticate_cognito] : []
+#         content {
+#           user_pool_arn                    = authenticate_cognito.value.user_pool_arn
+#           user_pool_client_id              = authenticate_cognito.value.user_pool_client_id
+#           user_pool_domain                 = authenticate_cognito.value.user_pool_domain
+#           authentication_request_extra_params = authenticate_cognito.value.authentication_request_extra_params
+#           on_unauthenticated_request       = authenticate_cognito.value.on_unauthenticated_request
+#           scope                            = authenticate_cognito.value.scope
+#           session_cookie_name              = authenticate_cognito.value.session_cookie_name
+#           session_timeout                  = authenticate_cognito.value.session_timeout
+#         }
+#       }
+
+#       # Fixed Response action
+#       dynamic "fixed_response" {
+#         for_each = lookup(default_action.value, "fixed_response", null) != null ? [default_action.value.fixed_response] : []
+#         content {
+#           status_code  = fixed_response.value.status_code
+#           content_type = fixed_response.value.content_type
+#           message_body = fixed_response.value.message_body
+#         }
+#       }
+
+#       # Forward action
+
+#        dynamic "forward" {
+#         for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
+#         content {
+#           target_group {
+#             # arn = lookup(default_action.value.forward, "arn", null) != null ? default_action.value.forward.arn : aws_lb_target_group.this["config"].arn
+#             arn = aws_lb_target_group.this["config"].arn
+#           }
+#        }
+#        }
+
+#       # dynamic "forward" {
+#       #   for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
+
+#       #     dynamic "target_group" {
+#       #       for_each = lookup(default_action.value.forward, "target_groups", null) != null ? default_action.value.forward.target_groups : []
+#       #       content {
+#       #         arn    = aws_lb_target_group.this["config"].arn
+#       #         weight = target_group.value.weight
+#       #       }
+#       #     }
+
+#       #     dynamic "stickiness" {
+#       #       for_each = lookup(default_action.value.forward, "stickiness", null) != null ? [default_action.value.forward.stickiness] : []
+#       #       content {
+#       #         duration = stickiness.value.duration
+#       #         enabled  = stickiness.value.enabled
+#       #       }
+#       #     }
+#       #   }
+
+
+#       # Forward action with multiple target groups
+#       # dynamic "forward" {
+#       #   for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
+#       #   content {
+#       #     dynamic "target_group" {
+#       #       for_each = forward.value.target_groups
+#       #       content {
+#       #         arn    = aws_lb_target_group.this["config"].arn
+#       #          weight = lookup(target_group.value, "weight", null) != null ? target_group.value.weight : null
+#       #       }
+#       #     }
+
+#       #     dynamic "stickiness" {
+#       #       for_each = lookup(forward.value, "stickiness", null) != null ? [forward.value.stickiness] : []
+#       #       content {
+#       #         duration = stickiness.value.duration
+#       #         enabled  = lookup(stickiness.value, "enabled", false)
+#       #       }
+#       #     }
+#       #   }
+#       # }
+
+#       # Redirect action
+#       dynamic "redirect" {
+#         for_each = lookup(default_action.value, "redirect", null) != null ? [default_action.value.redirect] : []
+#         content {
+#           host        = redirect.value.host
+#           path        = redirect.value.path
+#           query       = redirect.value.query
+#           protocol    = redirect.value.protocol
+#           port        = redirect.value.port
+#           status_code = redirect.value.status_code
+#         }
+#       }
+#     }
+#   }
+
+#   tags = var.tags
+# }
 
 
 
