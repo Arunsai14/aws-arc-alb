@@ -32,8 +32,9 @@ data "aws_iam_policy_document" "alb_logs_policy" {
 #       service = "delivery.logs.amazonaws.com"
 #     }
 #   }
-
-statement {
+  
+  # ALB Log Delivery - Allow Writing Logs to S3
+  statement {
     sid = "AWSLogDeliveryWrite"
 
     principals {
@@ -58,6 +59,7 @@ statement {
     }
   }
 
+  # ALB Log Delivery - Allow Bucket ACL Check
   statement {
     sid = "AWSLogDeliveryAclCheck"
 
@@ -76,7 +78,56 @@ statement {
     resources = [
       "arn:aws:s3:::${var.bucket_name}",
     ]
-
   }
+
+  # 🚨 Security Policy - Deny Insecure HTTP Transport
+  statement {
+    sid    = "denyInsecureTransport"
+    effect = "Deny"
+
+    actions = ["s3:*"]
+
+    resources = [
+      "arn:aws:s3:::${var.bucket_name}",
+      "arn:aws:s3:::${var.bucket_name}/*"
+    ]
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values   = ["false"]
+    }
+  }
+
+  # 🚨 Security Policy - Deny Outdated TLS Versions (<1.2)
+  statement {
+    sid    = "denyOutdatedTLS"
+    effect = "Deny"
+
+    actions = ["s3:*"]
+
+    resources = [
+      "arn:aws:s3:::${var.bucket_name}",
+      "arn:aws:s3:::${var.bucket_name}/*"
+    ]
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+
+    condition {
+      test     = "NumericLessThan"
+      variable = "s3:TlsVersion"
+      values   = ["1.2"]
+    }
+  }
+
 }
+
 
