@@ -24,10 +24,10 @@ load_balancer_config = {
 
   subnet_mapping = [
     {
-      subnet_id            = data.aws_subnet.private.id[0]
+      subnet_id            = data.aws_subnets.private[0].id
     },
     {
-      subnet_id            = data.aws_subnet.private.id[1]
+      subnet_id            = data.aws_subnets.private[1].id
     }
   ]
 
