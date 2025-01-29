@@ -302,16 +302,19 @@ resource "aws_lb_listener" "this" {
 
       # Forward action
 
-       dynamic "forward" {
-        for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
-        content {
-          target_group {
-            # arn = lookup(default_action.value.forward, "arn", null) != null ? default_action.value.forward.arn : aws_lb_target_group.this["config"].arn
-            arn = aws_lb_target_group.this["config"].arn
-            weight = target_group.value.weight != null ? target_group.value.weight : null
-          }
-       }
-       }
+     dynamic "forward" {
+  for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
+  content {
+    dynamic "target_group" {
+      for_each = lookup(forward.value, "target_groups", [])
+      content {
+        arn    = aws_lb_target_group.this["config"].arn
+        weight = lookup(target_group.value, "weight", null)
+      }
+    }
+  }
+}
+
 
       # dynamic "forward" {
       #   for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
