@@ -34,99 +34,90 @@ data "aws_iam_policy_document" "alb_logs_policy" {
 #   }
   
   # ALB Log Delivery - Allow Writing Logs to S3
-  statement {
-    sid = "AWSLogDeliveryWrite"
+statement {
+  sid = "AWSLogDeliveryWrite"
 
-    principals {
-      type        = "Service"
-      identifiers = ["delivery.logs.amazonaws.com"]
-    }
-
-    effect = "Allow"
-
-    actions = [
-      "s3:PutObject",
-    ]
-
-    resources = [
-      "arn:aws:s3:::${var.bucket_name}/*",
-    ]
-
-    condition {
-      test     = "StringEquals"
-      variable = "s3:x-amz-acl"
-      values   = ["bucket-owner-full-control"]
-    }
+  principals {
+    type        = "Service"
+    identifiers = ["delivery.logs.amazonaws.com"]
   }
 
-  # ALB Log Delivery - Allow Bucket ACL Check
-  statement {
-    sid = "AWSLogDeliveryAclCheck"
+  effect = "Allow"
 
-    effect = "Allow"
+  actions = [
+    "s3:PutObject",
+  ]
 
-    principals {
-      type        = "Service"
-      identifiers = ["delivery.logs.amazonaws.com"]
-    }
+  resources = [
+    "arn:aws:s3:::${var.bucket_name}/*",
+  ]
 
-    actions = [
-      "s3:GetBucketAcl",
-      "s3:ListBucket",
-    ]
+  condition {
+    test     = "StringEquals"
+    variable = "s3:x-amz-acl"
+    values   = ["bucket-owner-full-control"]
+  }
+}
 
-    resources = [
-      "arn:aws:s3:::${var.bucket_name}",
-    ]
+statement {
+  sid = "AWSLogDeliveryAclCheck"
+
+  effect = "Allow"
+
+  principals {
+    type        = "Service"
+    identifiers = ["delivery.logs.amazonaws.com"]
   }
 
-  # 🚨 Security Policy - Deny Insecure HTTP Transport
-  statement {
-    sid    = "denyInsecureTransport"
-    effect = "Deny"
+  actions = [
+    "s3:GetBucketAcl",
+    "s3:ListBucket",
+  ]
 
-    actions = ["s3:*"]
+  resources = [
+    "arn:aws:s3:::${var.bucket_name}",
+  ]
+}
 
-    resources = [
-      "arn:aws:s3:::${var.bucket_name}",
-      "arn:aws:s3:::${var.bucket_name}/*"
-    ]
+statement {
+  sid = "ELBLogDelivery"
 
-    principals {
-      type        = "*"
-      identifiers = ["*"]
-    }
+  effect = "Allow"
 
-    condition {
-      test     = "Bool"
-      variable = "aws:SecureTransport"
-      values   = ["false"]
-    }
+  principals {
+    type        = "Service"
+    identifiers = ["logdelivery.elasticloadbalancing.amazonaws.com"]
   }
 
-  # 🚨 Security Policy - Deny Outdated TLS Versions (<1.2)
-  statement {
-    sid    = "denyOutdatedTLS"
-    effect = "Deny"
+  actions = [
+    "s3:PutObject",
+  ]
 
-    actions = ["s3:*"]
+  resources = [
+    "arn:aws:s3:::${var.bucket_name}/*",
+  ]
+}
 
-    resources = [
-      "arn:aws:s3:::${var.bucket_name}",
-      "arn:aws:s3:::${var.bucket_name}/*"
-    ]
+statement {
+  sid = "ELBLogDeliveryAclCheck"
 
-    principals {
-      type        = "*"
-      identifiers = ["*"]
-    }
+  effect = "Allow"
 
-    condition {
-      test     = "NumericLessThan"
-      variable = "s3:TlsVersion"
-      values   = ["1.2"]
-    }
+  principals {
+    type        = "Service"
+    identifiers = ["logdelivery.elasticloadbalancing.amazonaws.com"]
   }
+
+  actions = [
+    "s3:GetBucketAcl",
+    "s3:ListBucket",
+  ]
+
+  resources = [
+    "arn:aws:s3:::${var.bucket_name}",
+  ]
+}
+
 
 }
 
