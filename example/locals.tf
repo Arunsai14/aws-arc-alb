@@ -62,7 +62,7 @@ bucket_policy_doc = jsonencode({
           "aws:SourceAccount" = "${data.aws_caller_identity.current.account_id}"
         }
         ArnLike = {
-          "aws:SourceArn" = "arn:aws:elasticloadbalancing:${var.region}:${data.aws_caller_identity.current.account_id}:loadbalancer/*"
+          "aws:SourceArn" = "arn:aws:applicationloadbalancing:${var.region}:${data.aws_caller_identity.current.account_id}:loadbalancer/*"
         }
       }
     },
