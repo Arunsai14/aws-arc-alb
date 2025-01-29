@@ -208,8 +208,8 @@ alb_listener = {
   port                     = 88               
   protocol                 = "TCP"            
   #  alpn_policy              = "HTTP2Only"        
-  certificate_arn          = "arn:aws:acm:us-east-1:804295906245:certificate/08759044-ad33-4bdb-b18c-7de7f85e272a"
-  ssl_policy               = "ELBSecurityPolicy-TLS13-1-2-2021-06"  
+  # certificate_arn          = "arn:aws:acm:us-east-1:804295906245:certificate/08759044-ad33-4bdb-b18c-7de7f85e272a"
+  # ssl_policy               = "ELBSecurityPolicy-TLS13-1-2-2021-06"  
   # tcp_idle_timeout_seconds = 360           
 }
 
