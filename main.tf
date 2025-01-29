@@ -200,7 +200,7 @@ resource "aws_lb_target_group" "this" {
 resource "aws_lb_target_group_attachment" "this" {
   for_each = var.target_group_attachment_config != null ? { for idx, attachment in var.target_group_attachment_config : idx => attachment } : {}
 
-  target_group_arn = aws_lb_target_group.this[each.value].arn
+  target_group_arn = aws_lb_target_group.this[0].arn
   target_id        = each.value.target_id
   port             = each.value.port
 
@@ -243,7 +243,7 @@ resource "aws_lb_listener" "this" {
   for_each = var.default_forward_action ? [1] : []
   content {
     # target_group_arn = aws_lb_target_group.this["config"].arn
-    target_group_arn = aws_lb_target_group.this[each.value].arn
+    target_group_arn = aws_lb_target_group.this[0].arn
     type             = "forward"
   }
 }
