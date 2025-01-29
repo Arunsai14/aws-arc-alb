@@ -277,7 +277,7 @@ variable "default_action" {
    forward = optional(object({
       target_groups = list(object({
         # arn    = string
-        weight = optional(number, null)
+        # weight = optional(number, nu)
       }))
       stickiness = optional(object({
         duration = number
@@ -306,7 +306,7 @@ variable "alb_listener" {
     ssl_policy               = optional(string, "")
     tcp_idle_timeout_seconds = optional(number, 350)
   })
-  }
+}
 
 ########## alb listener certificate config ##########
 variable "listener_certificates" {
