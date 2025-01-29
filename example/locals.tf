@@ -24,7 +24,7 @@ load_balancer_config = {
 
   subnet_mapping = [
     {
-      subnet_id            = [for s in data.aws_subnet.private : s.id]
+      subnet_id            = for s in data.aws_subnet.private : s.id
     },
     {
       subnet_id            = "subnet-f55c1392"
