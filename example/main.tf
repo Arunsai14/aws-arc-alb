@@ -51,7 +51,7 @@ module "s3" {
   acl              = "log-delivery-write"
   force_destroy   = true
   object_ownership = "ObjectWriter"
-  bucket_policy_doc = local.bucket_policy_doc
+  bucket_policy_doc = data.aws_iam_policy_document.alb_logs_policy.json
   tags             = module.tags.tags
 }
 

@@ -45,21 +45,34 @@ load_balancer_config = {
 }
 
 bucket_policy_doc = jsonencode({
-  "Version": "2012-10-17",
-  "Statement": [
+  Version = "2012-10-17"
+  Statement = [
     {
-      "Sid": "ELBLogging",
-      "Effect": "Allow",
-      "Action": "s3:PutObject",
-      "Resource": "arn:aws:s3:::arc-terraform-alb-logs-1/*",
-      "Principal": {
-        "Service": "elasticloadbalancing.amazonaws.com"
-      },
-      "Condition": {
-        "StringEquals": {
-          "aws:SourceAccount": "804295906245"
+      Effect = "Allow"
+      Principal = {
+        Service = "delivery.logs.amazonaws.com"
+      }
+      "Action": [
+            "s3:PutObject",
+            "s3:PutObjectAcl"
+      ],
+      Resource = "arn:aws:s3:::${var.bucket_name}/alb-logs/*"
+      Condition = {
+        StringEquals = {
+          "aws:SourceAccount" = "${data.aws_caller_identity.current.account_id}"
+        }
+        ArnLike = {
+          "aws:SourceArn" = "arn:aws:elasticloadbalancing:${var.region}:${data.aws_caller_identity.current.account_id}:loadbalancer/*"
         }
       }
+    },
+    {
+      Effect = "Allow"
+      Principal = {
+        Service = "delivery.logs.amazonaws.com"
+      }
+      Action = "s3:GetBucketAcl"
+      Resource = "arn:aws:s3:::${var.bucket_name}"
     }
   ]
 })
