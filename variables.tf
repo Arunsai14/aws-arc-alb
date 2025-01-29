@@ -239,6 +239,12 @@ variable "lb_trust_store_config" {
 #   default = []
 # }
 
+variable "default_target_group_arn" {
+  description = "The ARN of the default target group."
+  type        = string
+  default     = "" 
+}
+
 variable "default_action" {
   description = "Default actions for the ALB listener."
   type = list(object({
@@ -277,7 +283,7 @@ variable "default_action" {
    forward = optional(object({
       target_groups = list(object({
         # arn    = string
-        weight = optional(number, 0)
+        weight = optional(number, null)
       }))
       stickiness = optional(object({
         duration = number
