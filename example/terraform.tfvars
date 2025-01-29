@@ -9,6 +9,7 @@ region                   = "us-east-1"
 environment             = "dev"
 namespace               = "arc"
 security_group_name      = "arc-alb-sg"
+default_forward_action = false
 
 
 # Subnets for the load balancer
