@@ -34,7 +34,7 @@ load_balancer_config = {
   access_logs = {
     enabled = true
     bucket  = "arc-terraform-alb-logs-1"
-    prefix  = "AWSLogs/${data.aws_caller_identity.current.account_id}"
+    prefix  = "alb-logs"
   }
 
   connection_logs = {
@@ -53,7 +53,7 @@ bucket_policy_doc = jsonencode({
         Service = "delivery.logs.amazonaws.com"
       }
       Action = "s3:PutObject"
-      Resource = "arn:aws:s3:::${var.bucket_name}/AWSLogs/${data.aws_caller_identity.current.account_id}/*"
+      Resource = "arn:aws:s3:::${var.bucket_name}/AWSLogs/alb-logs//*"
       Condition = {
         StringEquals = {
           "aws:SourceAccount" = "${data.aws_caller_identity.current.account_id}"
