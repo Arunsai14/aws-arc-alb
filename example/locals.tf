@@ -38,7 +38,7 @@ load_balancer_config = {
   }
 
   connection_logs = {
-    enabled = failed
+    enabled = false
     bucket  = "arc-terraform-alb-logs-1"
     prefix  = "connection-logs"
   }
