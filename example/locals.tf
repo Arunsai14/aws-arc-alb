@@ -1,7 +1,7 @@
 locals {
 load_balancer_config = {
   name                              = "arc-load-balancer"
-  type                =  "network"
+  type                =  "application"
   internal                          = false
   security_groups                   = ["sg-123456"]
   ip_address_type                   = "ipv4"
@@ -55,7 +55,7 @@ bucket_policy_doc = jsonencode({
       "Action": [
             "s3:PutObject",
             "s3:PutObjectAcl"
-      ],
+     ],
       Resource = "arn:aws:s3:::${var.bucket_name}/alb-logs/*"
       Condition = {
         StringEquals = {

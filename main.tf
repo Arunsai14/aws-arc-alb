@@ -229,20 +229,6 @@ resource "aws_lb_trust_store" "this" {
 ###################################################################
 #                 Listener
 ###################################################################
-# resource "aws_lb_listener" "this" {
-#   load_balancer_arn = aws_lb.this.arn
-#   port              = 80
-#   protocol          = "TCP"
-
-#   default_action {
-#     type             = "forward"
-#     target_group_arn = aws_lb_target_group.this["config"].arn
-#     # order            = 100
-#   }
-# }
-
-
-
 resource "aws_lb_listener" "this" {
   load_balancer_arn = aws_lb.this.arn
   port              = var.alb_listener.port
@@ -309,22 +295,6 @@ resource "aws_lb_listener" "this" {
       }
 
       # Forward action
-
-#      dynamic "forward" {
-#   for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
-#   content {
-#     dynamic "target_group" {
-#       for_each = lookup(forward.value, "target_groups", [])
-#       content {
-#         arn    = aws_lb_target_group.this["config"].arn
-#         weight = lookup(target_group.value, "weight", null)
-#       }
-#     }
-#   }
-# }
-
- 
-
       #Forward action with multiple target groups
       dynamic "forward" {
         for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []

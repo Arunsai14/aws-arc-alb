@@ -99,7 +99,7 @@ security_group_data = {
 target_group_config = {
   name        = "arc-poc-alb"
   port        = 80
-  protocol    = "TCP"
+  protocol    = "HTTP"
   vpc_id      = "vpc-68f96212"
   target_type = "instance"
   health_check = {
@@ -195,19 +195,19 @@ target_group_attachment_config = [
   # },
 # ]
 
-# default_action = [{
-#   type = "forward"
-#   forward = {
-#     target_groups = [{
-#       # arn = aws_lb_target_group.this.arn
-#     }]
-#   }
-# }]
+default_action = [{
+  type = "forward"
+  forward = {
+    target_groups = [{
+      # arn = aws_lb_target_group.this.arn
+    }]
+  }
+}]
 
 
 alb_listener = {
   port                     = 88               
-  protocol                 = "TCP"            
+  protocol                 = "HTTP"            
   #  alpn_policy              = "HTTP2Only"        
   # certificate_arn          = "arn:aws:acm:us-east-1:804295906245:certificate/08759044-ad33-4bdb-b18c-7de7f85e272a"
   # ssl_policy               = "ELBSecurityPolicy-TLS13-1-2-2021-06"  
