@@ -32,14 +32,14 @@ load_balancer_config = {
   ]
 
   access_logs = {
-    enabled = false
-    bucket  = "my-log-bucket"
+    enabled = true
+    bucket  = "arc-terraform-alb-logs-1"
     prefix  = "access-logs"
   }
 
   connection_logs = {
     enabled = false
-    bucket  = "my-log-bucket"
+    bucket  = "arc-terraform-alb-logs-1"
     prefix  = "connection-logs"
   }
 }
