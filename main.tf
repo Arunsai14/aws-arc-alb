@@ -288,14 +288,14 @@ resource "aws_lb_listener" "this" {
 
       # Forward action
 
-      #  dynamic "forward" {
-      #   for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
-      #   content {
-      #     target_group {
-      #       arn = lookup(default_action.value.forward, "arn", null) != null ? default_action.value.forward.arn : aws_lb_target_group.this["config"].arn
-      #     }
-      #  }
-      #  }
+       dynamic "forward" {
+        for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
+        content {
+          target_group {
+            arn = lookup(default_action.value.forward, "arn", null) != null ? default_action.value.forward.arn : aws_lb_target_group.this["config"].arn
+          }
+       }
+       }
 
       # dynamic "forward" {
       #   for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
@@ -316,11 +316,11 @@ resource "aws_lb_listener" "this" {
       #       }
       #     }
       #   }
-default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.this["config"].arn
-    order            = 100
-  }
+# default_action {
+#     type             = "forward"
+#     target_group_arn = aws_lb_target_group.this["config"].arn
+#     order            = 100
+#   }
       # Forward action with multiple target groups
       # dynamic "forward" {
       #   for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
