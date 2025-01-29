@@ -34,49 +34,22 @@ data "aws_iam_policy_document" "alb_logs_policy" {
 #   }
 
 statement {
-    sid = "AWSLogDeliveryWrite"
+  sid = "ELBWriteAccess"
 
-    principals {
-      type        = "Service"
-      identifiers = ["delivery.logs.amazonaws.com"]
-    }
+  effect = "Allow"
 
-    effect = "Allow"
-
-    actions = [
-      "s3:PutObject",
-    ]
-
-    resources = [
-      "arn:aws:s3:::${var.bucket_name}/*",
-    ]
-
-    condition {
-      test     = "StringEquals"
-      variable = "s3:x-amz-acl"
-      values   = ["bucket-owner-full-control"]
-    }
+  principals {
+    type        = "AWS"
+    identifiers = ["arn:aws:iam::127311923021:root"]
   }
 
-  statement {
-    sid = "AWSLogDeliveryAclCheck"
+  actions = [
+    "s3:PutObject",
+  ]
 
-    effect = "Allow"
-
-    principals {
-      type        = "Service"
-      identifiers = ["delivery.logs.amazonaws.com"]
-    }
-
-    actions = [
-      "s3:GetBucketAcl",
-      "s3:ListBucket",
-    ]
-
-    resources = [
-      "arn:aws:s3:::${var.bucket_name}",
-    ]
-
-  }
+  resources = [
+    "arn:aws:s3:::${var.bucket_name}/*",
+  ]
+}
 }
 
