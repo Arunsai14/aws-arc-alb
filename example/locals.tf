@@ -24,7 +24,7 @@ load_balancer_config = {
 
   subnet_mapping = [
     {
-      subnet_id            = "subnet-6781cb49"
+      subnet_id            = [for s in data.aws_subnet.private : s.id]
     },
     {
       subnet_id            = "subnet-f55c1392"
@@ -38,7 +38,7 @@ load_balancer_config = {
   }
 
   connection_logs = {
-    enabled = true
+    enabled = false
     bucket  = "arc-terraform-alb-logs-1"
     prefix  = "connection-logs"
   }
