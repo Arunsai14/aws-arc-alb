@@ -7,11 +7,6 @@ variable "region" {
   description = "AWS region"
 }
 
-variable "region" {
-  type        = string
-  default     = "us-east-1"
-  description = "AWS region"
-}
 
 variable "environment" {
   type        = string
@@ -24,12 +19,6 @@ variable "namespace" {
   default     = "arc"
   description = "Namespace of the project, i.e. arc"
 }
-
-variable "security_group_name" {
-  type        = string
-  description = "The name of the security group"
-}
-
 variable "subnet_names" {
   type        = list(string)
   description = "List of subnet names to lookup"
