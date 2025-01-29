@@ -317,33 +317,33 @@ resource "aws_lb_listener" "this" {
       #     }
       #   }
   
-    # for_each = var.alb_listener.default_action != null ? [var.alb_listener.default_action] : []
+     for_each = var.alb_listener.default_action != null ? [var.alb_listener.default_action] : []
     content {
       type             = "forward"
       target_group_arn = aws_lb_target_group.this["config"].arn
       order            = 100
   }
       # Forward action with multiple target groups
-      dynamic "forward" {
-        for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
-        content {
-          dynamic "target_group" {
-            for_each = forward.value.target_groups
-            content {
-              arn    = aws_lb_target_group.this["config"].arn
-               weight = lookup(target_group.value, "weight", null) != null ? target_group.value.weight : null
-            }
-          }
+      # dynamic "forward" {
+      #   for_each = lookup(default_action.value, "forward", null) != null ? [default_action.value.forward] : []
+      #   content {
+      #     dynamic "target_group" {
+      #       for_each = forward.value.target_groups
+      #       content {
+      #         arn    = aws_lb_target_group.this["config"].arn
+      #          weight = lookup(target_group.value, "weight", null) != null ? target_group.value.weight : null
+      #       }
+      #     }
 
-          dynamic "stickiness" {
-            for_each = lookup(forward.value, "stickiness", null) != null ? [forward.value.stickiness] : []
-            content {
-              duration = stickiness.value.duration
-              enabled  = lookup(stickiness.value, "enabled", false)
-            }
-          }
-        }
-      }
+      #     dynamic "stickiness" {
+      #       for_each = lookup(forward.value, "stickiness", null) != null ? [forward.value.stickiness] : []
+      #       content {
+      #         duration = stickiness.value.duration
+      #         enabled  = lookup(stickiness.value, "enabled", false)
+      #       }
+      #     }
+      #   }
+      # }
 
       # Redirect action
       dynamic "redirect" {
