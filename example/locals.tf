@@ -32,7 +32,7 @@ load_balancer_config = {
   ]
 
   access_logs = {
-    enabled = true
+    enabled = false
     bucket  = "arc-terraform-alb-logs-1"
     prefix  = "alb-logs"
   }
