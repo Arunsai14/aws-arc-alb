@@ -35,5 +35,5 @@ output "private_subnet_id" {
 }
 
 output "s3_bucket_name" {
-  value = module.s3.name
+  value = module.s3.aws_s3_bucket.this.bucket
 }
