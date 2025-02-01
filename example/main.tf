@@ -39,7 +39,7 @@ module "alb" {
   default_action          = local.default_action
   listener_rules          = local.listener_rules
   security_group_data     = local.security_group_data
-  security_group_name     = local.security_group_name
+  security_group_name     = var.security_group_name
   vpc_id                  = data.aws_vpc.default.id
   tags                   = module.tags.tags
 }
