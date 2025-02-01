@@ -33,3 +33,7 @@ output "private_subnet_id" {
   description = "The first private subnet ID"
   value       = data.aws_subnets.private.ids[0]
 }
+
+output "s3_bucket_name" {
+  value = module.s3.bucket_name
+}
