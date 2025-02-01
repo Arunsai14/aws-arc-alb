@@ -37,3 +37,7 @@ output "private_subnet_id" {
 output "s3_bucket_name" {
   value = module.s3.bucket_id
 }
+
+output "aws_region" {
+  value = data.aws_region.current.name
+}

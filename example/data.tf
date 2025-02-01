@@ -43,3 +43,5 @@ data "aws_subnets" "private" {
   }
 }
 
+data "aws_region" "current" {}
+
