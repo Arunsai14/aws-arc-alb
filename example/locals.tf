@@ -1,9 +1,8 @@
 locals {
 load_balancer_config = {
   name                              = "arc-load-balancer"
-  type                =  "network" 
+  type                =  "application"
   internal                          = false
-  security_groups                   = ["sg-123456"]
   ip_address_type                   = "ipv4"
   enable_deletion_protection        = false
   enable_cross_zone_load_balancing  = true
@@ -77,8 +76,7 @@ security_group_data = {
 target_group_config = {
   name        = "arc-poc-alb"
   port        = 80
-  protocol    = "TCP"
-  vpc_id      = "vpc-68f96212"
+  protocol    = "HTTP"
   target_type = "instance"
   health_check = {
     enabled             = true
@@ -121,7 +119,7 @@ default_action = [{
 
 alb_listener = {
   port                     = 88               
-  protocol                 = "TCP"         
+  protocol                 = "HTTP"         
 }
 
 listener_rules = {
