@@ -31,7 +31,7 @@ module "tags" {
 
 module "alb" {
   source                   = "../"
-  region                   = var.region
+  # region                   = var.region
   load_balancer_config            = local.load_balancer_config
   target_group_config            = local.target_group_config
   target_group_attachment_config = local.target_group_attachment_config

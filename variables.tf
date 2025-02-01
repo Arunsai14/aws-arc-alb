@@ -1,7 +1,7 @@
-variable "region" {
-  description = "AWS region"
-  type        = string
-}
+# variable "region" {
+#   description = "AWS region"
+#   type        = string
+# }
 
 variable "security_group_name" {
   type        = string
