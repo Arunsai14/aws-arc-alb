@@ -23,12 +23,13 @@
 #   value = module.alb.target_group_health_check
 # }
 
-output "private_subnet_id" {
-  description = "ID of the first private subnet"
-  value       = data.aws_subnet.private_subnet.id
+
+output "private_subnet_ids" {
+  description = "List of private subnet IDs"
+  value       = data.aws_subnets.private.ids
 }
 
-output "public_subnet_id" {
-  description = "ID of the first public subnet"
-  value       = [for s in data.aws_subnet.private : s.id]
+output "private_subnet_id" {
+  description = "The first private subnet ID"
+  value       = data.aws_subnets.private.ids[0]
 }

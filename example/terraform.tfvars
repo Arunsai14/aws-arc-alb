@@ -19,7 +19,7 @@ subnets = ["subnet-6781cb49", "subnet-f55c1392"]
 vpc_id = "vpc-68f96212"
 
 vpc_name    = "Default VPC"
-# subnet_name = ["vnk-1", "vnk-2"]
+subnet_name = ["vnk-1", "vnk-2"]
 
 
 # Security group rules

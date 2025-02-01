@@ -29,35 +29,34 @@ module "tags" {
   }
 }
 
-# module "alb" {
-#   source               = "../"
-#   region               = var.region
-#   load_balancer_config            = local.load_balancer_config
+module "alb" {
+  source                   = "../"
+  region                   = var.region
+  load_balancer_config            = local.load_balancer_config
+  target_group_config            = local.target_group_config
+  target_group_attachment_config = local.target_group_attachment_config
+  alb_listener            = local.alb_listener
+  default_action          = local.default_action
+  listener_rules          = local.listener_rules
+  security_group_data     = local.security_group_data
+  security_group_name     = local.security_group_name
+  vpc_id                  = data.aws_vpc.default.id
+  tags                   = module.tags.tags
+}
+
+# module "nlb" {
+#   source                         = "../"
+#   region                         = var.region
+#   load_balancer_config           = local.load_balancer_config
 #   target_group_config            = var.target_group_config
 #   target_group_attachment_config = var.target_group_attachment_config
-#   alb_listener            = var.alb_listener
-#   default_forward_action = var.default_forward_action
-#   default_action          = var.default_action
-#   listener_rules          = var.listener_rules
-#   security_group_data     = var.security_group_data
-#   security_group_name     = var.security_group_name
-#   vpc_id                  = var.vpc_id
-#   tags                   = module.tags.tags
+#   alb_listener                   = var.alb_listener
+#   network_forward_action         = var.network_forward_action
+#   security_group_data            = var.security_group_data
+#   security_group_name            = var.security_group_name
+#   vpc_id                         = data.aws_vpc.default.id
+#   tags                           = module.tags.tags
 # }
-
-module "elb" {
-  source                         = "../"
-  region                         = var.region
-  load_balancer_config           = local.load_balancer_config
-  target_group_config            = var.target_group_config
-  target_group_attachment_config = var.target_group_attachment_config
-  alb_listener                   = var.alb_listener
-  network_forward_action         = var.network_forward_action
-  security_group_data            = var.security_group_data
-  security_group_name            = var.security_group_name
-  vpc_id                         = data.aws_vpc.default.id
-  tags                           = module.tags.tags
-}
 
 module "s3" {
   source      = "sourcefuse/arc-s3/aws"
